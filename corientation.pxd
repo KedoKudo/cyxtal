@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: UTF-8 no BOM -*-
-
 """
    ________  ___  ___________    __
   / ____/\ \/ / |/ /_  __/   |  / /
@@ -30,28 +27,4 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-from distutils.core import setup
-from distutils.extension import Extension
-from Cython.Distutils import build_ext
-from Cython.Build import cythonize
-import numpy as np
-
-NPDIR = np.get_include()
-EXTEN = [ Extension("ctools",
-                    ["ctools.pyx"],
-                    include_dirs=[NPDIR, "."]),
-          Extension("corientation",
-                    ["corientation.pyx"],
-                    include_dirs=[NPDIR, "."])
-        ]
-
-setup(
-      name='cyxtal',
-      version=0.1,
-      description='crystal analysis package (cython)',
-      author='C.Z',
-      author_email='chenzhang8722@gmail.com',
-      packages=["cyxtal"],
-      ext_modules=EXTEN,
-      cmdclass={'build_ext': build_ext},
-)
+cpdef symmetry(lattice)

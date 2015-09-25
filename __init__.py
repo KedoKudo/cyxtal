@@ -1,1 +1,2 @@
-from corientation import *
+__author__='C.Z'
+
