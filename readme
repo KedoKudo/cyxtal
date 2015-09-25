@@ -1,11 +1,10 @@
-__author__='C.Z'
-
-"""
-   ________  ___  ___________    __
-  / ____/\ \/ / |/ /_  __/   |  / /
- / /      \  /|   / / / / /| | / /
-/ /___    / //   | / / / ___ |/ /___
-\____/   /_//_/|_|/_/ /_/  |_/_____/
+>-------------------------------------<
+<   ________  ___  ___________    __  >
+<  / ____/\ \/ / |/ /_  __/   |  / /  >
+< / /      \  /|   / / / / /| | / /   >
+</ /___    / //   | / / / ___ |/ /___ >
+<\____/   /_//_/|_|/_/ /_/  |_/_____/ >
+>-------------------------------------<
 
 Copyright (c) 2015, C. Zhang.
 All rights reserved.
@@ -29,11 +28,27 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
 ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""
 
-from cyxtal.corientation import symmetry
-from cyxtal.ctools import kmeans
 
-import ext_vtk
-import ext_damask
-import ext_aps
+#######################
+# PACKAGE DESCRIPTION #
+#######################
+This package is designed to provide
+
+##################
+# FILE STRUCTURE #
+##################
+cyxtal/
+    __init__.py
+    corientation.pyd
+    corientation.pyx
+    ctools.pyd
+    ctools.pyx
+    ext_aps/
+        something goes here
+    ext_damask/
+        something goes here
+    ext_vtk/
+        something goes here
+    ext_ebsd/
+        something goes here
