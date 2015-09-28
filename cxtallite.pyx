@@ -33,10 +33,11 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import cython
-import math, random, os
-import numpy as np
+import  cython
+import  math, random, os
+import  numpy as np
 cimport numpy as np
+from    libc.math cimport sin, cos, sqrt
 
 
 cpdef symmetry(lattice):
@@ -60,7 +61,7 @@ cpdef symmetry(lattice):
 
     lattice = lattice.lower()
     if lattice == 'cubic':
-        tmp = math.sqrt(2)
+        tmp = sqrt(2)
         symQuats = [
                     [ 1.0,     0.0,     0.0,     0.0     ],
                     [ 0.0,     1.0,     0.0,     0.0     ],
@@ -88,7 +89,7 @@ cpdef symmetry(lattice):
                     [-0.5*tmp,-0.5*tmp, 0.0,     0.0     ],
                    ]
     elif lattice == 'hexagonal':
-        tmp = math.sqrt(3)
+        tmp = sqrt(3)
         symQuats =  [
                      [ 1.0,      0.0,     0.0,      0.0     ],
                      [-0.5*tmp,  0.0,     0.0,     -0.5     ],
@@ -104,7 +105,7 @@ cpdef symmetry(lattice):
                      [ 0.0,      0.5*tmp, 0.5,      0.0     ],
                     ]
     elif lattice == 'tetragonal':
-        tmp = math.sqrt(2)
+        tmp = sqrt(2)
         symQuats =  [
                      [ 1.0,     0.0,     0.0,     0.0     ],
                      [ 0.0,     1.0,     0.0,     0.0     ],
@@ -130,7 +131,7 @@ cdef class Quaternion:
     http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions
     """
 
-    def __init__(self, q):
+    def __init__(self, double[:] q):
         """
         DESCRIPTION
         -----------
@@ -156,8 +157,76 @@ cdef class Quaternion:
         cdef double[4] q = [self.w,self.x,self.y,self.z]
         return Quaternion(q)
 
+    def asEulers(self):
+        """
+        DESCRIPTION
+        -----------
+            eulers = Q.asEulers()
+            Return orientation in Euler angles
+        RETURNS
+        -------
+        eulers : list [phi1, PHI, phi2]
+            Euler angles in degrees
+        NOTE
+        ----
+        CONVERSION TAKEN FROM:
+        Melcher, A.; Unser, A.; Reichhardt, M.; Nestler, B.; Pötschke, M.; Selzer, M.
+        Conversion of EBSD data by a quaternion based algorithm to be used for grain
+        structure simulations Technische Mechanik 30 (2010) pp 401--413
+        """
+        cdef double     x, y, chi
+        cdef np.ndarray eulers = np.zeros(3, type=float)
+
+        if abs(self.x) < 1e-4 and abs(self.y) < 1e-4:
+            x = self.w**2 - self.z**2
+            y = 2.*self.w*self.z
+            eulers[0] = math.atan2(y,x)
+        elif abs(self.w) < 1e-4 and abs(self.z) < 1e-4:
+            x = self.x**2 - self.y**2
+            y = 2.*self.x*self.y
+            eulers[0] = math.atan2(y,x)
+            eulers[1] = math.pi
+        else:
+            chi = math.sqrt((self.w**2 + self.z**2)*(self.x**2 + self.y**2))
+
+            x = (self.w * self.x - self.y * self.z)/2./chi
+            y = (self.w * self.y + self.x * self.z)/2./chi
+            eulers[0] = math.atan2(y,x)
+
+            x = self.w**2 + self.z**2 - (self.x**2 + self.y**2)
+            y = 2.*chi
+            eulers[1] = math.atan2(y,x)
+
+            x = (self.w * self.x + self.y * self.z)/2./chi
+            y = (self.z * self.x - self.y * self.w)/2./chi
+            eulers[2] = math.atan2(y,x)
+
+        # convert to standard range
+        eulers[0] %= 2*math.pi
+        if eulers[1] < 0.0:
+            eulers[1] += math.pi
+            eulers[2] *= -1.0
+        eulers[2] %= 2*math.pi
+
+        return np.degrees(eulers)
+
+    def asOrientationMatrix(self):
+        """
+        """
+        pass
+
+    def asRodrigues(self):
+        """
+        """
+        pass
+
+    def asAngleAxis(self):
+        """
+        """
+        pass
+
     @staticmethod
-    cdef eulers2Quaternion(double[:] e):
+    def eulers2Quaternion(double[:] e):
         """
         DESCRIPTION
         -----------
@@ -183,12 +252,12 @@ cdef class Quaternion:
         for i in range(3):
             halfEulers[i] = e[i] * 0.5
 
-        c1 = math.cos(halfEulers[0])
-        s1 = math.sin(halfEulers[0])
-        c2 = math.cos(halfEulers[1])
-        s2 = math.sin(halfEulers[1])
-        c3 = math.cos(halfEulers[2])
-        s3 = math.sin(halfEulers[2])
+        c1 = cos(halfEulers[0])
+        s1 = sin(halfEulers[0])
+        c2 = cos(halfEulers[1])
+        s2 = sin(halfEulers[1])
+        c3 = cos(halfEulers[2])
+        s3 = sin(halfEulers[2])
 
         q[0] = c1 * c2 * c3 - s1 * s2 * s3
         q[1] = s1 * s2 * c3 + c1 * c2 * s3
@@ -197,9 +266,8 @@ cdef class Quaternion:
 
         return Quaternion(q)
 
-
     @staticmethod
-    cdef rodrigues2Quaternion(double[:] r):
+    def rodrigues2Quaternion(double[:] r):
         """
         DESCRIPTION
         -----------
@@ -210,25 +278,90 @@ cdef class Quaternion:
         r: double[:]
             Memoryview of a length 3 vector
         RETURNS
+        -------
         Q: Quaternion()
             Quaternion instance of given orientation
-        -------
-
         """
-        pass
+        cdef double        norm, halfAngle
+        cdef double[4]     q
+        cdef int           i
+
+        norm      = np.linalg.norm(r)
+        halfAngle = np.arctan(norm)
+        q[0]      = cos(halfAngle)
+
+        for i in range(3):
+            q[i+1] = sin(halfAngle) * r[i] / norm
+
+        return Quaternion(q)
 
     @staticmethod
-    cdef oMatrix2Quaternion(double[:,:] m):
+    def oMatrix2Quaternion(double[:,:] m):
         """
         DESCRIPTION
         -----------
+            Q = oMatrix2Quaternion(m)
+            convert orientation matrix to Quaternion representation
+            ref: http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
+        PARAMETERS
+        ----------
+        m : np.ndarray
+            3x3 orientation matrix
+        RETURNS
+        -------
+        Q : Quaternion
+            Quaternion instance of given orientation
         """
+        cdef double    trace, s, t
+        cdef double[4] q
+        cdef int       i
+
+        trace = np.trace(m)
+
+        if trace > 1e-8:
+            s    = sqrt(trace + 1.0) * 2.0
+
+            q[0] = s * 0.25
+            q[1] = (m[2,1] - m[1,2])/s
+            q[2] = (m[0,2] - m[2,0])/s
+            q[3] = (m[1,0] - m[0,1])/s
+
+        elif m[0,0] > m[1,1] and m[0,0] > m[2,2]:
+            t    = m[0,0] - m[1,1] - m[2,2] + 1.0
+            s    = 2.0*sqrt(t)
+
+            q[0] = (m[2,1] - m[1,2])/s
+            q[1] = s*0.25
+            q[2] = (m[0,1] + m[1,0])/s
+            q[3] = (m[2,0] + m[0,2])/s
+
+        elif m[1,1] > m[2,2]:
+            t    = -m[0,0] + m[1,1] - m[2,2] + 1.0
+            s    = 2.0 * sqrt(t)
+
+            q[0] = (m[0,2] - m[2,0])/s
+            q[1] = (m[0,1] + m[1,0])/s
+            q[2] = s*0.25
+            q[3] = (m[1,2] + m[2,1])/s
+
+        else:
+            t    = -m[0,0] - m[1,1] + m[2,2] + 1.0
+            s    = 2.0 * sqrt(t)
+
+            q[0] = (m[1,0] - m[0,1])/s
+            q[1] = (m[2,0] + m[0,2])/s
+            q[2] = (m[1,2] + m[2,1])/s
+            q[3] = s*0.25
+
+        return Quaternion(q)
+
+
+cdef class crystallite:
+    cdef public Quaternion   orientation
+    cdef public double[:,:]  op_sym
+
+    def __init__(eulers, symmetry):
         pass
-
-
-
-
-
 
 
 

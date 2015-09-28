@@ -38,11 +38,11 @@ from Cython.Distutils import build_ext
 import numpy as np
 
 NPDIR = np.get_include()
-EXTEN = [ Extension("ctools",
+EXTEN = [ Extension( "ctools",
                     ["ctools.pyx"],
                     include_dirs=[NPDIR, "."]),
-          Extension("corientation",
-                    ["corientation.pyx"],
+          Extension( "cxtallite",
+                    ["cxtallite.pyx"],
                     include_dirs=[NPDIR, "."])
         ]
 

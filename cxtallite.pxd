@@ -10,15 +10,5 @@ cimport numpy as np
 cpdef symmetry(lattice)
 
 cdef class Quaternion:
-
     cdef public double w,x,y,z
-
-    @staticmethod
-    cdef eulers2Quaternion(double[:] e)
-
-    @staticmethod
-    cdef rodrigues2Quaternion(double[:] r)
-
-    @staticmethod
-    cdef oMatrix2Quaternion(double[:,:] m)
 

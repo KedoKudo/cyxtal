@@ -31,9 +31,9 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-from cyxtal.corientation import symmetry
-from cyxtal.corientation import Quaternion
-from cyxtal.ctools import kmeans
+from cyxtal.cxtallite import symmetry
+from cyxtal.cxtallite import Quaternion
+from cyxtal.ctools    import kmeans
 
 import ext_vtk
 import ext_damask
