@@ -52,7 +52,7 @@ cpdef symmetry(lattice):
         Lattice structure for target crystal system
     RETURNS
     -------
-    sym_operator: list of Quaternion
+    sym_operator: ndarray
         The symmetry operators used to calculate equivalent crystal
         orientation.
     """
@@ -119,7 +119,8 @@ cpdef symmetry(lattice):
         symQuats =  [
                      [ 1.0,0.0,0.0,0.0 ],
                     ]
-    return symQuats
+
+    return np.array(symQuats)
 
 
 cdef class Quaternion:
@@ -129,7 +130,7 @@ cdef class Quaternion:
     http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions
     """
 
-    def __init__(self, double[:] q):
+    def __init__(self, q):
         """
         DESCRIPTION
         -----------
@@ -219,6 +220,8 @@ cdef class Quaternion:
     @staticmethod
     cdef oMatrix2Quaternion(double[:,:] m):
         """
+        DESCRIPTION
+        -----------
         """
         pass
 

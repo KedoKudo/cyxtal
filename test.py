@@ -35,6 +35,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # TESTING MODULES FOR CYXTAL #
 ##############################
 
+import sys
 from cyxtal import Quaternion
 from cyxtal import symmetry
 from cyxtal import kmeans
+
+a = symmetry('hexagonal')
+print a
