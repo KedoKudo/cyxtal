@@ -129,19 +129,18 @@ cdef class Quaternion:
     Quaternion representation of orientation
     All methods and naming conventions based off
     http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions
+
+    PARAMETERS
+    ----------
+    q: double[:]
+        Simple vector with length 4
+    ATTRIBUTES
+    ----------
+    METHODS
+    -------
     """
 
     def __init__(self, double[:] q):
-        """
-        DESCRIPTION
-        -----------
-        new_q = Quaternion(v)
-            Initialize Quaternion instance with vector.
-        PARAMETERS
-        ----------
-        q: double[:]
-            Simple vector with length 4
-        """
         if q[0] < 0:
             self.w = -q[0]
             self.x = -q[1]
@@ -212,18 +211,78 @@ cdef class Quaternion:
 
     def asOrientationMatrix(self):
         """
+        DESCRIPTION
+        -----------
+            m = Q.asOrientationMatrix()
+            convert orientation matrix representation
         """
-        pass
+        cdef np.ndarray m = np.empty((3,3), dtype=float)
+
+        m[0,0] = 1.0-2.0*(self.y*self.y+self.z*self.z)
+        m[0,1] =     2.0*(self.x*self.y-self.z*self.w)
+        m[0,2] =     2.0*(self.x*self.z+self.y*self.w)
+        m[1,0] =     2.0*(self.x*self.y+self.z*self.w)
+        m[1,1] = 1.0-2.0*(self.x*self.x+self.z*self.z)
+        m[1,2] =     2.0*(self.y*self.z-self.x*self.w)
+        m[2,0] =     2.0*(self.x*self.z-self.y*self.w)
+        m[2,1] =     2.0*(self.x*self.w+self.y*self.z)
+        m[2,2] = 1.0-2.0*(self.x*self.x+self.y*self.y)
+
+        return m
 
     def asRodrigues(self):
         """
+        DESCRIPTION
+        -----------
+            r = Q.asRodrigues()
+            convert to Rodrigues representation
         """
-        pass
+        cdef np.ndarray r = empty(3, dtype=float)
+
+        if self.w != 0.0:
+            r[0] = self.x/self.w
+            r[1] = self.y/self.w
+            r[2] = self.z/self.w
+        else:
+            r.fill(np.inf)
+
+        return r
 
     def asAngleAxis(self):
         """
+        DESCRIPTION
+        -----------
+            angle, axis = Q.asAngleAxis()
+            convert to angle-axis representation
         """
-        pass
+        cdef double     s, x, y, mag
+        cdef double     angle
+        cdef np.ndarray axis = np.zeros(3, dtype=float)
+
+
+        if self.w > 1.0:
+            mag = sqrt(self.w**2 + self.x**2 + self.y**2 + self.z**2)
+            self.w /= mag
+            self.x /= mag
+            self.y /= mag
+            self.z /= mag
+
+        s     = sqrt(1 - self.w**2)
+        x     = 2*self.w**2 - 1.
+        y     = 2*self.w * s
+        angle = math.atan2(y,x)
+        if angle < 0.0:
+            angle *= -1.0
+            s     *= -1.0
+
+        if np.abs(angle) > 1e-3:
+            axis[0] = self.x/s
+            axis[1] = self.y/s
+            axis[2] = self.z/s
+        else:
+            axis[0] = 1.0
+
+        return (angle, axis)
 
     @staticmethod
     def eulers2Quaternion(double[:] e):
@@ -248,6 +307,8 @@ cdef class Quaternion:
         cdef double[4]  q
         cdef double[3]  halfEulers
         cdef int        i
+
+        e = np.radians(e)  # convert to radians for calculation
 
         for i in range(3):
             halfEulers[i] = e[i] * 0.5
@@ -356,12 +417,26 @@ cdef class Quaternion:
         return Quaternion(q)
 
 
-cdef class crystallite:
+cdef class Crystallite:
+    """Aggregate class to represent real crystallite in material.
+
+    NOTE
+    ----
+    PARAMETERS
+    ----------
+        eulers  : Euler angles in degrees
+        lattice : lattice structure, e.g. "hexagonal"
+    ATTRIBUTES
+    ----------
+    METHODS
+    -------
+    """
     cdef public Quaternion   orientation
     cdef public double[:,:]  op_sym
 
-    def __init__(eulers, symmetry):
-        pass
+    def __init__(eulers, lattice):
+        self.orientation = Quaternion.eulers2Quaternion(eulers)
+        self.op_sym = symmetry(lattice)
 
 
 
