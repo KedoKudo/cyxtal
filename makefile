@@ -1,4 +1,5 @@
-CC=gcc-5
+SHELL = /bin/sh
+CC    = gcc-5
 
 #########################
 # COMPILE CYTHON MODULE #

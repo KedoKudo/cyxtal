@@ -237,7 +237,7 @@ cdef class Quaternion:
             r = Q.asRodrigues()
             convert to Rodrigues representation
         """
-        cdef np.ndarray r = empty(3, dtype=float)
+        cdef np.ndarray r = np.empty(3, dtype=float)
 
         if self.w != 0.0:
             r[0] = self.x/self.w
@@ -434,7 +434,7 @@ cdef class Crystallite:
     cdef public Quaternion   orientation
     cdef public double[:,:]  op_sym
 
-    def __init__(eulers, lattice):
+    def __init__(self, eulers, lattice):
         self.orientation = Quaternion.eulers2Quaternion(eulers)
         self.op_sym = symmetry(lattice)
 
