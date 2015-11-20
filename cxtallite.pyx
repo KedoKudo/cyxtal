@@ -437,33 +437,3 @@ cdef class Crystallite:
     def __init__(self, eulers, lattice):
         self.orientation = Quaternion.eulers2Quaternion(eulers)
         self.op_sym = symmetry(lattice)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
