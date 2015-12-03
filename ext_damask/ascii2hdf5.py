@@ -33,8 +33,35 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 DESCRIPTION
 -----------
-    ascii2hdf5
+    tableConvert:
+        convert a single damask table into a hdf5 file
+    tableMerge:
+        merge several hdf5 table into one single large file
+
+NOTE
+----
+    Ideally, the output from DAMASK should be directly in HDF5 format, which can help
+    speed up the post processing phase. However, since no immediate plan is made in
+    system wide implementation of HDF5 in DAMASK, we are still using the legacy combo
+    binary+ascii. This script is design to convert ASCII table from DAMASK into hdf5
+    table, which is faster when large amount of data is being processed.
 """
 
 import h5py
 import numpy as np
+
+def tableConvert(damaskTalbe,
+                 hdf5table=None, mode=None):
+    """
+    DESCRIPTION
+    -----------
+    tableConvert(PATH_TO_DAMASK_ASCII_TALBE,
+                 hdf5table=MY_HDF5_NAME)
+    create a
+    """
+    if hdf5table is None:
+        hdf5table = damaskTalbe.replace(".txt", ".hdf5")
+
+    mytable = h5py.file(hdf5table, "w")
+
+def table
