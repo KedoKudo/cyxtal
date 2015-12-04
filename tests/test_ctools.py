@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: UTF-8 no BOM -*-
 
 """
    ________  ___  ___________    __
@@ -29,16 +30,12 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
 ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+DESCRIPTION
+-----------
 """
 
-##############################
-# TESTING MODULES FOR CYXTAL #
-##############################
+import unittest
 
-import sys
-from cyxtal import Quaternion
-from cyxtal import symmetry
-from cyxtal import kmeans
-
-a = symmetry('hexagonal')
-print a
+if __name__ == '__main__':
+    unittest.main()

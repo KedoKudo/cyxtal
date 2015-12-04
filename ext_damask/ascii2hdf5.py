@@ -51,17 +51,40 @@ import h5py
 import numpy as np
 
 def tableConvert(damaskTalbe,
-                 hdf5table=None, mode=None):
+                 hdf5table=None, mode='new', groupname=None):
     """
     DESCRIPTION
     -----------
     tableConvert(PATH_TO_DAMASK_ASCII_TALBE,
                  hdf5table=MY_HDF5_NAME)
-    create a
+    convert a single ASCII table with DAMASK convention into HDF5 format, which can be
+    either stored in a new HDF5 file or appended to an existing one.
+    PARAMETERS
+    ----------
+    damaskTalbe: str
+        path to the damask ASCII table for conversion
+    hdf5table: str
+        path to the new hdf5 table, default is the same as damaskTalbe with
+        hdf5 as new extension
+    mode: str = ['append', 'new']
+        data storage mode
     """
+    # set HDF5 path
     if hdf5table is None:
         hdf5table = damaskTalbe.replace(".txt", ".hdf5")
 
-    mytable = h5py.file(hdf5table, "w")
+    # set writing mode
+    if mode == 'new':
+        wmode = 'w'
+    elif mode == 'append':
+        wmode = 'r+'
+    else:
+        raise ValueError("unknown mode, use new/append")
 
-def table
+    # set up HDF5 table
+    mytable = h5py.file(hdf5table, wmode)
+
+
+
+def tableMerge(hdf5talbes, mode=None):
+    pass

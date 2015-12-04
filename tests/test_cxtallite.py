@@ -1,10 +1,12 @@
->-------------------------------------<
-<   ________  ___  ___________    __  >
-<  / ____/\ \/ / |/ /_  __/   |  / /  >
-< / /      \  /|   / / / / /| | / /   >
-</ /___    / //   | / / / ___ |/ /___ >
-<\____/   /_//_/|_|/_/ /_/  |_/_____/ >
->-------------------------------------<
+#!/usr/bin/env python
+# -*- coding: UTF-8 no BOM -*-
+
+"""
+   ________  ___  ___________    __
+  / ____/\ \/ / |/ /_  __/   |  / /
+ / /      \  /|   / / / / /| | / /
+/ /___    / //   | / / / ___ |/ /___
+\____/   /_//_/|_|/_/ /_/  |_/_____/
 
 Copyright (c) 2015, C. Zhang.
 All rights reserved.
@@ -29,26 +31,11 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+DESCRIPTION
+-----------
+"""
 
-#######################
-# PACKAGE DESCRIPTION #
-#######################
-This package is designed to provide
+import unittest
 
-##################
-# FILE STRUCTURE #
-##################
-cyxtal/
-    __init__.py
-    corientation.pyd
-    corientation.pyx
-    ctools.pyd
-    ctools.pyx
-    ext_aps/
-        something goes here
-    ext_damask/
-        something goes here
-    ext_vtk/
-        ascii2hdf5.py
-    ext_ebsd/
-        something goes here
+if __name__ == '__main__':
+    unittest.main()
