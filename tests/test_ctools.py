@@ -46,7 +46,7 @@ np.random.seed(1960)
 
 class TestKmeans(unittest.TestCase):
 
-    def test_clustering(self):
+    def setUp(self):
         # generate 1D points and reshape to 2D
         pt1 = np.random.normal(1, 0.2, (100,2))
         pt2 = np.random.normal(2, 0.5, (300,2))
@@ -56,14 +56,25 @@ class TestKmeans(unittest.TestCase):
         pt2[:,0] += 1
         pt3[:,0] -= 20
         pt4[:,0] += 10
-        data = np.concatenate((pt1, pt2, pt3, pt4))
-        k = 4
+        # for testing
+        self.data      = np.concatenate((pt1, pt2, pt3, pt4))
+        self.k         = 4
+        self.max_iter  = 1e4
+        self.threshold = 1e-2
+        self.max_outer = 2**8
 
+    def test_clustering(self):
         # get results and unpack it
-        rst = kmeans(data, k, max_iter=1e4, threshold=0.1)
+        rst = kmeans(self.data,
+                     self.k,
+                     max_iter=self.max_iter,
+                     threshold=self.threshold)
         # try multiple times to get better results
-        for i in range(64):
-            tmp = kmeans(data, k, max_iter=1e4, threshold=0.1)
+        for i in range(self.max_outer):
+            tmp = kmeans(self.data,
+                         self.k,
+                         max_iter=self.max_iter,
+                         threshold=self.threshold)
             if tmp[-1] < rst[-1]:
                 rst = tmp
 
@@ -76,7 +87,7 @@ class TestKmeans(unittest.TestCase):
         inertia = rst[5]
 
         # assert find right number of clusters
-        self.assertEqual(len(cnt), k)
+        self.assertEqual(len(cnt), self.k)
 
 
 if __name__ == '__main__':
