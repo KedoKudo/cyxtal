@@ -33,9 +33,51 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 DESCRIPTION
 -----------
+    TestKeamns:
+        testing module of kmeans in cyxtal.ctools
 """
 
 import unittest
+import numpy as np
+from cyxtal.ctools import kmeans
+
+# void random seed for testing
+np.random.seed(1960)
+
+class TestKmeans(unittest.TestCase):
+
+    def test_clustering(self):
+        # generate 1D points and reshape to 2D
+        pt1 = np.random.normal(1, 0.2, (100,2))
+        pt2 = np.random.normal(2, 0.5, (300,2))
+        pt3 = np.random.normal(3, 0.3, (100,2))
+        pt4 = np.random.normal(5, 0.5, (100,2))
+        # slightly move sets 2 and 3 (for a prettier output)
+        pt2[:,0] += 1
+        pt3[:,0] -= 20
+        pt4[:,0] += 10
+        data = np.concatenate((pt1, pt2, pt3, pt4))
+        k = 4
+
+        # get results and unpack it
+        rst = kmeans(data, k, max_iter=1e4, threshold=0.1)
+        # try multiple times to get better results
+        for i in range(64):
+            tmp = kmeans(data, k, max_iter=1e4, threshold=0.1)
+            if tmp[-1] < rst[-1]:
+                rst = tmp
+
+        # get final result
+        assign = rst[0]
+        centroid = rst[1]
+        iteration = rst[2]
+        converged = rst[3]
+        cnt = rst[4]
+        inertia = rst[5]
+
+        # assert find right number of clusters
+        self.assertEqual(len(cnt), k)
+
 
 if __name__ == '__main__':
     unittest.main()

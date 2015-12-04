@@ -12,13 +12,10 @@ cdef extern from "numpy/npy_math.h":
 # Determine the right dtype for arrays of indices at compile time.
 IF UNAME_MACHINE[-2:] == '64':
     ctypedef np.int64_t INTP_t
-    intp = np.int64
 ELSE:
     ctypedef np.int32_t INTP_t
-    intp = np.int32
 
 ctypedef np.float64_t DTYPE_t
-DTYPE = np.float64
 
 
 cdef inline DTYPE_t DTYPE_max(DTYPE_t a, DTYPE_t b): return a if a >= b else b

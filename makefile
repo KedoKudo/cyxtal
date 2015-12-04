@@ -7,5 +7,8 @@ CC    = gcc-5
 all:
 	python setup.py build_ext --inplace
 
+test:
+	nosetests tests
+
 clean:
 	rm -rvf build *.so

@@ -47,6 +47,23 @@ from scipy.spatial.distance import cdist
 from numpy.random import normal, choice
 
 
+#############################
+# SETUP FOR TYPE DEFINITION #
+#############################
+np.import_array()
+
+cdef extern from "numpy/npy_math.h":
+    double NPY_INFINITY
+
+# Determine the right dtype for arrays of indices at compile time.
+IF UNAME_MACHINE[-2:] == '64':
+    intp = np.int64
+ELSE:
+    intp = np.int32
+
+DTYPE = np.float64
+
+
 ##
 # Functions to provide the kemans clustering capability
 # reference:
