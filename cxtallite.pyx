@@ -239,8 +239,7 @@ cdef class Quaternion:
         return Quaternion(newQ)
 
     def __div__(self, Quaternion other):
-        cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
-        pass
+        return self * other.conj()
 
     def __str__(self):
         tmp = "({}, <{},{},{}>)".format(self.w, self.x, self.y, self.z)
@@ -281,6 +280,15 @@ cdef class Quaternion:
         newQ[1] = self.x/length
         newQ[2] = self.y/length
         newQ[3] = self.z/length
+        return Quaternion(newQ)
+
+    def conj(self):
+        cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
+
+        newQ[0] =  self.w
+        newQ[1] = -self.x
+        newQ[2] = -self.y
+        newQ[3] = -self.z
         return Quaternion(newQ)
 
     def tolist(self):

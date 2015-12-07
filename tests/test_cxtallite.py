@@ -100,11 +100,17 @@ class testQuaternion(unittest.TestCase):
         target2 = [0.2623303, 0.8853649, 0.1311652, -0.3607042]
         np.testing.assert_almost_equal(calc2.tolist(), target2)
 
-    def test_rot(self):
+    def test_rotate(self):
         pass
 
     def test_div(self):
-        pass
+        calc1   = self.q2 / self.q3
+        target1 = [52, 29, -24, 13]
+        np.testing.assert_almost_equal(calc1.tolist(), target1)
+
+        calc2   = self.u2 / self.u3
+        target2 = [0.7939163, 0.4427610, -0.3664228, 0.1984791]
+        np.testing.assert_almost_equal(calc2.tolist(), target2)
 
     def test_inv(self):
         pass
