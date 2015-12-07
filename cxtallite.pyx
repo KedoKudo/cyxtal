@@ -203,8 +203,38 @@ cdef class Quaternion:
         self.z = self.z + other.z
         return self
 
+    def __sub__(self, Quaternion other):
+        cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
+
+        newQ[0] = self.w - other.w
+        newQ[1] = self.x - other.x
+        newQ[2] = self.y - other.y
+        newQ[3] = self.z - other.z
+        return Quaternion(newQ)
+
+    def __isub__(self, Quaternion other):
+        self.w = self.w - other.w
+        self.x = self.x - other.x
+        self.y = self.y - other.y
+        self.z = self.z - other.z
+        return self
+
+    def __mul__(self, Quaternion other):
+        cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
+
+
+    def __imul__(self, Quaternion other):
+        pass
+
     def __str__(self):
         tmp = "({}, <{},{},{}>)".format(self.w, self.x, self.y, self.z)
+        return tmp
+
+    def __repr__(self):
+        tmp = "Quaternion(real={:.4f}, imag=<{:.4f},{:.4f},{:.4f}>".format(self.w,
+                                                                           self.x,
+                                                                           self.y,
+                                                                           self.z)
         return tmp
 
     def __abs__(self):
@@ -214,11 +244,18 @@ cdef class Quaternion:
               self.x*self.x + \
               self.y*self.y + \
               self.z*self.z
-        tmp = np.sqrt(tmp)
+        tmp = sqrt(tmp)
         return tmp
 
     def __len__(self):
         return 4
+
+    def __neg__(self):
+        self.w = -self.w
+        self.x = -self.x
+        self.y = -self.y
+        self.z = -self.z
+        return self
 
     def unitary(self):
         cdef double length = abs(self)
