@@ -74,6 +74,7 @@ def tableConvert(damaskTalbe,
         hdf5table = damaskTalbe.replace(".txt", ".hdf5")
 
     # set writing mode
+    mode = mode.lower()
     if mode == 'new':
         wmode = 'w'
     elif mode == 'append':

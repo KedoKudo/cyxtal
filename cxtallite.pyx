@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# encoding: utf-8
+# -*- coding: UTF-8 no BOM -*-
 # filename: corientation.pyx
 
 """
@@ -31,6 +31,17 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
 ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+DESCRIPTION
+-----------
+    symmetry: function
+        provide symmetry operators in quaternion for different crystal structure
+    Quaternion: extension class
+        quaternion representation of 3D orientation
+    Xtallite: extension class
+        physically equivalent to material point
+    Aggregate: extension class
+        physically equivalent to grain
 """
 
 import  cython
@@ -38,6 +49,23 @@ import  math, random, os
 import  numpy as np
 cimport numpy as np
 from    libc.math cimport sin, cos, sqrt
+
+
+#############################
+# SETUP FOR TYPE DEFINITION #
+#############################
+np.import_array()
+
+cdef extern from "numpy/npy_math.h":
+    double NPY_INFINITY
+
+# Determine the right dtype for arrays of indices at compile time.
+IF UNAME_MACHINE[-2:] == '64':
+    intp = np.int64
+ELSE:
+    intp = np.int32
+
+DTYPE = np.float64
 
 
 cpdef symmetry(lattice):
@@ -58,9 +86,11 @@ cpdef symmetry(lattice):
         orientation.
     """
     cdef double tmp
+    cdef list   lattice_hcp   = ['hexagonal', 'hex', 'hcp']
+    cdef list   lattice_cubic = ['bcc', 'fcc', 'cubic']
 
-    lattice = lattice.lower()
-    if lattice == 'cubic':
+    lattice = str(lattice.lower())
+    if lattice in lattice_cubic:
         tmp = sqrt(2)
         symQuats = [
                     [ 1.0,     0.0,     0.0,     0.0     ],
@@ -88,7 +118,7 @@ cpdef symmetry(lattice):
                     [-0.5*tmp, 0.5*tmp, 0.0,     0.0     ],
                     [-0.5*tmp,-0.5*tmp, 0.0,     0.0     ],
                    ]
-    elif lattice == 'hexagonal':
+    elif lattice in lattice_hcp:
         tmp = sqrt(3)
         symQuats =  [
                      [ 1.0,      0.0,     0.0,      0.0     ],
@@ -116,10 +146,12 @@ cpdef symmetry(lattice):
                      [ 0.5*tmp, 0.0,     0.0,     0.5*tmp ],
                      [-0.5*tmp, 0.0,     0.0,     0.5*tmp ],
                     ]
-    else:
+    elif lattice == 'triclinic':
         symQuats =  [
                      [ 1.0,0.0,0.0,0.0 ],
                     ]
+    else:
+        raise ValueError("Unknown lattice structure: {}".format(lattice))
 
     return np.array(symQuats)
 
@@ -152,272 +184,8 @@ cdef class Quaternion:
             self.y = q[2]
             self.z = q[3]
 
-    def __copy__(self):
-        cdef double[4] q = [self.w,self.x,self.y,self.z]
-        return Quaternion(q)
 
-    def asEulers(self):
-        """
-        DESCRIPTION
-        -----------
-            eulers = Q.asEulers()
-            Return orientation in Euler angles
-        RETURNS
-        -------
-        eulers : list [phi1, PHI, phi2]
-            Euler angles in degrees
-        NOTE
-        ----
-        CONVERSION TAKEN FROM:
-        Melcher, A.; Unser, A.; Reichhardt, M.; Nestler, B.; Pötschke, M.; Selzer, M.
-        Conversion of EBSD data by a quaternion based algorithm to be used for grain
-        structure simulations Technische Mechanik 30 (2010) pp 401--413
-        """
-        cdef double     x, y, chi
-        cdef np.ndarray eulers = np.zeros(3, type=float)
-
-        if abs(self.x) < 1e-4 and abs(self.y) < 1e-4:
-            x = self.w**2 - self.z**2
-            y = 2.*self.w*self.z
-            eulers[0] = math.atan2(y,x)
-        elif abs(self.w) < 1e-4 and abs(self.z) < 1e-4:
-            x = self.x**2 - self.y**2
-            y = 2.*self.x*self.y
-            eulers[0] = math.atan2(y,x)
-            eulers[1] = math.pi
-        else:
-            chi = math.sqrt((self.w**2 + self.z**2)*(self.x**2 + self.y**2))
-
-            x = (self.w * self.x - self.y * self.z)/2./chi
-            y = (self.w * self.y + self.x * self.z)/2./chi
-            eulers[0] = math.atan2(y,x)
-
-            x = self.w**2 + self.z**2 - (self.x**2 + self.y**2)
-            y = 2.*chi
-            eulers[1] = math.atan2(y,x)
-
-            x = (self.w * self.x + self.y * self.z)/2./chi
-            y = (self.z * self.x - self.y * self.w)/2./chi
-            eulers[2] = math.atan2(y,x)
-
-        # convert to standard range
-        eulers[0] %= 2*math.pi
-        if eulers[1] < 0.0:
-            eulers[1] += math.pi
-            eulers[2] *= -1.0
-        eulers[2] %= 2*math.pi
-
-        return np.degrees(eulers)
-
-    def asOrientationMatrix(self):
-        """
-        DESCRIPTION
-        -----------
-            m = Q.asOrientationMatrix()
-            convert orientation matrix representation
-        """
-        cdef np.ndarray m = np.empty((3,3), dtype=float)
-
-        m[0,0] = 1.0-2.0*(self.y*self.y+self.z*self.z)
-        m[0,1] =     2.0*(self.x*self.y-self.z*self.w)
-        m[0,2] =     2.0*(self.x*self.z+self.y*self.w)
-        m[1,0] =     2.0*(self.x*self.y+self.z*self.w)
-        m[1,1] = 1.0-2.0*(self.x*self.x+self.z*self.z)
-        m[1,2] =     2.0*(self.y*self.z-self.x*self.w)
-        m[2,0] =     2.0*(self.x*self.z-self.y*self.w)
-        m[2,1] =     2.0*(self.x*self.w+self.y*self.z)
-        m[2,2] = 1.0-2.0*(self.x*self.x+self.y*self.y)
-
-        return m
-
-    def asRodrigues(self):
-        """
-        DESCRIPTION
-        -----------
-            r = Q.asRodrigues()
-            convert to Rodrigues representation
-        """
-        cdef np.ndarray r = np.empty(3, dtype=float)
-
-        if self.w != 0.0:
-            r[0] = self.x/self.w
-            r[1] = self.y/self.w
-            r[2] = self.z/self.w
-        else:
-            r.fill(np.inf)
-
-        return r
-
-    def asAngleAxis(self):
-        """
-        DESCRIPTION
-        -----------
-            angle, axis = Q.asAngleAxis()
-            convert to angle-axis representation
-        """
-        cdef double     s, x, y, mag
-        cdef double     angle
-        cdef np.ndarray axis = np.zeros(3, dtype=float)
-
-
-        if self.w > 1.0:
-            mag = sqrt(self.w**2 + self.x**2 + self.y**2 + self.z**2)
-            self.w /= mag
-            self.x /= mag
-            self.y /= mag
-            self.z /= mag
-
-        s     = sqrt(1 - self.w**2)
-        x     = 2*self.w**2 - 1.
-        y     = 2*self.w * s
-        angle = math.atan2(y,x)
-        if angle < 0.0:
-            angle *= -1.0
-            s     *= -1.0
-
-        if np.abs(angle) > 1e-3:
-            axis[0] = self.x/s
-            axis[1] = self.y/s
-            axis[2] = self.z/s
-        else:
-            axis[0] = 1.0
-
-        return (angle, axis)
-
-    @staticmethod
-    def eulers2Quaternion(double[:] e):
-        """
-        DESCRIPTION
-        -----------
-            Q = eulers2Quaternion(eulerAgnles)
-            convert euler_angle to quaternion representation
-        PARAMETERS
-        ----------
-        e: double[3]
-            Euler angles in degrees
-        RETURNS
-        -------
-        q: Quaternion
-            Return a quaternion instance of given orientation
-        NOTE
-        ----
-        Always assume using Bunge convention (z-x-z)
-        """
-        cdef double     c1,s1,c2,s2,c3,s3
-        cdef double[4]  q
-        cdef double[3]  halfEulers
-        cdef int        i
-
-        e = np.radians(e)  # convert to radians for calculation
-
-        for i in range(3):
-            halfEulers[i] = e[i] * 0.5
-
-        c1 = cos(halfEulers[0])
-        s1 = sin(halfEulers[0])
-        c2 = cos(halfEulers[1])
-        s2 = sin(halfEulers[1])
-        c3 = cos(halfEulers[2])
-        s3 = sin(halfEulers[2])
-
-        q[0] = c1 * c2 * c3 - s1 * s2 * s3
-        q[1] = s1 * s2 * c3 + c1 * c2 * s3
-        q[2] = s1 * c2 * c3 + c1 * s2 * s3
-        q[3] = c1 * s2 * c3 - s1 * c2 * s3
-
-        return Quaternion(q)
-
-    @staticmethod
-    def rodrigues2Quaternion(double[:] r):
-        """
-        DESCRIPTION
-        -----------
-            Q = rodrigues2Quaternion(r)
-            Convert a Rodrigues vector (length 3) to a Quaternion
-        PARAMETERS
-        ----------
-        r: double[:]
-            Memoryview of a length 3 vector
-        RETURNS
-        -------
-        Q: Quaternion()
-            Quaternion instance of given orientation
-        """
-        cdef double        norm, halfAngle
-        cdef double[4]     q
-        cdef int           i
-
-        norm      = np.linalg.norm(r)
-        halfAngle = np.arctan(norm)
-        q[0]      = cos(halfAngle)
-
-        for i in range(3):
-            q[i+1] = sin(halfAngle) * r[i] / norm
-
-        return Quaternion(q)
-
-    @staticmethod
-    def oMatrix2Quaternion(double[:,:] m):
-        """
-        DESCRIPTION
-        -----------
-            Q = oMatrix2Quaternion(m)
-            convert orientation matrix to Quaternion representation
-            ref: http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
-        PARAMETERS
-        ----------
-        m : np.ndarray
-            3x3 orientation matrix
-        RETURNS
-        -------
-        Q : Quaternion
-            Quaternion instance of given orientation
-        """
-        cdef double    trace, s, t
-        cdef double[4] q
-        cdef int       i
-
-        trace = np.trace(m)
-
-        if trace > 1e-8:
-            s    = sqrt(trace + 1.0) * 2.0
-
-            q[0] = s * 0.25
-            q[1] = (m[2,1] - m[1,2])/s
-            q[2] = (m[0,2] - m[2,0])/s
-            q[3] = (m[1,0] - m[0,1])/s
-
-        elif m[0,0] > m[1,1] and m[0,0] > m[2,2]:
-            t    = m[0,0] - m[1,1] - m[2,2] + 1.0
-            s    = 2.0*sqrt(t)
-
-            q[0] = (m[2,1] - m[1,2])/s
-            q[1] = s*0.25
-            q[2] = (m[0,1] + m[1,0])/s
-            q[3] = (m[2,0] + m[0,2])/s
-
-        elif m[1,1] > m[2,2]:
-            t    = -m[0,0] + m[1,1] - m[2,2] + 1.0
-            s    = 2.0 * sqrt(t)
-
-            q[0] = (m[0,2] - m[2,0])/s
-            q[1] = (m[0,1] + m[1,0])/s
-            q[2] = s*0.25
-            q[3] = (m[1,2] + m[2,1])/s
-
-        else:
-            t    = -m[0,0] - m[1,1] + m[2,2] + 1.0
-            s    = 2.0 * sqrt(t)
-
-            q[0] = (m[1,0] - m[0,1])/s
-            q[1] = (m[2,0] + m[0,2])/s
-            q[2] = (m[1,2] + m[2,1])/s
-            q[3] = s*0.25
-
-        return Quaternion(q)
-
-
-cdef class Crystallite:
+cdef class Xtallite:
     """Aggregate class to represent real crystallite in material.
 
     NOTE

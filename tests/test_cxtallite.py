@@ -36,6 +36,59 @@ DESCRIPTION
 """
 
 import unittest
+import numpy as np
+from cyxtal.cxtallite import Quaternion
+from cyxtal.cxtallite import symmetry
+from cyxtal.cxtallite import Xtallite
+
+# void random seed for testing
+np.random.seed(1960)
+
+
+class testSymmetry(unittest.TestCase):
+
+    def test_hcp(self):
+        sym1 = symmetry('hexagonal')
+        sym2 = symmetry('hcp')
+        sym3 = symmetry('hex')
+        self.assertListEqual(sym1.tolist(), sym2.tolist())
+        self.assertListEqual(sym2.tolist(), sym3.tolist())
+
+    def test_cubic(self):
+        sym1 = symmetry('bcc')
+        sym2 = symmetry('fcc')
+        sym3 = symmetry('cubic')
+        self.assertListEqual(sym1.tolist(), sym2.tolist())
+        self.assertListEqual(sym2.tolist(), sym3.tolist())
+
+    def test_unknownStructure(self):
+        self.assertRaises(ValueError,
+                          symmetry, 'Peter Parker')
+
+
+class testQuaternion(unittest.TestCase):
+    pass
+
+#     def setUp(self):
+#         q1 = Quaternion()
+#         self.data = []
+
+#     def test_add(self):
+#         pass
+
+#     def test_rotation(self):
+#         pass
+
+#     def test_convert2Eulers(self):
+#         pass
+
+#     def test_convert2gMatrix(self):
+#         pass
+
+#     def test_avergateOrientation(self):
+#         pass
+
+
 
 if __name__ == '__main__':
     unittest.main()
