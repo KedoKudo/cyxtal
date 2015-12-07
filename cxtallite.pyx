@@ -258,6 +258,15 @@ cdef class Quaternion:
     def __div__(self, Quaternion other):
         return self * other.conj()
 
+    def __idiv__(self, Quaternion other):
+        cdef Quaternion tmp = self * other.conj()
+
+        self.w = tmp.w
+        self.x = tmp.x
+        self.y = tmp.y
+        self.z = tmp.z
+        return self
+
     def __str__(self):
         tmp = "({}, <{},{},{}>)".format(self.w, self.x, self.y, self.z)
         return tmp
@@ -313,6 +322,15 @@ cdef class Quaternion:
 
     def tondarray(self):
         return np.array(self.tolist())
+
+    def toEulers(self):
+        pass
+
+    def toRodrigues(self):
+        pass
+
+    def toOrientationMatrix(self):
+        pass
 
     @classmethod
     def rotate(cls, Quaternion q, DTYPE_t[:] pt):
