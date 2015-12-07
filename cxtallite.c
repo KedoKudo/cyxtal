@@ -847,7 +847,7 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
 
-/* "cxtallite.pxd":29
+/* "cxtallite.pxd":32
  * cpdef symmetry(lattice)
  * 
  * cdef class Quaternion:             # <<<<<<<<<<<<<<
@@ -863,7 +863,7 @@ struct __pyx_obj_9cxtallite_Quaternion {
 };
 
 
-/* "cxtallite.pxd":32
+/* "cxtallite.pxd":35
  *     cdef public double w,x,y,z
  * 
  * cdef class Rodgiues:             # <<<<<<<<<<<<<<
@@ -876,7 +876,7 @@ struct __pyx_obj_9cxtallite_Rodgiues {
 };
 
 
-/* "cxtallite.pxd":35
+/* "cxtallite.pxd":38
  *     cdef public double[3] v
  * 
  * cdef class Eulers:             # <<<<<<<<<<<<<<
@@ -891,7 +891,7 @@ struct __pyx_obj_9cxtallite_Eulers {
 };
 
 
-/* "cxtallite.pxd":38
+/* "cxtallite.pxd":41
  *     cdef public double phi1, PHI, phi2
  * 
  * cdef class OrientationMatrix:             # <<<<<<<<<<<<<<
@@ -903,7 +903,7 @@ struct __pyx_obj_9cxtallite_OrientationMatrix {
 };
 
 
-/* "cxtallite.pyx":315
+/* "cxtallite.pyx":327
  * 
  * 
  * cdef class Xtallite:             # <<<<<<<<<<<<<<
@@ -1618,6 +1618,7 @@ static PyObject *strided = 0;
 static PyObject *indirect = 0;
 static PyObject *contiguous = 0;
 static PyObject *indirect_contiguous = 0;
+static CYTHON_INLINE __pyx_t_9cxtallite_DTYPE_t __pyx_f_9cxtallite_DTYPE_sgn(__pyx_t_9cxtallite_DTYPE_t); /*proto*/
 static PyObject *__pyx_f_9cxtallite_symmetry(PyObject *, int __pyx_skip_dispatch); /*proto*/
 static struct __pyx_array_obj *__pyx_array_new(PyObject *, Py_ssize_t, char *, char *, char *); /*proto*/
 static void *__pyx_align_pointer(void *, size_t); /*proto*/
@@ -1905,16 +1906,15 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_2__add__(PyObject *__pyx_v_sel
 static PyObject *__pyx_pf_9cxtallite_10Quaternion_4__iadd__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self, struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_other); /* proto */
 static PyObject *__pyx_pf_9cxtallite_10Quaternion_6__sub__(PyObject *__pyx_v_self, struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_other); /* proto */
 static PyObject *__pyx_pf_9cxtallite_10Quaternion_8__isub__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self, struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_other); /* proto */
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_10__mul__(CYTHON_UNUSED PyObject *__pyx_v_self, CYTHON_UNUSED struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_other); /* proto */
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_12__imul__(CYTHON_UNUSED struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self, CYTHON_UNUSED struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_other); /* proto */
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_14__str__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_16__repr__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_18__abs__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
-static Py_ssize_t __pyx_pf_9cxtallite_10Quaternion_20__len__(CYTHON_UNUSED struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_22__neg__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_24unitary(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_26tolist(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_28tondarray(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_9cxtallite_10Quaternion_10__mul__(PyObject *__pyx_v_self, struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_other); /* proto */
+static PyObject *__pyx_pf_9cxtallite_10Quaternion_12__str__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_9cxtallite_10Quaternion_14__repr__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_9cxtallite_10Quaternion_16__abs__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
+static Py_ssize_t __pyx_pf_9cxtallite_10Quaternion_18__len__(CYTHON_UNUSED struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_9cxtallite_10Quaternion_20__neg__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_9cxtallite_10Quaternion_22unitary(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_9cxtallite_10Quaternion_24tolist(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_9cxtallite_10Quaternion_26tondarray(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_9cxtallite_10Quaternion_1w___get__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
 static int __pyx_pf_9cxtallite_10Quaternion_1w_2__set__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
 static PyObject *__pyx_pf_9cxtallite_10Quaternion_1x___get__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self); /* proto */
@@ -3694,8 +3694,8 @@ static PyObject *__pyx_pf_9cxtallite_symmetry(CYTHON_UNUSED PyObject *__pyx_self
  *     """
  * 
  *     def __init__(self, DTYPE_t[:] q):             # <<<<<<<<<<<<<<
- *         self.w = q[0]
- *         self.x = q[1]
+ *         cdef DTYPE_t sgn = DTYPE_sgn(q[0])
+ * 
  */
 
 /* Python wrapper */
@@ -3751,6 +3751,7 @@ static int __pyx_pw_9cxtallite_10Quaternion_1__init__(PyObject *__pyx_v_self, Py
 }
 
 static int __pyx_pf_9cxtallite_10Quaternion___init__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self, __Pyx_memviewslice __pyx_v_q) {
+  __pyx_t_9cxtallite_DTYPE_t __pyx_v_sgn;
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   Py_ssize_t __pyx_t_1;
@@ -3758,6 +3759,7 @@ static int __pyx_pf_9cxtallite_10Quaternion___init__(struct __pyx_obj_9cxtallite
   Py_ssize_t __pyx_t_3;
   Py_ssize_t __pyx_t_4;
   Py_ssize_t __pyx_t_5;
+  Py_ssize_t __pyx_t_6;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -3766,9 +3768,9 @@ static int __pyx_pf_9cxtallite_10Quaternion___init__(struct __pyx_obj_9cxtallite
   /* "cxtallite.pyx":185
  * 
  *     def __init__(self, DTYPE_t[:] q):
- *         self.w = q[0]             # <<<<<<<<<<<<<<
- *         self.x = q[1]
- *         self.y = q[2]
+ *         cdef DTYPE_t sgn = DTYPE_sgn(q[0])             # <<<<<<<<<<<<<<
+ * 
+ *         self.w = q[0] * sgn
  */
   __pyx_t_1 = 0;
   __pyx_t_2 = -1;
@@ -3780,16 +3782,16 @@ static int __pyx_pf_9cxtallite_10Quaternion___init__(struct __pyx_obj_9cxtallite
     __Pyx_RaiseBufferIndexError(__pyx_t_2);
     {__pyx_filename = __pyx_f[0]; __pyx_lineno = 185; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_v_self->w = (*((__pyx_t_9cxtallite_DTYPE_t *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_1 * __pyx_v_q.strides[0]) )));
+  __pyx_v_sgn = __pyx_f_9cxtallite_DTYPE_sgn((*((__pyx_t_9cxtallite_DTYPE_t *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_1 * __pyx_v_q.strides[0]) ))));
 
-  /* "cxtallite.pyx":186
- *     def __init__(self, DTYPE_t[:] q):
- *         self.w = q[0]
- *         self.x = q[1]             # <<<<<<<<<<<<<<
- *         self.y = q[2]
- *         self.z = q[3]
+  /* "cxtallite.pyx":187
+ *         cdef DTYPE_t sgn = DTYPE_sgn(q[0])
+ * 
+ *         self.w = q[0] * sgn             # <<<<<<<<<<<<<<
+ *         self.x = q[1] * sgn
+ *         self.y = q[2] * sgn
  */
-  __pyx_t_3 = 1;
+  __pyx_t_3 = 0;
   __pyx_t_2 = -1;
   if (__pyx_t_3 < 0) {
     __pyx_t_3 += __pyx_v_q.shape[0];
@@ -3797,18 +3799,18 @@ static int __pyx_pf_9cxtallite_10Quaternion___init__(struct __pyx_obj_9cxtallite
   } else if (unlikely(__pyx_t_3 >= __pyx_v_q.shape[0])) __pyx_t_2 = 0;
   if (unlikely(__pyx_t_2 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_2);
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 187; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_v_self->x = (*((__pyx_t_9cxtallite_DTYPE_t *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_3 * __pyx_v_q.strides[0]) )));
+  __pyx_v_self->w = ((*((__pyx_t_9cxtallite_DTYPE_t *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_3 * __pyx_v_q.strides[0]) ))) * __pyx_v_sgn);
 
-  /* "cxtallite.pyx":187
- *         self.w = q[0]
- *         self.x = q[1]
- *         self.y = q[2]             # <<<<<<<<<<<<<<
- *         self.z = q[3]
+  /* "cxtallite.pyx":188
  * 
+ *         self.w = q[0] * sgn
+ *         self.x = q[1] * sgn             # <<<<<<<<<<<<<<
+ *         self.y = q[2] * sgn
+ *         self.z = q[3] * sgn
  */
-  __pyx_t_4 = 2;
+  __pyx_t_4 = 1;
   __pyx_t_2 = -1;
   if (__pyx_t_4 < 0) {
     __pyx_t_4 += __pyx_v_q.shape[0];
@@ -3816,18 +3818,18 @@ static int __pyx_pf_9cxtallite_10Quaternion___init__(struct __pyx_obj_9cxtallite
   } else if (unlikely(__pyx_t_4 >= __pyx_v_q.shape[0])) __pyx_t_2 = 0;
   if (unlikely(__pyx_t_2 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_2);
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 187; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 188; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_v_self->y = (*((__pyx_t_9cxtallite_DTYPE_t *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_4 * __pyx_v_q.strides[0]) )));
+  __pyx_v_self->x = ((*((__pyx_t_9cxtallite_DTYPE_t *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_4 * __pyx_v_q.strides[0]) ))) * __pyx_v_sgn);
 
-  /* "cxtallite.pyx":188
- *         self.x = q[1]
- *         self.y = q[2]
- *         self.z = q[3]             # <<<<<<<<<<<<<<
+  /* "cxtallite.pyx":189
+ *         self.w = q[0] * sgn
+ *         self.x = q[1] * sgn
+ *         self.y = q[2] * sgn             # <<<<<<<<<<<<<<
+ *         self.z = q[3] * sgn
  * 
- *     def __add__(self, Quaternion other):
  */
-  __pyx_t_5 = 3;
+  __pyx_t_5 = 2;
   __pyx_t_2 = -1;
   if (__pyx_t_5 < 0) {
     __pyx_t_5 += __pyx_v_q.shape[0];
@@ -3835,16 +3837,35 @@ static int __pyx_pf_9cxtallite_10Quaternion___init__(struct __pyx_obj_9cxtallite
   } else if (unlikely(__pyx_t_5 >= __pyx_v_q.shape[0])) __pyx_t_2 = 0;
   if (unlikely(__pyx_t_2 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_2);
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 188; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 189; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_v_self->z = (*((__pyx_t_9cxtallite_DTYPE_t *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_5 * __pyx_v_q.strides[0]) )));
+  __pyx_v_self->y = ((*((__pyx_t_9cxtallite_DTYPE_t *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_5 * __pyx_v_q.strides[0]) ))) * __pyx_v_sgn);
+
+  /* "cxtallite.pyx":190
+ *         self.x = q[1] * sgn
+ *         self.y = q[2] * sgn
+ *         self.z = q[3] * sgn             # <<<<<<<<<<<<<<
+ * 
+ *     def __add__(self, Quaternion other):
+ */
+  __pyx_t_6 = 3;
+  __pyx_t_2 = -1;
+  if (__pyx_t_6 < 0) {
+    __pyx_t_6 += __pyx_v_q.shape[0];
+    if (unlikely(__pyx_t_6 < 0)) __pyx_t_2 = 0;
+  } else if (unlikely(__pyx_t_6 >= __pyx_v_q.shape[0])) __pyx_t_2 = 0;
+  if (unlikely(__pyx_t_2 != -1)) {
+    __Pyx_RaiseBufferIndexError(__pyx_t_2);
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 190; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  }
+  __pyx_v_self->z = ((*((__pyx_t_9cxtallite_DTYPE_t *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_6 * __pyx_v_q.strides[0]) ))) * __pyx_v_sgn);
 
   /* "cxtallite.pyx":184
  *     """
  * 
  *     def __init__(self, DTYPE_t[:] q):             # <<<<<<<<<<<<<<
- *         self.w = q[0]
- *         self.x = q[1]
+ *         cdef DTYPE_t sgn = DTYPE_sgn(q[0])
+ * 
  */
 
   /* function exit code */
@@ -3859,8 +3880,8 @@ static int __pyx_pf_9cxtallite_10Quaternion___init__(struct __pyx_obj_9cxtallite
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":190
- *         self.z = q[3]
+/* "cxtallite.pyx":192
+ *         self.z = q[3] * sgn
  * 
  *     def __add__(self, Quaternion other):             # <<<<<<<<<<<<<<
  *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
@@ -3876,7 +3897,7 @@ static PyObject *__pyx_pw_9cxtallite_10Quaternion_3__add__(PyObject *__pyx_v_sel
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__add__ (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_9cxtallite_Quaternion, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 190; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_9cxtallite_Quaternion, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 192; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_9cxtallite_10Quaternion_2__add__(((PyObject *)__pyx_v_self), ((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_other));
 
   /* function exit code */
@@ -3900,105 +3921,105 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_2__add__(PyObject *__pyx_v_sel
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__add__", 0);
 
-  /* "cxtallite.pyx":191
+  /* "cxtallite.pyx":193
  * 
  *     def __add__(self, Quaternion other):
  *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)             # <<<<<<<<<<<<<<
  * 
  *         newQ[0] = self.w + other.w
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 191; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 191; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 191; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 191; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_3) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 191; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_3) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple_, __pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 191; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple_, __pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 191; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_newQ = ((PyArrayObject *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "cxtallite.pyx":193
+  /* "cxtallite.pyx":195
  *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
  * 
  *         newQ[0] = self.w + other.w             # <<<<<<<<<<<<<<
  *         newQ[1] = self.x + other.x
  *         newQ[2] = self.y + other.y
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_w); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_w); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 195; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_other->w); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_other->w); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 195; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyNumber_Add(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyNumber_Add(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 195; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 0, __pyx_t_2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 0, __pyx_t_2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 195; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cxtallite.pyx":194
+  /* "cxtallite.pyx":196
  * 
  *         newQ[0] = self.w + other.w
  *         newQ[1] = self.x + other.x             # <<<<<<<<<<<<<<
  *         newQ[2] = self.y + other.y
  *         newQ[3] = self.z + other.z
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_x); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 194; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_x); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 196; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_other->x); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 194; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_other->x); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 196; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyNumber_Add(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 194; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyNumber_Add(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 196; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 1, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 194; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 1, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 196; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "cxtallite.pyx":195
+  /* "cxtallite.pyx":197
  *         newQ[0] = self.w + other.w
  *         newQ[1] = self.x + other.x
  *         newQ[2] = self.y + other.y             # <<<<<<<<<<<<<<
  *         newQ[3] = self.z + other.z
  *         return Quaternion(newQ)
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_y); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 195; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_y); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 197; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_other->y); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 195; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_other->y); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 197; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyNumber_Add(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 195; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyNumber_Add(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 197; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 2, __pyx_t_2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 195; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 2, __pyx_t_2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 197; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cxtallite.pyx":196
+  /* "cxtallite.pyx":198
  *         newQ[1] = self.x + other.x
  *         newQ[2] = self.y + other.y
  *         newQ[3] = self.z + other.z             # <<<<<<<<<<<<<<
  *         return Quaternion(newQ)
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_z); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 196; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_z); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 198; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_other->z); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 196; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_other->z); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 198; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyNumber_Add(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 196; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyNumber_Add(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 198; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 3, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 196; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 3, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 198; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "cxtallite.pyx":197
+  /* "cxtallite.pyx":199
  *         newQ[2] = self.y + other.y
  *         newQ[3] = self.z + other.z
  *         return Quaternion(newQ)             # <<<<<<<<<<<<<<
@@ -4006,20 +4027,20 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_2__add__(PyObject *__pyx_v_sel
  *     def __iadd__(self, Quaternion other):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 197; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 199; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(((PyObject *)__pyx_v_newQ));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_newQ));
   PyTuple_SET_ITEM(__pyx_t_3, 0, ((PyObject *)__pyx_v_newQ));
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_9cxtallite_Quaternion), __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 197; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_9cxtallite_Quaternion), __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 199; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cxtallite.pyx":190
- *         self.z = q[3]
+  /* "cxtallite.pyx":192
+ *         self.z = q[3] * sgn
  * 
  *     def __add__(self, Quaternion other):             # <<<<<<<<<<<<<<
  *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
@@ -4040,7 +4061,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_2__add__(PyObject *__pyx_v_sel
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":199
+/* "cxtallite.pyx":201
  *         return Quaternion(newQ)
  * 
  *     def __iadd__(self, Quaternion other):             # <<<<<<<<<<<<<<
@@ -4057,7 +4078,7 @@ static PyObject *__pyx_pw_9cxtallite_10Quaternion_5__iadd__(PyObject *__pyx_v_se
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__iadd__ (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_9cxtallite_Quaternion, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 199; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_9cxtallite_Quaternion, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 201; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_9cxtallite_10Quaternion_4__iadd__(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self), ((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_other));
 
   /* function exit code */
@@ -4074,7 +4095,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_4__iadd__(struct __pyx_obj_9cx
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__iadd__", 0);
 
-  /* "cxtallite.pyx":200
+  /* "cxtallite.pyx":202
  * 
  *     def __iadd__(self, Quaternion other):
  *         self.w = self.w + other.w             # <<<<<<<<<<<<<<
@@ -4083,7 +4104,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_4__iadd__(struct __pyx_obj_9cx
  */
   __pyx_v_self->w = (__pyx_v_self->w + __pyx_v_other->w);
 
-  /* "cxtallite.pyx":201
+  /* "cxtallite.pyx":203
  *     def __iadd__(self, Quaternion other):
  *         self.w = self.w + other.w
  *         self.x = self.x + other.x             # <<<<<<<<<<<<<<
@@ -4092,7 +4113,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_4__iadd__(struct __pyx_obj_9cx
  */
   __pyx_v_self->x = (__pyx_v_self->x + __pyx_v_other->x);
 
-  /* "cxtallite.pyx":202
+  /* "cxtallite.pyx":204
  *         self.w = self.w + other.w
  *         self.x = self.x + other.x
  *         self.y = self.y + other.y             # <<<<<<<<<<<<<<
@@ -4101,7 +4122,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_4__iadd__(struct __pyx_obj_9cx
  */
   __pyx_v_self->y = (__pyx_v_self->y + __pyx_v_other->y);
 
-  /* "cxtallite.pyx":203
+  /* "cxtallite.pyx":205
  *         self.x = self.x + other.x
  *         self.y = self.y + other.y
  *         self.z = self.z + other.z             # <<<<<<<<<<<<<<
@@ -4110,7 +4131,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_4__iadd__(struct __pyx_obj_9cx
  */
   __pyx_v_self->z = (__pyx_v_self->z + __pyx_v_other->z);
 
-  /* "cxtallite.pyx":204
+  /* "cxtallite.pyx":206
  *         self.y = self.y + other.y
  *         self.z = self.z + other.z
  *         return self             # <<<<<<<<<<<<<<
@@ -4122,7 +4143,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_4__iadd__(struct __pyx_obj_9cx
   __pyx_r = ((PyObject *)__pyx_v_self);
   goto __pyx_L0;
 
-  /* "cxtallite.pyx":199
+  /* "cxtallite.pyx":201
  *         return Quaternion(newQ)
  * 
  *     def __iadd__(self, Quaternion other):             # <<<<<<<<<<<<<<
@@ -4137,7 +4158,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_4__iadd__(struct __pyx_obj_9cx
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":206
+/* "cxtallite.pyx":208
  *         return self
  * 
  *     def __sub__(self, Quaternion other):             # <<<<<<<<<<<<<<
@@ -4154,7 +4175,7 @@ static PyObject *__pyx_pw_9cxtallite_10Quaternion_7__sub__(PyObject *__pyx_v_sel
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__sub__ (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_9cxtallite_Quaternion, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 206; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_9cxtallite_Quaternion, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 208; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_9cxtallite_10Quaternion_6__sub__(((PyObject *)__pyx_v_self), ((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_other));
 
   /* function exit code */
@@ -4178,105 +4199,105 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_6__sub__(PyObject *__pyx_v_sel
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__sub__", 0);
 
-  /* "cxtallite.pyx":207
+  /* "cxtallite.pyx":209
  * 
  *     def __sub__(self, Quaternion other):
  *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)             # <<<<<<<<<<<<<<
  * 
  *         newQ[0] = self.w - other.w
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 209; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 209; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 209; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 209; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_3) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_3) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 209; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__2, __pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__2, __pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 209; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 209; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_newQ = ((PyArrayObject *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "cxtallite.pyx":209
+  /* "cxtallite.pyx":211
  *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
  * 
  *         newQ[0] = self.w - other.w             # <<<<<<<<<<<<<<
  *         newQ[1] = self.x - other.x
  *         newQ[2] = self.y - other.y
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_w); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 209; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_w); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 211; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_other->w); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 209; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_other->w); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 211; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyNumber_Subtract(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 209; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyNumber_Subtract(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 211; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 0, __pyx_t_2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 209; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 0, __pyx_t_2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 211; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cxtallite.pyx":210
+  /* "cxtallite.pyx":212
  * 
  *         newQ[0] = self.w - other.w
  *         newQ[1] = self.x - other.x             # <<<<<<<<<<<<<<
  *         newQ[2] = self.y - other.y
  *         newQ[3] = self.z - other.z
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_x); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 210; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_x); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 212; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_other->x); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 210; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_other->x); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 212; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyNumber_Subtract(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 210; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyNumber_Subtract(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 212; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 1, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 210; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 1, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 212; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "cxtallite.pyx":211
+  /* "cxtallite.pyx":213
  *         newQ[0] = self.w - other.w
  *         newQ[1] = self.x - other.x
  *         newQ[2] = self.y - other.y             # <<<<<<<<<<<<<<
  *         newQ[3] = self.z - other.z
  *         return Quaternion(newQ)
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_y); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 211; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_y); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 213; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_other->y); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 211; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_other->y); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 213; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyNumber_Subtract(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 211; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyNumber_Subtract(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 213; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 2, __pyx_t_2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 211; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 2, __pyx_t_2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 213; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cxtallite.pyx":212
+  /* "cxtallite.pyx":214
  *         newQ[1] = self.x - other.x
  *         newQ[2] = self.y - other.y
  *         newQ[3] = self.z - other.z             # <<<<<<<<<<<<<<
  *         return Quaternion(newQ)
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_z); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 212; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_z); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 214; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_other->z); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 212; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_other->z); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 214; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyNumber_Subtract(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 212; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyNumber_Subtract(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 214; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 3, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 212; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 3, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 214; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "cxtallite.pyx":213
+  /* "cxtallite.pyx":215
  *         newQ[2] = self.y - other.y
  *         newQ[3] = self.z - other.z
  *         return Quaternion(newQ)             # <<<<<<<<<<<<<<
@@ -4284,19 +4305,19 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_6__sub__(PyObject *__pyx_v_sel
  *     def __isub__(self, Quaternion other):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 213; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 215; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(((PyObject *)__pyx_v_newQ));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_newQ));
   PyTuple_SET_ITEM(__pyx_t_3, 0, ((PyObject *)__pyx_v_newQ));
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_9cxtallite_Quaternion), __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 213; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_9cxtallite_Quaternion), __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 215; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cxtallite.pyx":206
+  /* "cxtallite.pyx":208
  *         return self
  * 
  *     def __sub__(self, Quaternion other):             # <<<<<<<<<<<<<<
@@ -4318,7 +4339,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_6__sub__(PyObject *__pyx_v_sel
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":215
+/* "cxtallite.pyx":217
  *         return Quaternion(newQ)
  * 
  *     def __isub__(self, Quaternion other):             # <<<<<<<<<<<<<<
@@ -4335,7 +4356,7 @@ static PyObject *__pyx_pw_9cxtallite_10Quaternion_9__isub__(PyObject *__pyx_v_se
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__isub__ (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_9cxtallite_Quaternion, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 215; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_9cxtallite_Quaternion, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 217; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_9cxtallite_10Quaternion_8__isub__(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self), ((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_other));
 
   /* function exit code */
@@ -4352,7 +4373,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_8__isub__(struct __pyx_obj_9cx
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__isub__", 0);
 
-  /* "cxtallite.pyx":216
+  /* "cxtallite.pyx":218
  * 
  *     def __isub__(self, Quaternion other):
  *         self.w = self.w - other.w             # <<<<<<<<<<<<<<
@@ -4361,7 +4382,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_8__isub__(struct __pyx_obj_9cx
  */
   __pyx_v_self->w = (__pyx_v_self->w - __pyx_v_other->w);
 
-  /* "cxtallite.pyx":217
+  /* "cxtallite.pyx":219
  *     def __isub__(self, Quaternion other):
  *         self.w = self.w - other.w
  *         self.x = self.x - other.x             # <<<<<<<<<<<<<<
@@ -4370,7 +4391,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_8__isub__(struct __pyx_obj_9cx
  */
   __pyx_v_self->x = (__pyx_v_self->x - __pyx_v_other->x);
 
-  /* "cxtallite.pyx":218
+  /* "cxtallite.pyx":220
  *         self.w = self.w - other.w
  *         self.x = self.x - other.x
  *         self.y = self.y - other.y             # <<<<<<<<<<<<<<
@@ -4379,7 +4400,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_8__isub__(struct __pyx_obj_9cx
  */
   __pyx_v_self->y = (__pyx_v_self->y - __pyx_v_other->y);
 
-  /* "cxtallite.pyx":219
+  /* "cxtallite.pyx":221
  *         self.x = self.x - other.x
  *         self.y = self.y - other.y
  *         self.z = self.z - other.z             # <<<<<<<<<<<<<<
@@ -4388,7 +4409,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_8__isub__(struct __pyx_obj_9cx
  */
   __pyx_v_self->z = (__pyx_v_self->z - __pyx_v_other->z);
 
-  /* "cxtallite.pyx":220
+  /* "cxtallite.pyx":222
  *         self.y = self.y - other.y
  *         self.z = self.z - other.z
  *         return self             # <<<<<<<<<<<<<<
@@ -4400,7 +4421,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_8__isub__(struct __pyx_obj_9cx
   __pyx_r = ((PyObject *)__pyx_v_self);
   goto __pyx_L0;
 
-  /* "cxtallite.pyx":215
+  /* "cxtallite.pyx":217
  *         return Quaternion(newQ)
  * 
  *     def __isub__(self, Quaternion other):             # <<<<<<<<<<<<<<
@@ -4415,12 +4436,12 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_8__isub__(struct __pyx_obj_9cx
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":222
+/* "cxtallite.pyx":224
  *         return self
  * 
  *     def __mul__(self, Quaternion other):             # <<<<<<<<<<<<<<
  *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
- * 
+ *         cdef DTYPE_t Aw = self.w
  */
 
 /* Python wrapper */
@@ -4432,7 +4453,7 @@ static PyObject *__pyx_pw_9cxtallite_10Quaternion_11__mul__(PyObject *__pyx_v_se
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__mul__ (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_9cxtallite_Quaternion, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 222; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_9cxtallite_Quaternion, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 224; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_9cxtallite_10Quaternion_10__mul__(((PyObject *)__pyx_v_self), ((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_other));
 
   /* function exit code */
@@ -4444,55 +4465,223 @@ static PyObject *__pyx_pw_9cxtallite_10Quaternion_11__mul__(PyObject *__pyx_v_se
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_10__mul__(CYTHON_UNUSED PyObject *__pyx_v_self, CYTHON_UNUSED struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_other) {
-  CYTHON_UNUSED PyArrayObject *__pyx_v_newQ = 0;
+static PyObject *__pyx_pf_9cxtallite_10Quaternion_10__mul__(PyObject *__pyx_v_self, struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_other) {
+  PyArrayObject *__pyx_v_newQ = 0;
+  __pyx_t_9cxtallite_DTYPE_t __pyx_v_Aw;
+  __pyx_t_9cxtallite_DTYPE_t __pyx_v_Ax;
+  __pyx_t_9cxtallite_DTYPE_t __pyx_v_Ay;
+  __pyx_t_9cxtallite_DTYPE_t __pyx_v_Az;
+  __pyx_t_9cxtallite_DTYPE_t __pyx_v_Bw;
+  __pyx_t_9cxtallite_DTYPE_t __pyx_v_Bx;
+  __pyx_t_9cxtallite_DTYPE_t __pyx_v_By;
+  __pyx_t_9cxtallite_DTYPE_t __pyx_v_Bz;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
+  __pyx_t_9cxtallite_DTYPE_t __pyx_t_4;
+  double __pyx_t_5;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__mul__", 0);
 
-  /* "cxtallite.pyx":223
+  /* "cxtallite.pyx":225
  * 
  *     def __mul__(self, Quaternion other):
  *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)             # <<<<<<<<<<<<<<
- * 
- * 
+ *         cdef DTYPE_t Aw = self.w
+ *         cdef DTYPE_t Ax = self.x
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 223; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 225; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 223; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 225; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 223; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 225; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 223; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 225; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_3) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 223; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_3) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 225; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__3, __pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 223; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__3, __pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 225; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 223; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 225; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_newQ = ((PyArrayObject *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "cxtallite.pyx":222
+  /* "cxtallite.pyx":226
+ *     def __mul__(self, Quaternion other):
+ *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
+ *         cdef DTYPE_t Aw = self.w             # <<<<<<<<<<<<<<
+ *         cdef DTYPE_t Ax = self.x
+ *         cdef DTYPE_t Ay = self.y
+ */
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_w); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 226; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_4 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 226; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_v_Aw = __pyx_t_4;
+
+  /* "cxtallite.pyx":227
+ *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
+ *         cdef DTYPE_t Aw = self.w
+ *         cdef DTYPE_t Ax = self.x             # <<<<<<<<<<<<<<
+ *         cdef DTYPE_t Ay = self.y
+ *         cdef DTYPE_t Az = self.z
+ */
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_x); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 227; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_4 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 227; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_v_Ax = __pyx_t_4;
+
+  /* "cxtallite.pyx":228
+ *         cdef DTYPE_t Aw = self.w
+ *         cdef DTYPE_t Ax = self.x
+ *         cdef DTYPE_t Ay = self.y             # <<<<<<<<<<<<<<
+ *         cdef DTYPE_t Az = self.z
+ *         cdef DTYPE_t Bw = other.w
+ */
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_y); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 228; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_4 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 228; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_v_Ay = __pyx_t_4;
+
+  /* "cxtallite.pyx":229
+ *         cdef DTYPE_t Ax = self.x
+ *         cdef DTYPE_t Ay = self.y
+ *         cdef DTYPE_t Az = self.z             # <<<<<<<<<<<<<<
+ *         cdef DTYPE_t Bw = other.w
+ *         cdef DTYPE_t Bx = other.x
+ */
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_z); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 229; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_4 == (npy_float64)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 229; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_v_Az = __pyx_t_4;
+
+  /* "cxtallite.pyx":230
+ *         cdef DTYPE_t Ay = self.y
+ *         cdef DTYPE_t Az = self.z
+ *         cdef DTYPE_t Bw = other.w             # <<<<<<<<<<<<<<
+ *         cdef DTYPE_t Bx = other.x
+ *         cdef DTYPE_t By = other.y
+ */
+  __pyx_t_5 = __pyx_v_other->w;
+  __pyx_v_Bw = __pyx_t_5;
+
+  /* "cxtallite.pyx":231
+ *         cdef DTYPE_t Az = self.z
+ *         cdef DTYPE_t Bw = other.w
+ *         cdef DTYPE_t Bx = other.x             # <<<<<<<<<<<<<<
+ *         cdef DTYPE_t By = other.y
+ *         cdef DTYPE_t Bz = other.z
+ */
+  __pyx_t_5 = __pyx_v_other->x;
+  __pyx_v_Bx = __pyx_t_5;
+
+  /* "cxtallite.pyx":232
+ *         cdef DTYPE_t Bw = other.w
+ *         cdef DTYPE_t Bx = other.x
+ *         cdef DTYPE_t By = other.y             # <<<<<<<<<<<<<<
+ *         cdef DTYPE_t Bz = other.z
+ * 
+ */
+  __pyx_t_5 = __pyx_v_other->y;
+  __pyx_v_By = __pyx_t_5;
+
+  /* "cxtallite.pyx":233
+ *         cdef DTYPE_t Bx = other.x
+ *         cdef DTYPE_t By = other.y
+ *         cdef DTYPE_t Bz = other.z             # <<<<<<<<<<<<<<
+ * 
+ *         newQ[0] = - Ax * Bx - Ay * By - Az * Bz + Aw * Bw
+ */
+  __pyx_t_5 = __pyx_v_other->z;
+  __pyx_v_Bz = __pyx_t_5;
+
+  /* "cxtallite.pyx":235
+ *         cdef DTYPE_t Bz = other.z
+ * 
+ *         newQ[0] = - Ax * Bx - Ay * By - Az * Bz + Aw * Bw             # <<<<<<<<<<<<<<
+ *         newQ[1] = + Ax * Bw + Ay * Bz - Az * By + Aw * Bx
+ *         newQ[2] = - Ax * Bz + Ay * Bw + Az * Bx + Aw * By
+ */
+  __pyx_t_3 = PyFloat_FromDouble((((((-__pyx_v_Ax) * __pyx_v_Bx) - (__pyx_v_Ay * __pyx_v_By)) - (__pyx_v_Az * __pyx_v_Bz)) + (__pyx_v_Aw * __pyx_v_Bw))); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 235; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
+  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 0, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 235; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+  /* "cxtallite.pyx":236
+ * 
+ *         newQ[0] = - Ax * Bx - Ay * By - Az * Bz + Aw * Bw
+ *         newQ[1] = + Ax * Bw + Ay * Bz - Az * By + Aw * Bx             # <<<<<<<<<<<<<<
+ *         newQ[2] = - Ax * Bz + Ay * Bw + Az * Bx + Aw * By
+ *         newQ[3] = + Ax * By - Ay * Bx + Az * Bw + Aw * Bz
+ */
+  __pyx_t_3 = PyFloat_FromDouble(((((__pyx_v_Ax * __pyx_v_Bw) + (__pyx_v_Ay * __pyx_v_Bz)) - (__pyx_v_Az * __pyx_v_By)) + (__pyx_v_Aw * __pyx_v_Bx))); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 236; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
+  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 1, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 236; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+  /* "cxtallite.pyx":237
+ *         newQ[0] = - Ax * Bx - Ay * By - Az * Bz + Aw * Bw
+ *         newQ[1] = + Ax * Bw + Ay * Bz - Az * By + Aw * Bx
+ *         newQ[2] = - Ax * Bz + Ay * Bw + Az * Bx + Aw * By             # <<<<<<<<<<<<<<
+ *         newQ[3] = + Ax * By - Ay * Bx + Az * Bw + Aw * Bz
+ *         return Quaternion(newQ)
+ */
+  __pyx_t_3 = PyFloat_FromDouble((((((-__pyx_v_Ax) * __pyx_v_Bz) + (__pyx_v_Ay * __pyx_v_Bw)) + (__pyx_v_Az * __pyx_v_Bx)) + (__pyx_v_Aw * __pyx_v_By))); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 237; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
+  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 2, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 237; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+  /* "cxtallite.pyx":238
+ *         newQ[1] = + Ax * Bw + Ay * Bz - Az * By + Aw * Bx
+ *         newQ[2] = - Ax * Bz + Ay * Bw + Az * Bx + Aw * By
+ *         newQ[3] = + Ax * By - Ay * Bx + Az * Bw + Aw * Bz             # <<<<<<<<<<<<<<
+ *         return Quaternion(newQ)
+ * 
+ */
+  __pyx_t_3 = PyFloat_FromDouble(((((__pyx_v_Ax * __pyx_v_By) - (__pyx_v_Ay * __pyx_v_Bx)) + (__pyx_v_Az * __pyx_v_Bw)) + (__pyx_v_Aw * __pyx_v_Bz))); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 238; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
+  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 3, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 238; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+  /* "cxtallite.pyx":239
+ *         newQ[2] = - Ax * Bz + Ay * Bw + Az * Bx + Aw * By
+ *         newQ[3] = + Ax * By - Ay * Bx + Az * Bw + Aw * Bz
+ *         return Quaternion(newQ)             # <<<<<<<<<<<<<<
+ * 
+ *     def __str__(self):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 239; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_INCREF(((PyObject *)__pyx_v_newQ));
+  __Pyx_GIVEREF(((PyObject *)__pyx_v_newQ));
+  PyTuple_SET_ITEM(__pyx_t_3, 0, ((PyObject *)__pyx_v_newQ));
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_9cxtallite_Quaternion), __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 239; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "cxtallite.pyx":224
  *         return self
  * 
  *     def __mul__(self, Quaternion other):             # <<<<<<<<<<<<<<
  *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
- * 
+ *         cdef DTYPE_t Aw = self.w
  */
 
   /* function exit code */
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
@@ -4506,49 +4695,8 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_10__mul__(CYTHON_UNUSED PyObje
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":226
- * 
- * 
- *     def __imul__(self, Quaternion other):             # <<<<<<<<<<<<<<
- *         pass
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_9cxtallite_10Quaternion_13__imul__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /*proto*/
-static PyObject *__pyx_pw_9cxtallite_10Quaternion_13__imul__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
-  CYTHON_UNUSED int __pyx_lineno = 0;
-  CYTHON_UNUSED const char *__pyx_filename = NULL;
-  CYTHON_UNUSED int __pyx_clineno = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__imul__ (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_9cxtallite_Quaternion, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 226; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_9cxtallite_10Quaternion_12__imul__(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self), ((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_other));
-
-  /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_12__imul__(CYTHON_UNUSED struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self, CYTHON_UNUSED struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_other) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__imul__", 0);
-
-  /* function exit code */
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "cxtallite.pyx":229
- *         pass
+/* "cxtallite.pyx":241
+ *         return Quaternion(newQ)
  * 
  *     def __str__(self):             # <<<<<<<<<<<<<<
  *         tmp = "({}, <{},{},{}>)".format(self.w, self.x, self.y, self.z)
@@ -4556,19 +4704,19 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_12__imul__(CYTHON_UNUSED struc
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9cxtallite_10Quaternion_15__str__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_9cxtallite_10Quaternion_15__str__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_9cxtallite_10Quaternion_13__str__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_9cxtallite_10Quaternion_13__str__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__str__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_9cxtallite_10Quaternion_14__str__(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self));
+  __pyx_r = __pyx_pf_9cxtallite_10Quaternion_12__str__(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_14__str__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self) {
+static PyObject *__pyx_pf_9cxtallite_10Quaternion_12__str__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self) {
   PyObject *__pyx_v_tmp = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -4586,22 +4734,22 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_14__str__(struct __pyx_obj_9cx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__str__", 0);
 
-  /* "cxtallite.pyx":230
+  /* "cxtallite.pyx":242
  * 
  *     def __str__(self):
  *         tmp = "({}, <{},{},{}>)".format(self.w, self.x, self.y, self.z)             # <<<<<<<<<<<<<<
  *         return tmp
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s__4, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 230; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s__4, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 242; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_self->w); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 230; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_self->w); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 242; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_self->x); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 230; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_self->x); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 242; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyFloat_FromDouble(__pyx_v_self->y); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 230; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = PyFloat_FromDouble(__pyx_v_self->y); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 242; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = PyFloat_FromDouble(__pyx_v_self->z); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 230; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_6 = PyFloat_FromDouble(__pyx_v_self->z); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 242; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_t_7 = NULL;
   __pyx_t_8 = 0;
@@ -4615,7 +4763,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_14__str__(struct __pyx_obj_9cx
       __pyx_t_8 = 1;
     }
   }
-  __pyx_t_9 = PyTuple_New(4+__pyx_t_8); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 230; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_9 = PyTuple_New(4+__pyx_t_8); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 242; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_9);
   if (__pyx_t_7) {
     __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_7); __pyx_t_7 = NULL;
@@ -4632,14 +4780,14 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_14__str__(struct __pyx_obj_9cx
   __pyx_t_4 = 0;
   __pyx_t_5 = 0;
   __pyx_t_6 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_9, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 230; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_9, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 242; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_tmp = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "cxtallite.pyx":231
+  /* "cxtallite.pyx":243
  *     def __str__(self):
  *         tmp = "({}, <{},{},{}>)".format(self.w, self.x, self.y, self.z)
  *         return tmp             # <<<<<<<<<<<<<<
@@ -4651,8 +4799,8 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_14__str__(struct __pyx_obj_9cx
   __pyx_r = __pyx_v_tmp;
   goto __pyx_L0;
 
-  /* "cxtallite.pyx":229
- *         pass
+  /* "cxtallite.pyx":241
+ *         return Quaternion(newQ)
  * 
  *     def __str__(self):             # <<<<<<<<<<<<<<
  *         tmp = "({}, <{},{},{}>)".format(self.w, self.x, self.y, self.z)
@@ -4678,7 +4826,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_14__str__(struct __pyx_obj_9cx
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":233
+/* "cxtallite.pyx":245
  *         return tmp
  * 
  *     def __repr__(self):             # <<<<<<<<<<<<<<
@@ -4687,19 +4835,19 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_14__str__(struct __pyx_obj_9cx
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9cxtallite_10Quaternion_17__repr__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_9cxtallite_10Quaternion_17__repr__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_9cxtallite_10Quaternion_15__repr__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_9cxtallite_10Quaternion_15__repr__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__repr__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_9cxtallite_10Quaternion_16__repr__(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self));
+  __pyx_r = __pyx_pf_9cxtallite_10Quaternion_14__repr__(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_16__repr__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self) {
+static PyObject *__pyx_pf_9cxtallite_10Quaternion_14__repr__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self) {
   PyObject *__pyx_v_tmp = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -4717,46 +4865,46 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_16__repr__(struct __pyx_obj_9c
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__repr__", 0);
 
-  /* "cxtallite.pyx":234
+  /* "cxtallite.pyx":246
  * 
  *     def __repr__(self):
  *         tmp = "Quaternion(real={:.4f}, imag=<{:.4f},{:.4f},{:.4f}>".format(self.w,             # <<<<<<<<<<<<<<
  *                                                                            self.x,
  *                                                                            self.y,
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Quaternion_real_4f_imag_4f_4f_4f, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 234; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Quaternion_real_4f_imag_4f_4f_4f, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 246; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_self->w); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 234; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_self->w); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 246; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
 
-  /* "cxtallite.pyx":235
+  /* "cxtallite.pyx":247
  *     def __repr__(self):
  *         tmp = "Quaternion(real={:.4f}, imag=<{:.4f},{:.4f},{:.4f}>".format(self.w,
  *                                                                            self.x,             # <<<<<<<<<<<<<<
  *                                                                            self.y,
  *                                                                            self.z)
  */
-  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_self->x); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 235; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_self->x); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 247; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
 
-  /* "cxtallite.pyx":236
+  /* "cxtallite.pyx":248
  *         tmp = "Quaternion(real={:.4f}, imag=<{:.4f},{:.4f},{:.4f}>".format(self.w,
  *                                                                            self.x,
  *                                                                            self.y,             # <<<<<<<<<<<<<<
  *                                                                            self.z)
  *         return tmp
  */
-  __pyx_t_5 = PyFloat_FromDouble(__pyx_v_self->y); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 236; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = PyFloat_FromDouble(__pyx_v_self->y); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 248; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
 
-  /* "cxtallite.pyx":237
+  /* "cxtallite.pyx":249
  *                                                                            self.x,
  *                                                                            self.y,
  *                                                                            self.z)             # <<<<<<<<<<<<<<
  *         return tmp
  * 
  */
-  __pyx_t_6 = PyFloat_FromDouble(__pyx_v_self->z); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 237; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_6 = PyFloat_FromDouble(__pyx_v_self->z); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 249; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_t_7 = NULL;
   __pyx_t_8 = 0;
@@ -4770,7 +4918,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_16__repr__(struct __pyx_obj_9c
       __pyx_t_8 = 1;
     }
   }
-  __pyx_t_9 = PyTuple_New(4+__pyx_t_8); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 234; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_9 = PyTuple_New(4+__pyx_t_8); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 246; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_9);
   if (__pyx_t_7) {
     __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_7); __pyx_t_7 = NULL;
@@ -4787,14 +4935,14 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_16__repr__(struct __pyx_obj_9c
   __pyx_t_4 = 0;
   __pyx_t_5 = 0;
   __pyx_t_6 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_9, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 234; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_9, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 246; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_tmp = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "cxtallite.pyx":238
+  /* "cxtallite.pyx":250
  *                                                                            self.y,
  *                                                                            self.z)
  *         return tmp             # <<<<<<<<<<<<<<
@@ -4806,7 +4954,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_16__repr__(struct __pyx_obj_9c
   __pyx_r = __pyx_v_tmp;
   goto __pyx_L0;
 
-  /* "cxtallite.pyx":233
+  /* "cxtallite.pyx":245
  *         return tmp
  * 
  *     def __repr__(self):             # <<<<<<<<<<<<<<
@@ -4833,7 +4981,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_16__repr__(struct __pyx_obj_9c
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":240
+/* "cxtallite.pyx":252
  *         return tmp
  * 
  *     def __abs__(self):             # <<<<<<<<<<<<<<
@@ -4842,19 +4990,19 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_16__repr__(struct __pyx_obj_9c
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9cxtallite_10Quaternion_19__abs__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_9cxtallite_10Quaternion_19__abs__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_9cxtallite_10Quaternion_17__abs__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_9cxtallite_10Quaternion_17__abs__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__abs__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_9cxtallite_10Quaternion_18__abs__(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self));
+  __pyx_r = __pyx_pf_9cxtallite_10Quaternion_16__abs__(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_18__abs__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self) {
+static PyObject *__pyx_pf_9cxtallite_10Quaternion_16__abs__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self) {
   double __pyx_v_tmp;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -4864,7 +5012,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_18__abs__(struct __pyx_obj_9cx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__abs__", 0);
 
-  /* "cxtallite.pyx":245
+  /* "cxtallite.pyx":257
  *         tmp = self.w*self.w + \
  *               self.x*self.x + \
  *               self.y*self.y + \             # <<<<<<<<<<<<<<
@@ -4873,7 +5021,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_18__abs__(struct __pyx_obj_9cx
  */
   __pyx_v_tmp = ((((__pyx_v_self->w * __pyx_v_self->w) + (__pyx_v_self->x * __pyx_v_self->x)) + (__pyx_v_self->y * __pyx_v_self->y)) + (__pyx_v_self->z * __pyx_v_self->z));
 
-  /* "cxtallite.pyx":247
+  /* "cxtallite.pyx":259
  *               self.y*self.y + \
  *               self.z*self.z
  *         tmp = sqrt(tmp)             # <<<<<<<<<<<<<<
@@ -4882,7 +5030,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_18__abs__(struct __pyx_obj_9cx
  */
   __pyx_v_tmp = sqrt(__pyx_v_tmp);
 
-  /* "cxtallite.pyx":248
+  /* "cxtallite.pyx":260
  *               self.z*self.z
  *         tmp = sqrt(tmp)
  *         return tmp             # <<<<<<<<<<<<<<
@@ -4890,13 +5038,13 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_18__abs__(struct __pyx_obj_9cx
  *     def __len__(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_tmp); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 248; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_tmp); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 260; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cxtallite.pyx":240
+  /* "cxtallite.pyx":252
  *         return tmp
  * 
  *     def __abs__(self):             # <<<<<<<<<<<<<<
@@ -4915,7 +5063,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_18__abs__(struct __pyx_obj_9cx
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":250
+/* "cxtallite.pyx":262
  *         return tmp
  * 
  *     def __len__(self):             # <<<<<<<<<<<<<<
@@ -4924,24 +5072,24 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_18__abs__(struct __pyx_obj_9cx
  */
 
 /* Python wrapper */
-static Py_ssize_t __pyx_pw_9cxtallite_10Quaternion_21__len__(PyObject *__pyx_v_self); /*proto*/
-static Py_ssize_t __pyx_pw_9cxtallite_10Quaternion_21__len__(PyObject *__pyx_v_self) {
+static Py_ssize_t __pyx_pw_9cxtallite_10Quaternion_19__len__(PyObject *__pyx_v_self); /*proto*/
+static Py_ssize_t __pyx_pw_9cxtallite_10Quaternion_19__len__(PyObject *__pyx_v_self) {
   Py_ssize_t __pyx_r;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__len__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_9cxtallite_10Quaternion_20__len__(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self));
+  __pyx_r = __pyx_pf_9cxtallite_10Quaternion_18__len__(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static Py_ssize_t __pyx_pf_9cxtallite_10Quaternion_20__len__(CYTHON_UNUSED struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self) {
+static Py_ssize_t __pyx_pf_9cxtallite_10Quaternion_18__len__(CYTHON_UNUSED struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self) {
   Py_ssize_t __pyx_r;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__len__", 0);
 
-  /* "cxtallite.pyx":251
+  /* "cxtallite.pyx":263
  * 
  *     def __len__(self):
  *         return 4             # <<<<<<<<<<<<<<
@@ -4951,7 +5099,7 @@ static Py_ssize_t __pyx_pf_9cxtallite_10Quaternion_20__len__(CYTHON_UNUSED struc
   __pyx_r = 4;
   goto __pyx_L0;
 
-  /* "cxtallite.pyx":250
+  /* "cxtallite.pyx":262
  *         return tmp
  * 
  *     def __len__(self):             # <<<<<<<<<<<<<<
@@ -4965,7 +5113,7 @@ static Py_ssize_t __pyx_pf_9cxtallite_10Quaternion_20__len__(CYTHON_UNUSED struc
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":253
+/* "cxtallite.pyx":265
  *         return 4
  * 
  *     def __neg__(self):             # <<<<<<<<<<<<<<
@@ -4974,24 +5122,24 @@ static Py_ssize_t __pyx_pf_9cxtallite_10Quaternion_20__len__(CYTHON_UNUSED struc
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9cxtallite_10Quaternion_23__neg__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_9cxtallite_10Quaternion_23__neg__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_9cxtallite_10Quaternion_21__neg__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_9cxtallite_10Quaternion_21__neg__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__neg__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_9cxtallite_10Quaternion_22__neg__(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self));
+  __pyx_r = __pyx_pf_9cxtallite_10Quaternion_20__neg__(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_22__neg__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self) {
+static PyObject *__pyx_pf_9cxtallite_10Quaternion_20__neg__(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__neg__", 0);
 
-  /* "cxtallite.pyx":254
+  /* "cxtallite.pyx":266
  * 
  *     def __neg__(self):
  *         self.w = -self.w             # <<<<<<<<<<<<<<
@@ -5000,7 +5148,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_22__neg__(struct __pyx_obj_9cx
  */
   __pyx_v_self->w = (-__pyx_v_self->w);
 
-  /* "cxtallite.pyx":255
+  /* "cxtallite.pyx":267
  *     def __neg__(self):
  *         self.w = -self.w
  *         self.x = -self.x             # <<<<<<<<<<<<<<
@@ -5009,7 +5157,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_22__neg__(struct __pyx_obj_9cx
  */
   __pyx_v_self->x = (-__pyx_v_self->x);
 
-  /* "cxtallite.pyx":256
+  /* "cxtallite.pyx":268
  *         self.w = -self.w
  *         self.x = -self.x
  *         self.y = -self.y             # <<<<<<<<<<<<<<
@@ -5018,7 +5166,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_22__neg__(struct __pyx_obj_9cx
  */
   __pyx_v_self->y = (-__pyx_v_self->y);
 
-  /* "cxtallite.pyx":257
+  /* "cxtallite.pyx":269
  *         self.x = -self.x
  *         self.y = -self.y
  *         self.z = -self.z             # <<<<<<<<<<<<<<
@@ -5027,7 +5175,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_22__neg__(struct __pyx_obj_9cx
  */
   __pyx_v_self->z = (-__pyx_v_self->z);
 
-  /* "cxtallite.pyx":258
+  /* "cxtallite.pyx":270
  *         self.y = -self.y
  *         self.z = -self.z
  *         return self             # <<<<<<<<<<<<<<
@@ -5039,7 +5187,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_22__neg__(struct __pyx_obj_9cx
   __pyx_r = ((PyObject *)__pyx_v_self);
   goto __pyx_L0;
 
-  /* "cxtallite.pyx":253
+  /* "cxtallite.pyx":265
  *         return 4
  * 
  *     def __neg__(self):             # <<<<<<<<<<<<<<
@@ -5054,7 +5202,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_22__neg__(struct __pyx_obj_9cx
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":260
+/* "cxtallite.pyx":272
  *         return self
  * 
  *     def unitary(self):             # <<<<<<<<<<<<<<
@@ -5063,19 +5211,19 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_22__neg__(struct __pyx_obj_9cx
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9cxtallite_10Quaternion_25unitary(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_9cxtallite_10Quaternion_25unitary(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_9cxtallite_10Quaternion_23unitary(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_9cxtallite_10Quaternion_23unitary(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("unitary (wrapper)", 0);
-  __pyx_r = __pyx_pf_9cxtallite_10Quaternion_24unitary(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self));
+  __pyx_r = __pyx_pf_9cxtallite_10Quaternion_22unitary(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_24unitary(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self) {
+static PyObject *__pyx_pf_9cxtallite_10Quaternion_22unitary(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self) {
   double __pyx_v_length;
   PyArrayObject *__pyx_v_newQ = 0;
   PyObject *__pyx_r = NULL;
@@ -5089,46 +5237,46 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_24unitary(struct __pyx_obj_9cx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("unitary", 0);
 
-  /* "cxtallite.pyx":261
+  /* "cxtallite.pyx":273
  * 
  *     def unitary(self):
  *         cdef double length = abs(self)             # <<<<<<<<<<<<<<
  *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
  * 
  */
-  __pyx_t_1 = PyNumber_Absolute(((PyObject *)__pyx_v_self)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 261; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyNumber_Absolute(((PyObject *)__pyx_v_self)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 273; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 261; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 273; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_length = __pyx_t_2;
 
-  /* "cxtallite.pyx":262
+  /* "cxtallite.pyx":274
  *     def unitary(self):
  *         cdef double length = abs(self)
  *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)             # <<<<<<<<<<<<<<
  * 
  *         newQ[0] = self.w/length
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 262; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 274; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 262; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 274; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 262; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 274; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 262; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 274; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 262; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 274; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__5, __pyx_t_1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 262; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__5, __pyx_t_1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 274; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 262; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 274; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_newQ = ((PyArrayObject *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "cxtallite.pyx":264
+  /* "cxtallite.pyx":276
  *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
  * 
  *         newQ[0] = self.w/length             # <<<<<<<<<<<<<<
@@ -5137,14 +5285,14 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_24unitary(struct __pyx_obj_9cx
  */
   if (unlikely(__pyx_v_length == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 264; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 276; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_4 = PyFloat_FromDouble((__pyx_v_self->w / __pyx_v_length)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 264; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyFloat_FromDouble((__pyx_v_self->w / __pyx_v_length)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 276; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 0, __pyx_t_4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 264; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 0, __pyx_t_4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 276; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "cxtallite.pyx":265
+  /* "cxtallite.pyx":277
  * 
  *         newQ[0] = self.w/length
  *         newQ[1] = self.x/length             # <<<<<<<<<<<<<<
@@ -5153,14 +5301,14 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_24unitary(struct __pyx_obj_9cx
  */
   if (unlikely(__pyx_v_length == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 265; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 277; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_4 = PyFloat_FromDouble((__pyx_v_self->x / __pyx_v_length)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 265; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyFloat_FromDouble((__pyx_v_self->x / __pyx_v_length)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 277; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 1, __pyx_t_4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 265; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 1, __pyx_t_4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 277; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "cxtallite.pyx":266
+  /* "cxtallite.pyx":278
  *         newQ[0] = self.w/length
  *         newQ[1] = self.x/length
  *         newQ[2] = self.y/length             # <<<<<<<<<<<<<<
@@ -5169,14 +5317,14 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_24unitary(struct __pyx_obj_9cx
  */
   if (unlikely(__pyx_v_length == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 266; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 278; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_4 = PyFloat_FromDouble((__pyx_v_self->y / __pyx_v_length)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 266; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyFloat_FromDouble((__pyx_v_self->y / __pyx_v_length)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 278; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 2, __pyx_t_4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 266; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 2, __pyx_t_4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 278; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "cxtallite.pyx":267
+  /* "cxtallite.pyx":279
  *         newQ[1] = self.x/length
  *         newQ[2] = self.y/length
  *         newQ[3] = self.z/length             # <<<<<<<<<<<<<<
@@ -5185,14 +5333,14 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_24unitary(struct __pyx_obj_9cx
  */
   if (unlikely(__pyx_v_length == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 267; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 279; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_4 = PyFloat_FromDouble((__pyx_v_self->z / __pyx_v_length)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 267; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyFloat_FromDouble((__pyx_v_self->z / __pyx_v_length)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 279; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 3, __pyx_t_4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 267; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_newQ), 3, __pyx_t_4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 279; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "cxtallite.pyx":268
+  /* "cxtallite.pyx":280
  *         newQ[2] = self.y/length
  *         newQ[3] = self.z/length
  *         return Quaternion(newQ)             # <<<<<<<<<<<<<<
@@ -5200,19 +5348,19 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_24unitary(struct __pyx_obj_9cx
  *     def tolist(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 268; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 280; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_INCREF(((PyObject *)__pyx_v_newQ));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_newQ));
   PyTuple_SET_ITEM(__pyx_t_4, 0, ((PyObject *)__pyx_v_newQ));
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_9cxtallite_Quaternion), __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 268; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_9cxtallite_Quaternion), __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 280; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cxtallite.pyx":260
+  /* "cxtallite.pyx":272
  *         return self
  * 
  *     def unitary(self):             # <<<<<<<<<<<<<<
@@ -5234,7 +5382,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_24unitary(struct __pyx_obj_9cx
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":270
+/* "cxtallite.pyx":282
  *         return Quaternion(newQ)
  * 
  *     def tolist(self):             # <<<<<<<<<<<<<<
@@ -5243,19 +5391,19 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_24unitary(struct __pyx_obj_9cx
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9cxtallite_10Quaternion_27tolist(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_9cxtallite_10Quaternion_27tolist(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_9cxtallite_10Quaternion_25tolist(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_9cxtallite_10Quaternion_25tolist(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("tolist (wrapper)", 0);
-  __pyx_r = __pyx_pf_9cxtallite_10Quaternion_26tolist(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self));
+  __pyx_r = __pyx_pf_9cxtallite_10Quaternion_24tolist(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_26tolist(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self) {
+static PyObject *__pyx_pf_9cxtallite_10Quaternion_24tolist(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -5268,7 +5416,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_26tolist(struct __pyx_obj_9cxt
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("tolist", 0);
 
-  /* "cxtallite.pyx":271
+  /* "cxtallite.pyx":283
  * 
  *     def tolist(self):
  *         return [self.w, self.x, self.y, self.z]             # <<<<<<<<<<<<<<
@@ -5276,15 +5424,15 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_26tolist(struct __pyx_obj_9cxt
  *     def tondarray(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->w); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 271; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->w); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 283; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->x); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 271; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->x); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 283; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_self->y); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 271; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_self->y); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 283; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_self->z); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 271; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_self->z); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 283; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyList_New(4); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 271; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = PyList_New(4); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 283; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_1);
   PyList_SET_ITEM(__pyx_t_5, 0, __pyx_t_1);
@@ -5302,7 +5450,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_26tolist(struct __pyx_obj_9cxt
   __pyx_t_5 = 0;
   goto __pyx_L0;
 
-  /* "cxtallite.pyx":270
+  /* "cxtallite.pyx":282
  *         return Quaternion(newQ)
  * 
  *     def tolist(self):             # <<<<<<<<<<<<<<
@@ -5325,7 +5473,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_26tolist(struct __pyx_obj_9cxt
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":273
+/* "cxtallite.pyx":285
  *         return [self.w, self.x, self.y, self.z]
  * 
  *     def tondarray(self):             # <<<<<<<<<<<<<<
@@ -5334,19 +5482,19 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_26tolist(struct __pyx_obj_9cxt
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9cxtallite_10Quaternion_29tondarray(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_9cxtallite_10Quaternion_29tondarray(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_9cxtallite_10Quaternion_27tondarray(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_9cxtallite_10Quaternion_27tondarray(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("tondarray (wrapper)", 0);
-  __pyx_r = __pyx_pf_9cxtallite_10Quaternion_28tondarray(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self));
+  __pyx_r = __pyx_pf_9cxtallite_10Quaternion_26tondarray(((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9cxtallite_10Quaternion_28tondarray(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self) {
+static PyObject *__pyx_pf_9cxtallite_10Quaternion_26tondarray(struct __pyx_obj_9cxtallite_Quaternion *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -5359,7 +5507,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_28tondarray(struct __pyx_obj_9
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("tondarray", 0);
 
-  /* "cxtallite.pyx":274
+  /* "cxtallite.pyx":286
  * 
  *     def tondarray(self):
  *         return np.array(self.tolist())             # <<<<<<<<<<<<<<
@@ -5367,12 +5515,12 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_28tondarray(struct __pyx_obj_9
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 274; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 286; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 274; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 286; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_tolist); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 274; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_tolist); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 286; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_4))) {
@@ -5385,10 +5533,10 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_28tondarray(struct __pyx_obj_9
     }
   }
   if (__pyx_t_5) {
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 274; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 286; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   } else {
-    __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_4); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 274; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_4); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 286; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -5403,17 +5551,17 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_28tondarray(struct __pyx_obj_9
     }
   }
   if (!__pyx_t_4) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 274; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 286; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else {
-    __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 274; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 286; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
     __Pyx_GIVEREF(__pyx_t_2);
     PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_t_2);
     __pyx_t_2 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 274; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 286; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   }
@@ -5422,7 +5570,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_28tondarray(struct __pyx_obj_9
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cxtallite.pyx":273
+  /* "cxtallite.pyx":285
  *         return [self.w, self.x, self.y, self.z]
  * 
  *     def tondarray(self):             # <<<<<<<<<<<<<<
@@ -5445,7 +5593,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_28tondarray(struct __pyx_obj_9
   return __pyx_r;
 }
 
-/* "cxtallite.pxd":30
+/* "cxtallite.pxd":33
  * 
  * cdef class Quaternion:
  *     cdef public double w,x,y,z             # <<<<<<<<<<<<<<
@@ -5475,7 +5623,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_1w___get__(struct __pyx_obj_9c
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->w); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->w); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -5513,7 +5661,7 @@ static int __pyx_pf_9cxtallite_10Quaternion_1w_2__set__(struct __pyx_obj_9cxtall
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__set__", 0);
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_self->w = __pyx_t_1;
 
   /* function exit code */
@@ -5549,7 +5697,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_1x___get__(struct __pyx_obj_9c
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->x); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->x); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -5587,7 +5735,7 @@ static int __pyx_pf_9cxtallite_10Quaternion_1x_2__set__(struct __pyx_obj_9cxtall
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__set__", 0);
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_self->x = __pyx_t_1;
 
   /* function exit code */
@@ -5623,7 +5771,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_1y___get__(struct __pyx_obj_9c
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->y); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->y); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -5661,7 +5809,7 @@ static int __pyx_pf_9cxtallite_10Quaternion_1y_2__set__(struct __pyx_obj_9cxtall
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__set__", 0);
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_self->y = __pyx_t_1;
 
   /* function exit code */
@@ -5697,7 +5845,7 @@ static PyObject *__pyx_pf_9cxtallite_10Quaternion_1z___get__(struct __pyx_obj_9c
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->z); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->z); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -5735,7 +5883,7 @@ static int __pyx_pf_9cxtallite_10Quaternion_1z_2__set__(struct __pyx_obj_9cxtall
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__set__", 0);
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_self->z = __pyx_t_1;
 
   /* function exit code */
@@ -5749,7 +5897,7 @@ static int __pyx_pf_9cxtallite_10Quaternion_1z_2__set__(struct __pyx_obj_9cxtall
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":296
+/* "cxtallite.pyx":308
  *     """
  * 
  *     def __init__(self, phi1, PHI, phi2):             # <<<<<<<<<<<<<<
@@ -5790,16 +5938,16 @@ static int __pyx_pw_9cxtallite_6Eulers_1__init__(PyObject *__pyx_v_self, PyObjec
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_PHI)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 296; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 308; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_phi2)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 296; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 308; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 296; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 308; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -5814,7 +5962,7 @@ static int __pyx_pw_9cxtallite_6Eulers_1__init__(PyObject *__pyx_v_self, PyObjec
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 296; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 308; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("cxtallite.Eulers.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -5836,37 +5984,37 @@ static int __pyx_pf_9cxtallite_6Eulers___init__(struct __pyx_obj_9cxtallite_Eule
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "cxtallite.pyx":297
+  /* "cxtallite.pyx":309
  * 
  *     def __init__(self, phi1, PHI, phi2):
  *         self.phi1 = phi1             # <<<<<<<<<<<<<<
  *         self.PHI  = PHI
  *         self.phi2 = phi2
  */
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_phi1); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 297; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_phi1); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 309; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_self->phi1 = __pyx_t_1;
 
-  /* "cxtallite.pyx":298
+  /* "cxtallite.pyx":310
  *     def __init__(self, phi1, PHI, phi2):
  *         self.phi1 = phi1
  *         self.PHI  = PHI             # <<<<<<<<<<<<<<
  *         self.phi2 = phi2
  * 
  */
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_PHI); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 298; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_PHI); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 310; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_self->PHI = __pyx_t_1;
 
-  /* "cxtallite.pyx":299
+  /* "cxtallite.pyx":311
  *         self.phi1 = phi1
  *         self.PHI  = PHI
  *         self.phi2 = phi2             # <<<<<<<<<<<<<<
  * 
  * cdef class OrientationMatrix:
  */
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_phi2); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 299; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_phi2); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 311; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_self->phi2 = __pyx_t_1;
 
-  /* "cxtallite.pyx":296
+  /* "cxtallite.pyx":308
  *     """
  * 
  *     def __init__(self, phi1, PHI, phi2):             # <<<<<<<<<<<<<<
@@ -5885,7 +6033,7 @@ static int __pyx_pf_9cxtallite_6Eulers___init__(struct __pyx_obj_9cxtallite_Eule
   return __pyx_r;
 }
 
-/* "cxtallite.pxd":36
+/* "cxtallite.pxd":39
  * 
  * cdef class Eulers:
  *     cdef public double phi1, PHI, phi2             # <<<<<<<<<<<<<<
@@ -5915,7 +6063,7 @@ static PyObject *__pyx_pf_9cxtallite_6Eulers_4phi1___get__(struct __pyx_obj_9cxt
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->phi1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->phi1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -5953,7 +6101,7 @@ static int __pyx_pf_9cxtallite_6Eulers_4phi1_2__set__(struct __pyx_obj_9cxtallit
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__set__", 0);
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_self->phi1 = __pyx_t_1;
 
   /* function exit code */
@@ -5989,7 +6137,7 @@ static PyObject *__pyx_pf_9cxtallite_6Eulers_3PHI___get__(struct __pyx_obj_9cxta
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->PHI); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->PHI); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -6027,7 +6175,7 @@ static int __pyx_pf_9cxtallite_6Eulers_3PHI_2__set__(struct __pyx_obj_9cxtallite
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__set__", 0);
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_self->PHI = __pyx_t_1;
 
   /* function exit code */
@@ -6063,7 +6211,7 @@ static PyObject *__pyx_pf_9cxtallite_6Eulers_4phi2___get__(struct __pyx_obj_9cxt
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->phi2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->phi2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -6101,7 +6249,7 @@ static int __pyx_pf_9cxtallite_6Eulers_4phi2_2__set__(struct __pyx_obj_9cxtallit
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__set__", 0);
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_self->phi2 = __pyx_t_1;
 
   /* function exit code */
@@ -6115,7 +6263,7 @@ static int __pyx_pf_9cxtallite_6Eulers_4phi2_2__set__(struct __pyx_obj_9cxtallit
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":311
+/* "cxtallite.pyx":323
  *     """
  * 
  *     def __init__(self, g):             # <<<<<<<<<<<<<<
@@ -6151,7 +6299,7 @@ static int __pyx_pw_9cxtallite_17OrientationMatrix_1__init__(PyObject *__pyx_v_s
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 311; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 323; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 1) {
       goto __pyx_L5_argtuple_error;
@@ -6162,7 +6310,7 @@ static int __pyx_pw_9cxtallite_17OrientationMatrix_1__init__(PyObject *__pyx_v_s
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 311; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("__init__", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 323; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("cxtallite.OrientationMatrix.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -6187,14 +6335,14 @@ static int __pyx_pf_9cxtallite_17OrientationMatrix___init__(struct __pyx_obj_9cx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "cxtallite.pyx":312
+  /* "cxtallite.pyx":324
  * 
  *     def __init__(self, g):
  *         self.g = g.copy()             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_g, __pyx_n_s_copy); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 312; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_g, __pyx_n_s_copy); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 324; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
@@ -6207,22 +6355,22 @@ static int __pyx_pf_9cxtallite_17OrientationMatrix___init__(struct __pyx_obj_9cx
     }
   }
   if (__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 312; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 324; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else {
-    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 312; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 324; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_4 = __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_9cxtallite_DTYPE_t(__pyx_t_1);
-  if (unlikely(!__pyx_t_4.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 312; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_4.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 324; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->g, 0);
   __pyx_v_self->g = __pyx_t_4;
   __pyx_t_4.memview = NULL;
   __pyx_t_4.data = NULL;
 
-  /* "cxtallite.pyx":311
+  /* "cxtallite.pyx":323
  *     """
  * 
  *     def __init__(self, g):             # <<<<<<<<<<<<<<
@@ -6245,7 +6393,7 @@ static int __pyx_pf_9cxtallite_17OrientationMatrix___init__(struct __pyx_obj_9cx
   return __pyx_r;
 }
 
-/* "cxtallite.pxd":39
+/* "cxtallite.pxd":42
  * 
  * cdef class OrientationMatrix:
  *     cdef public DTYPE_t[:,:] g             # <<<<<<<<<<<<<<
@@ -6273,8 +6421,8 @@ static PyObject *__pyx_pf_9cxtallite_17OrientationMatrix_1g___get__(struct __pyx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
   __Pyx_XDECREF(__pyx_r);
-  if (unlikely(!__pyx_v_self->g.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[1]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
-  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_self->g, 2, (PyObject *(*)(char *)) __pyx_memview_get_nn___pyx_t_9cxtallite_DTYPE_t, (int (*)(char *, PyObject *)) __pyx_memview_set_nn___pyx_t_9cxtallite_DTYPE_t, 0);; if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_v_self->g.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[1]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
+  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_self->g, 2, (PyObject *(*)(char *)) __pyx_memview_get_nn___pyx_t_9cxtallite_DTYPE_t, (int (*)(char *, PyObject *)) __pyx_memview_set_nn___pyx_t_9cxtallite_DTYPE_t, 0);; if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -6313,7 +6461,7 @@ static int __pyx_pf_9cxtallite_17OrientationMatrix_1g_2__set__(struct __pyx_obj_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__set__", 0);
   __pyx_t_1 = __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_9cxtallite_DTYPE_t(__pyx_v_value);
-  if (unlikely(!__pyx_t_1.memview)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_1.memview)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->g, 0);
   __pyx_v_self->g = __pyx_t_1;
   __pyx_t_1.memview = NULL;
@@ -6331,7 +6479,7 @@ static int __pyx_pf_9cxtallite_17OrientationMatrix_1g_2__set__(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":332
+/* "cxtallite.pyx":344
  *     cdef public double[:,:]  op_sym
  * 
  *     def __init__(self, eulers, lattice):             # <<<<<<<<<<<<<<
@@ -6370,11 +6518,11 @@ static int __pyx_pw_9cxtallite_8Xtallite_1__init__(PyObject *__pyx_v_self, PyObj
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_lattice)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 2, 2, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 332; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 2, 2, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 344; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 332; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 344; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -6387,7 +6535,7 @@ static int __pyx_pw_9cxtallite_8Xtallite_1__init__(PyObject *__pyx_v_self, PyObj
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 332; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("__init__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 344; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("cxtallite.Xtallite.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -6413,13 +6561,13 @@ static int __pyx_pf_9cxtallite_8Xtallite___init__(struct __pyx_obj_9cxtallite_Xt
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "cxtallite.pyx":333
+  /* "cxtallite.pyx":345
  * 
  *     def __init__(self, eulers, lattice):
  *         self.orientation = Quaternion.eulers2Quaternion(eulers)             # <<<<<<<<<<<<<<
  *         self.op_sym = symmetry(lattice)
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_9cxtallite_Quaternion), __pyx_n_s_eulers2Quaternion); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 333; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_9cxtallite_Quaternion), __pyx_n_s_eulers2Quaternion); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 345; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
@@ -6432,43 +6580,43 @@ static int __pyx_pf_9cxtallite_8Xtallite___init__(struct __pyx_obj_9cxtallite_Xt
     }
   }
   if (!__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_eulers); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 333; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_eulers); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 345; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
   } else {
-    __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 333; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 345; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3); __pyx_t_3 = NULL;
     __Pyx_INCREF(__pyx_v_eulers);
     __Pyx_GIVEREF(__pyx_v_eulers);
     PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_v_eulers);
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 333; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 345; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_9cxtallite_Quaternion))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 333; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_9cxtallite_Quaternion))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 345; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v_self->orientation);
   __Pyx_DECREF(((PyObject *)__pyx_v_self->orientation));
   __pyx_v_self->orientation = ((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "cxtallite.pyx":334
+  /* "cxtallite.pyx":346
  *     def __init__(self, eulers, lattice):
  *         self.orientation = Quaternion.eulers2Quaternion(eulers)
  *         self.op_sym = symmetry(lattice)             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __pyx_f_9cxtallite_symmetry(__pyx_v_lattice, 0); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 334; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_f_9cxtallite_symmetry(__pyx_v_lattice, 0); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 346; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(__pyx_t_1);
-  if (unlikely(!__pyx_t_5.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 334; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_5.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 346; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->op_sym, 0);
   __pyx_v_self->op_sym = __pyx_t_5;
   __pyx_t_5.memview = NULL;
   __pyx_t_5.data = NULL;
 
-  /* "cxtallite.pyx":332
+  /* "cxtallite.pyx":344
  *     cdef public double[:,:]  op_sym
  * 
  *     def __init__(self, eulers, lattice):             # <<<<<<<<<<<<<<
@@ -6492,7 +6640,7 @@ static int __pyx_pf_9cxtallite_8Xtallite___init__(struct __pyx_obj_9cxtallite_Xt
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":329
+/* "cxtallite.pyx":341
  *     -------
  *     """
  *     cdef public Quaternion   orientation             # <<<<<<<<<<<<<<
@@ -6550,7 +6698,7 @@ static int __pyx_pf_9cxtallite_8Xtallite_11orientation_2__set__(struct __pyx_obj
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__set__", 0);
-  if (!(likely(((__pyx_v_value) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_value, __pyx_ptype_9cxtallite_Quaternion))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 329; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_v_value) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_value, __pyx_ptype_9cxtallite_Quaternion))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 341; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_t_1 = __pyx_v_value;
   __Pyx_INCREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
@@ -6600,7 +6748,7 @@ static int __pyx_pf_9cxtallite_8Xtallite_11orientation_4__del__(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":330
+/* "cxtallite.pyx":342
  *     """
  *     cdef public Quaternion   orientation
  *     cdef public double[:,:]  op_sym             # <<<<<<<<<<<<<<
@@ -6630,8 +6778,8 @@ static PyObject *__pyx_pf_9cxtallite_8Xtallite_6op_sym___get__(struct __pyx_obj_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
   __Pyx_XDECREF(__pyx_r);
-  if (unlikely(!__pyx_v_self->op_sym.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 330; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
-  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_self->op_sym, 2, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 330; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_v_self->op_sym.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 342; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
+  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_self->op_sym, 2, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 342; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -6670,7 +6818,7 @@ static int __pyx_pf_9cxtallite_8Xtallite_6op_sym_2__set__(struct __pyx_obj_9cxta
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__set__", 0);
   __pyx_t_1 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(__pyx_v_value);
-  if (unlikely(!__pyx_t_1.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 330; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_t_1.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 342; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->op_sym, 0);
   __pyx_v_self->op_sym = __pyx_t_1;
   __pyx_t_1.memview = NULL;
@@ -6683,6 +6831,33 @@ static int __pyx_pf_9cxtallite_8Xtallite_6op_sym_2__set__(struct __pyx_obj_9cxta
   __PYX_XDEC_MEMVIEW(&__pyx_t_1, 1);
   __Pyx_AddTraceback("cxtallite.Xtallite.op_sym.__set__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "cxtallite.pxd":24
+ * 
+ * 
+ * cdef inline DTYPE_t DTYPE_sgn(DTYPE_t a): return 1.0 if a >= 0.0 else -1.0             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+
+static CYTHON_INLINE __pyx_t_9cxtallite_DTYPE_t __pyx_f_9cxtallite_DTYPE_sgn(__pyx_t_9cxtallite_DTYPE_t __pyx_v_a) {
+  __pyx_t_9cxtallite_DTYPE_t __pyx_r;
+  __Pyx_RefNannyDeclarations
+  double __pyx_t_1;
+  __Pyx_RefNannySetupContext("DTYPE_sgn", 0);
+  if (((__pyx_v_a >= 0.0) != 0)) {
+    __pyx_t_1 = 1.0;
+  } else {
+    __pyx_t_1 = -1.0;
+  }
+  __pyx_r = __pyx_t_1;
+  goto __pyx_L0;
+
+  /* function exit code */
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
@@ -20429,9 +20604,9 @@ static int __pyx_setprop_9cxtallite_10Quaternion_z(PyObject *o, PyObject *v, CYT
 }
 
 static PyMethodDef __pyx_methods_9cxtallite_Quaternion[] = {
-  {"unitary", (PyCFunction)__pyx_pw_9cxtallite_10Quaternion_25unitary, METH_NOARGS, 0},
-  {"tolist", (PyCFunction)__pyx_pw_9cxtallite_10Quaternion_27tolist, METH_NOARGS, 0},
-  {"tondarray", (PyCFunction)__pyx_pw_9cxtallite_10Quaternion_29tondarray, METH_NOARGS, 0},
+  {"unitary", (PyCFunction)__pyx_pw_9cxtallite_10Quaternion_23unitary, METH_NOARGS, 0},
+  {"tolist", (PyCFunction)__pyx_pw_9cxtallite_10Quaternion_25tolist, METH_NOARGS, 0},
+  {"tondarray", (PyCFunction)__pyx_pw_9cxtallite_10Quaternion_27tondarray, METH_NOARGS, 0},
   {0, 0, 0, 0}
 };
 
@@ -20453,9 +20628,9 @@ static PyNumberMethods __pyx_tp_as_number_Quaternion = {
   0, /*nb_remainder*/
   0, /*nb_divmod*/
   0, /*nb_power*/
-  __pyx_pw_9cxtallite_10Quaternion_23__neg__, /*nb_negative*/
+  __pyx_pw_9cxtallite_10Quaternion_21__neg__, /*nb_negative*/
   0, /*nb_positive*/
-  __pyx_pw_9cxtallite_10Quaternion_19__abs__, /*nb_absolute*/
+  __pyx_pw_9cxtallite_10Quaternion_17__abs__, /*nb_absolute*/
   0, /*nb_nonzero*/
   0, /*nb_invert*/
   0, /*nb_lshift*/
@@ -20481,7 +20656,7 @@ static PyNumberMethods __pyx_tp_as_number_Quaternion = {
   #endif
   __pyx_pw_9cxtallite_10Quaternion_5__iadd__, /*nb_inplace_add*/
   __pyx_pw_9cxtallite_10Quaternion_9__isub__, /*nb_inplace_subtract*/
-  __pyx_pw_9cxtallite_10Quaternion_13__imul__, /*nb_inplace_multiply*/
+  0, /*nb_inplace_multiply*/
   #if PY_MAJOR_VERSION < 3 || CYTHON_COMPILING_IN_PYPY
   0, /*nb_inplace_divide*/
   #endif
@@ -20506,7 +20681,7 @@ static PyNumberMethods __pyx_tp_as_number_Quaternion = {
 };
 
 static PySequenceMethods __pyx_tp_as_sequence_Quaternion = {
-  __pyx_pw_9cxtallite_10Quaternion_21__len__, /*sq_length*/
+  __pyx_pw_9cxtallite_10Quaternion_19__len__, /*sq_length*/
   0, /*sq_concat*/
   0, /*sq_repeat*/
   0, /*sq_item*/
@@ -20519,7 +20694,7 @@ static PySequenceMethods __pyx_tp_as_sequence_Quaternion = {
 };
 
 static PyMappingMethods __pyx_tp_as_mapping_Quaternion = {
-  __pyx_pw_9cxtallite_10Quaternion_21__len__, /*mp_length*/
+  __pyx_pw_9cxtallite_10Quaternion_19__len__, /*mp_length*/
   0, /*mp_subscript*/
   0, /*mp_ass_subscript*/
 };
@@ -20539,13 +20714,13 @@ static PyTypeObject __pyx_type_9cxtallite_Quaternion = {
   #if PY_MAJOR_VERSION >= 3
   0, /*tp_as_async*/
   #endif
-  __pyx_pw_9cxtallite_10Quaternion_17__repr__, /*tp_repr*/
+  __pyx_pw_9cxtallite_10Quaternion_15__repr__, /*tp_repr*/
   &__pyx_tp_as_number_Quaternion, /*tp_as_number*/
   &__pyx_tp_as_sequence_Quaternion, /*tp_as_sequence*/
   &__pyx_tp_as_mapping_Quaternion, /*tp_as_mapping*/
   0, /*tp_hash*/
   0, /*tp_call*/
-  __pyx_pw_9cxtallite_10Quaternion_15__str__, /*tp_str*/
+  __pyx_pw_9cxtallite_10Quaternion_13__str__, /*tp_str*/
   0, /*tp_getattro*/
   0, /*tp_setattro*/
   0, /*tp_as_buffer*/
@@ -21851,47 +22026,47 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "cxtallite.pyx":191
+  /* "cxtallite.pyx":193
  * 
  *     def __add__(self, Quaternion other):
  *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)             # <<<<<<<<<<<<<<
  * 
  *         newQ[0] = self.w + other.w
  */
-  __pyx_tuple_ = PyTuple_Pack(1, __pyx_int_4); if (unlikely(!__pyx_tuple_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 191; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple_ = PyTuple_Pack(1, __pyx_int_4); if (unlikely(!__pyx_tuple_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 193; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
-  /* "cxtallite.pyx":207
+  /* "cxtallite.pyx":209
  * 
  *     def __sub__(self, Quaternion other):
  *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)             # <<<<<<<<<<<<<<
  * 
  *         newQ[0] = self.w - other.w
  */
-  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_int_4); if (unlikely(!__pyx_tuple__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_int_4); if (unlikely(!__pyx_tuple__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 209; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "cxtallite.pyx":223
+  /* "cxtallite.pyx":225
  * 
  *     def __mul__(self, Quaternion other):
  *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)             # <<<<<<<<<<<<<<
- * 
- * 
+ *         cdef DTYPE_t Aw = self.w
+ *         cdef DTYPE_t Ax = self.x
  */
-  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_int_4); if (unlikely(!__pyx_tuple__3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 223; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_int_4); if (unlikely(!__pyx_tuple__3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 225; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
 
-  /* "cxtallite.pyx":262
+  /* "cxtallite.pyx":274
  *     def unitary(self):
  *         cdef double length = abs(self)
  *         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)             # <<<<<<<<<<<<<<
  * 
  *         newQ[0] = self.w/length
  */
-  __pyx_tuple__5 = PyTuple_Pack(1, __pyx_int_4); if (unlikely(!__pyx_tuple__5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 262; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__5 = PyTuple_Pack(1, __pyx_int_4); if (unlikely(!__pyx_tuple__5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 274; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
 
@@ -22280,21 +22455,21 @@ PyMODINIT_FUNC PyInit_cxtallite(void)
   __pyx_type_9cxtallite_Quaternion.tp_print = 0;
   if (PyObject_SetAttrString(__pyx_m, "Quaternion", (PyObject *)&__pyx_type_9cxtallite_Quaternion) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 165; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_9cxtallite_Quaternion = &__pyx_type_9cxtallite_Quaternion;
-  if (PyType_Ready(&__pyx_type_9cxtallite_Rodgiues) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyType_Ready(&__pyx_type_9cxtallite_Rodgiues) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type_9cxtallite_Rodgiues.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "Rodgiues", (PyObject *)&__pyx_type_9cxtallite_Rodgiues) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "Rodgiues", (PyObject *)&__pyx_type_9cxtallite_Rodgiues) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_9cxtallite_Rodgiues = &__pyx_type_9cxtallite_Rodgiues;
-  if (PyType_Ready(&__pyx_type_9cxtallite_Eulers) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 277; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyType_Ready(&__pyx_type_9cxtallite_Eulers) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 289; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type_9cxtallite_Eulers.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "Eulers", (PyObject *)&__pyx_type_9cxtallite_Eulers) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 277; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "Eulers", (PyObject *)&__pyx_type_9cxtallite_Eulers) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 289; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_9cxtallite_Eulers = &__pyx_type_9cxtallite_Eulers;
-  if (PyType_Ready(&__pyx_type_9cxtallite_OrientationMatrix) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 301; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyType_Ready(&__pyx_type_9cxtallite_OrientationMatrix) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 313; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type_9cxtallite_OrientationMatrix.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "OrientationMatrix", (PyObject *)&__pyx_type_9cxtallite_OrientationMatrix) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 301; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "OrientationMatrix", (PyObject *)&__pyx_type_9cxtallite_OrientationMatrix) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 313; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_9cxtallite_OrientationMatrix = &__pyx_type_9cxtallite_OrientationMatrix;
-  if (PyType_Ready(&__pyx_type_9cxtallite_Xtallite) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 315; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyType_Ready(&__pyx_type_9cxtallite_Xtallite) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 327; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type_9cxtallite_Xtallite.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "Xtallite", (PyObject *)&__pyx_type_9cxtallite_Xtallite) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 315; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "Xtallite", (PyObject *)&__pyx_type_9cxtallite_Xtallite) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 327; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_9cxtallite_Xtallite = &__pyx_type_9cxtallite_Xtallite;
   if (PyType_Ready(&__pyx_type___pyx_array) < 0) {__pyx_filename = __pyx_f[3]; __pyx_lineno = 101; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type___pyx_array.tp_print = 0;

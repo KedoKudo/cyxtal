@@ -80,17 +80,27 @@ class testQuaternion(unittest.TestCase):
         self.u3      = self.q3.unitary()
         self.u4      = self.q4.unitary()
 
+        self.p1      = np.array([3.2, 4.1, -11.2])
+
     def test_add(self):
         calc1   = self.q1 + self.q2
-        target1 = [0.0, 2.0, 3.0, 4.0]
+        target1 = [2.0, 2.0, 3.0, 4.0]
         np.testing.assert_almost_equal(calc1.tolist(), target1)
 
     def test_sub(self):
         calc1   = self.q1 - self.q2
-        target1 = [-2.0, -2.0, -3.0, -4.0]
+        target1 = [0.0, -2.0, -3.0, -4.0]
         np.testing.assert_almost_equal(calc1.tolist(), target1)
 
     def test_mul(self):
+        calc1   = self.u1 * self.u2
+        np.testing.assert_almost_equal(calc1.tolist(), self.u2.tolist())
+
+        calc2   = self.u2 * self.u4
+        target2 = [0.2623303, 0.8853649, 0.1311652, -0.3607042]
+        np.testing.assert_almost_equal(calc2.tolist(), target2)
+
+    def test_rot(self):
         pass
 
     def test_div(self):

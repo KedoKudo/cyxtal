@@ -182,10 +182,12 @@ cdef class Quaternion:
     """
 
     def __init__(self, DTYPE_t[:] q):
-        self.w = q[0]
-        self.x = q[1]
-        self.y = q[2]
-        self.z = q[3]
+        cdef DTYPE_t sgn = DTYPE_sgn(q[0])
+
+        self.w = q[0] * sgn
+        self.x = q[1] * sgn
+        self.y = q[2] * sgn
+        self.z = q[3] * sgn
 
     def __add__(self, Quaternion other):
         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
@@ -221,9 +223,23 @@ cdef class Quaternion:
 
     def __mul__(self, Quaternion other):
         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
+        cdef DTYPE_t Aw = self.w
+        cdef DTYPE_t Ax = self.x
+        cdef DTYPE_t Ay = self.y
+        cdef DTYPE_t Az = self.z
+        cdef DTYPE_t Bw = other.w
+        cdef DTYPE_t Bx = other.x
+        cdef DTYPE_t By = other.y
+        cdef DTYPE_t Bz = other.z
 
+        newQ[0] = - Ax * Bx - Ay * By - Az * Bz + Aw * Bw
+        newQ[1] = + Ax * Bw + Ay * Bz - Az * By + Aw * Bx
+        newQ[2] = - Ax * Bz + Ay * Bw + Az * Bx + Aw * By
+        newQ[3] = + Ax * By - Ay * Bx + Az * Bw + Aw * Bz
+        return Quaternion(newQ)
 
-    def __imul__(self, Quaternion other):
+    def __div__(self, Quaternion other):
+        cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
         pass
 
     def __str__(self):
@@ -272,6 +288,9 @@ cdef class Quaternion:
 
     def tondarray(self):
         return np.array(self.tolist())
+
+    def rotate(self, DTYPE_t[:] pt):
+        pass
 
 
 cdef class Eulers:
