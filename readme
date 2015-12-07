@@ -57,3 +57,14 @@ cyxtal/
         test_ctools.py
         test_cxtallite.py
         test_exdamask_ascii2table.py
+
+###############
+# INSTRUCTION #
+###############
+To use cyxtal, add it to ${PYTHON}/site-packages or other location in
+${PYTHONPATH}.
+To use cython based module, run `make all` from command window (cython
+and gcc compiler required).
+To test modification, run `make test` from command window (nosetests
+required). Alternatively, each module can be tested individually by executing
+corresponding testing script located in ./tests .
