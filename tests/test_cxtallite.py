@@ -67,27 +67,101 @@ class testSymmetry(unittest.TestCase):
 
 
 class testQuaternion(unittest.TestCase):
+
+    def setUp(self):
+
+        self.q1      = Quaternion(np.array([-1.0, 0.0, 0.0, 0.0]))
+        self.q2      = Quaternion(np.array([ 1.0, 2.0, 3.0, 4.0]))
+        self.q3      = Quaternion(np.array([ 3.0, 7.0, 9.0, 2.0]))
+        self.q4      = Quaternion(np.array([ 1.0, 2.0,-5.0, 1.0]))
+
+        self.u1      = self.q1.unitary()
+        self.u2      = self.q2.unitary()
+        self.u3      = self.q3.unitary()
+        self.u4      = self.q4.unitary()
+
+    def test_add(self):
+        print self.q1
+        print self.q2
+        calc1   = self.q1 + self.q2
+        target1 = [0.0, 2.0, 3.0, 4.0]
+        np.testing.assert_almost_equal(calc1.tolist(),
+                                       target1)
+
+    def test_sub(self):
+        pass
+
+    def test_rmul(self):
+        pass
+
+    def test_lmul(self):
+        pass
+
+    def test_div(self):
+        pass
+
+    def test_inv(self):
+        pass
+
+    def test_len(self):
+        pass
+
+    def test_2Eulers(self):
+        pass
+
+    def test_2Rodrigues(self):
+        pass
+
+    def test_2OrientationMatrix(self):
+        pass
+
+
+class testEulers(unittest.TestCase):
     pass
 
-#     def setUp(self):
-#         q1 = Quaternion()
-#         self.data = []
 
-#     def test_add(self):
-#         pass
+class testOrienationMatrix(unittest.TestCase):
+    pass
 
-#     def test_rotation(self):
-#         pass
 
-#     def test_convert2Eulers(self):
-#         pass
+class testRodrigues(unittest.TestCase):
+    pass
 
-#     def test_convert2gMatrix(self):
-#         pass
 
-#     def test_avergateOrientation(self):
-#         pass
+class testOrientations(unittest.TestCase):
 
+    def setUp(self):
+        pass
+
+    def test_fromQuaternions(self):
+        pass
+
+    def test_fromEulers(self):
+        pass
+
+    def test_fromRodrigues(self):
+        pass
+
+    def test_fromMatrices(self):
+        pass
+
+
+class testAverageOrientations(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def test_avgQuaternions(self):
+        pass
+
+    def test_avgEulers(self):
+        pass
+
+    def test_avgRogrigues(self):
+        pass
+
+    def test_avgOrientationMatrix(self):
+        pass
 
 
 if __name__ == '__main__':

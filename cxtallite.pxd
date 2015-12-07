@@ -29,3 +29,11 @@ cpdef symmetry(lattice)
 cdef class Quaternion:
     cdef public double w,x,y,z
 
+cdef class Rodgiues:
+    cdef public double[3] v
+
+cdef class Eulers:
+    cdef public double phi1, PHI, phi2
+
+cdef class OrientationMatrix:
+    cdef public DTYPE_t[:,:] g

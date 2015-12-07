@@ -38,6 +38,12 @@ DESCRIPTION
         provide symmetry operators in quaternion for different crystal structure
     Quaternion: extension class
         quaternion representation of 3D orientation
+    Eulers: extension class
+        Euler angle representation of 3D orientation
+    OrientationMatrix: extension class
+        Matrix representation of 3D orientation
+    Rodrigues: extension class
+        Rodrigue vector representation of 3D orientation
     Xtallite: extension class
         physically equivalent to material point
     Aggregate: extension class
@@ -158,31 +164,115 @@ cpdef symmetry(lattice):
 
 cdef class Quaternion:
     """
-    Quaternion representation of orientation
-    All methods and naming conventions based off
-    http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions
-
+    DESCRIPTION
+    -----------
+    Quaternion(np.array([w,x,y,z]))
+        Quaternion is a set of numerics that extends from complex number,
+        where a imaginary space (x,y,z) is constructed to facilitate a close
+        set.
+        Particularly, the unitary quaternions correspond to the rotation
+        operation in 3D space, which is why many computer graphics used it
+        to perform fast rotation calculations.
     PARAMETERS
     ----------
-    q: double[:]
+    q: DTYPE[:]
         Simple vector with length 4
-    ATTRIBUTES
-    ----------
     METHODS
     -------
     """
 
-    def __init__(self, double[:] q):
-        if q[0] < 0:
-            self.w = -q[0]
-            self.x = -q[1]
-            self.y = -q[2]
-            self.z = -q[3]
-        else:
-            self.w = q[0]
-            self.x = q[1]
-            self.y = q[2]
-            self.z = q[3]
+    def __init__(self, DTYPE_t[:] q):
+        self.w = q[0]
+        self.x = q[1]
+        self.y = q[2]
+        self.z = q[3]
+
+    def __add__(self, Quaternion other):
+        cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
+
+        newQ[0] = self.w + other.w
+        newQ[1] = self.x + other.x
+        newQ[2] = self.y + other.y
+        newQ[3] = self.z + other.z
+        return Quaternion(newQ)
+
+    def __iadd__(self, Quaternion other):
+        self.w = self.w + other.w
+        self.x = self.x + other.x
+        self.y = self.y + other.y
+        self.z = self.z + other.z
+        return self
+
+    def __str__(self):
+        tmp = "({}, <{},{},{}>)".format(self.w, self.x, self.y, self.z)
+        return tmp
+
+    def __abs__(self):
+        cdef double tmp
+
+        tmp = self.w*self.w + \
+              self.x*self.x + \
+              self.y*self.y + \
+              self.z*self.z
+        tmp = np.sqrt(tmp)
+        return tmp
+
+    def __len__(self):
+        return 4
+
+    def unitary(self):
+        cdef double length = abs(self)
+        cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
+
+        newQ[0] = self.w/length
+        newQ[1] = self.x/length
+        newQ[2] = self.y/length
+        newQ[3] = self.z/length
+        return Quaternion(newQ)
+
+    def tolist(self):
+        return [self.w, self.x, self.y, self.z]
+
+    def tondarray(self):
+        return np.array(self.tolist())
+
+
+cdef class Eulers:
+    """
+    DESCRIPTION
+    -----------
+    Euler angle representation of orientation.
+    Calculation is carries out by converting to quaternions.
+
+    PARAMETERS
+    ----------
+    phi1: double
+        first of Euler angle
+    PHI:  double
+        second of Euler angle
+    phi2: double
+        third of Euler angle
+    METHODS
+    -------
+    """
+
+    def __init__(self, phi1, PHI, phi2):
+        self.phi1 = phi1
+        self.PHI  = PHI
+        self.phi2 = phi2
+
+cdef class OrientationMatrix:
+    """
+    Matrix representation of orientation, this is defined as
+    the transpose of the rotation matrix.
+
+    PARAMETERS
+    ----------
+    METHODS
+    """
+
+    def __init__(self, g):
+        self.g = g.copy()
 
 
 cdef class Xtallite:
