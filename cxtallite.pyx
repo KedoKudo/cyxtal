@@ -178,6 +178,7 @@ cdef class Quaternion:
     q: DTYPE[:]
         Simple vector with length 4
     METHODS
+
     -------
     """
 
@@ -238,6 +239,22 @@ cdef class Quaternion:
         newQ[3] = + Ax * By - Ay * Bx + Az * Bw + Aw * Bz
         return Quaternion(newQ)
 
+    def __imul__(self, Quaternion other):
+        cdef DTYPE_t Aw = self.w
+        cdef DTYPE_t Ax = self.x
+        cdef DTYPE_t Ay = self.y
+        cdef DTYPE_t Az = self.z
+        cdef DTYPE_t Bw = other.w
+        cdef DTYPE_t Bx = other.x
+        cdef DTYPE_t By = other.y
+        cdef DTYPE_t Bz = other.z
+
+        self.w = - Ax * Bx - Ay * By - Az * Bz + Aw * Bw
+        self.x = + Ax * Bw + Ay * Bz - Az * By + Aw * Bx
+        self.y = - Ax * Bz + Ay * Bw + Az * Bx + Aw * By
+        self.z = + Ax * By - Ay * Bx + Az * Bw + Aw * Bz
+        return self
+
     def __div__(self, Quaternion other):
         return self * other.conj()
 
@@ -297,8 +314,45 @@ cdef class Quaternion:
     def tondarray(self):
         return np.array(self.tolist())
 
-    def rotate(self, DTYPE_t[:] pt):
-        pass
+    @classmethod
+    def rotate(cls, Quaternion q, DTYPE_t[:] pt):
+        """
+        DESCRIPTION
+        -----------
+        newPt = Quaternion.rotate(q, pt)
+            active rotation of pt using quaternion q, namely
+            'newPt = q * pt * q.conj()'
+        PARAMETERS
+        ----------
+        q: Quaternion
+            quaternion defining rotation
+        pt: np.ndarray
+            Point vector
+        RETURNS
+        -------
+        newPt: np.ndarray
+            new point vector
+        """
+        cdef np.ndarray newPt = np.zeros(3, dtype=DTYPE)
+        cdef Quaternion rotQ  = q.unitary()
+        cdef DTYPE_t w  = rotQ.w
+        cdef DTYPE_t x  = rotQ.x
+        cdef DTYPE_t y  = rotQ.y
+        cdef DTYPE_t z  = rotQ.z
+        cdef DTYPE_t Vx = pt[0]
+        cdef DTYPE_t Vy = pt[1]
+        cdef DTYPE_t Vz = pt[2]
+
+        newPt[0] = w * w * Vx + 2 * y * w * Vz - 2 * z * w * Vy + \
+                   x * x * Vx + 2 * y * x * Vy + 2 * z * x * Vz - \
+                   z * z * Vx - y * y * Vx
+        newPt[1] = 2 * x * y * Vx + y * y * Vy + 2 * z * y * Vz + \
+                   2 * w * z * Vx - z * z * Vy + w * w * Vy - \
+                   2 * x * w * Vz - x * x * Vy
+        newPt[2] = 2 * x * z * Vx + 2 * y * z * Vy + \
+                   z * z * Vz - 2 * w * y * Vx - y * y * Vz + \
+                   2 * w * x * Vy - x * x * Vz + w * w * Vz
+        return newPt
 
 
 cdef class Eulers:

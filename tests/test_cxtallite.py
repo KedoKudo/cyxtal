@@ -70,17 +70,19 @@ class testQuaternion(unittest.TestCase):
 
     def setUp(self):
 
-        self.q1      = Quaternion(np.array([-1.0, 0.0, 0.0, 0.0]))
-        self.q2      = Quaternion(np.array([ 1.0, 2.0, 3.0, 4.0]))
-        self.q3      = Quaternion(np.array([ 3.0, 7.0, 9.0, 2.0]))
-        self.q4      = Quaternion(np.array([ 1.0, 2.0,-5.0, 1.0]))
+        self.q1 = Quaternion(np.array([-1.0, 0.0, 0.0, 0.0]))
+        self.q2 = Quaternion(np.array([ 1.0, 2.0, 3.0, 4.0]))
+        self.q3 = Quaternion(np.array([ 3.0, 7.0, 9.0, 2.0]))
+        self.q4 = Quaternion(np.array([ 1.0, 2.0,-5.0, 1.0]))
+        self.q5 = Quaternion(np.array([ 0.7071, 0, 0, 0.7071]))
 
-        self.u1      = self.q1.unitary()
-        self.u2      = self.q2.unitary()
-        self.u3      = self.q3.unitary()
-        self.u4      = self.q4.unitary()
+        self.u1 = self.q1.unitary()
+        self.u2 = self.q2.unitary()
+        self.u3 = self.q3.unitary()
+        self.u4 = self.q4.unitary()
+        self.u5 = self.q5.unitary()
 
-        self.p1      = np.array([3.2, 4.1, -11.2])
+        self.p1 = np.array([1.0,0.0,0.0])
 
     def test_add(self):
         calc1   = self.q1 + self.q2
@@ -101,7 +103,9 @@ class testQuaternion(unittest.TestCase):
         np.testing.assert_almost_equal(calc2.tolist(), target2)
 
     def test_rotate(self):
-        pass
+        calc1   = Quaternion.rotate(self.u5, self.p1)
+        target  = [0.0, 1.0, 0.0]
+        np.testing.assert_almost_equal(calc1, target)
 
     def test_div(self):
         calc1   = self.q2 / self.q3
@@ -111,9 +115,6 @@ class testQuaternion(unittest.TestCase):
         calc2   = self.u2 / self.u3
         target2 = [0.7939163, 0.4427610, -0.3664228, 0.1984791]
         np.testing.assert_almost_equal(calc2.tolist(), target2)
-
-    def test_inv(self):
-        pass
 
     def test_2Eulers(self):
         pass
