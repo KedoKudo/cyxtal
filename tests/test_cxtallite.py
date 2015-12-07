@@ -116,6 +116,11 @@ class testQuaternion(unittest.TestCase):
         target2 = [0.7939163, 0.4427610, -0.3664228, 0.1984791]
         np.testing.assert_almost_equal(calc2.tolist(), target2)
 
+    def test_scale(self):
+        calc1  = Quaternion.scale(self.q3, 5)
+        target = np.array([3.0, 7.0, 9.0, 2.0]) * 5
+        np.testing.assert_almost_equal(calc1.tondarray(), target)
+
     def test_2Eulers(self):
         pass
 

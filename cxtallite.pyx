@@ -178,7 +178,22 @@ cdef class Quaternion:
     q: DTYPE[:]
         Simple vector with length 4
     METHODS
-
+    -------
+    unitary(self)
+        Return a unitary quaternion, useful for using quaternion to represent
+        rotation/orientation.
+    conj(self)
+        Return the conjugate of the quaternion
+    tolist(self)
+        Return the quaternion as a simple python list
+    tondarray(self)
+        Return the quaternion as a numpy array (preferred)
+    toEulers(self)
+        Convert a unitary quaternion into Euler Angles
+    toRodrigues(self)
+        Convert a unitary quaternion into Rodrigue vector
+    toOrientationMatrix(self)
+        Convert a unitary quaternion into Orientation Matrix
     -------
     """
 
@@ -331,6 +346,29 @@ cdef class Quaternion:
 
     def toOrientationMatrix(self):
         pass
+
+    @classmethod
+    def scale(cls, Quaternion q, double s):
+        """
+        DESCRIPTION
+        -----------
+        newQ = Quaternion.scale(q, s)
+            Scale a quaternion with given scalar
+        PARAMETERS
+        ----------
+        q: Quaternion
+            Quaternion to scale
+        s: double
+            Scaling amount
+        """
+        cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
+
+        newQ[0] = q.w * s
+        newQ[1] = q.x * s
+        newQ[2] = q.y * s
+        newQ[3] = q.z * s
+
+        return Quaternion(newQ)
 
     @classmethod
     def rotate(cls, Quaternion q, DTYPE_t[:] pt):
