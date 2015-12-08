@@ -103,6 +103,9 @@ class testQuaternion(unittest.TestCase):
         np.testing.assert_almost_equal(calc2.tolist(), target2)
 
     def test_rotate(self):
+        """
+        Rotate [1,0,0] around z-axis by 90 degree
+        """
         calc1   = Quaternion.rotate(self.u5, self.p1)
         target  = [0.0, 1.0, 0.0]
         np.testing.assert_almost_equal(calc1, target)
@@ -122,7 +125,12 @@ class testQuaternion(unittest.TestCase):
         np.testing.assert_almost_equal(calc1.tondarray(), target)
 
     def test_2Eulers(self):
-        pass
+        e1 = np.array([  -0.,            0.,            0.        ])
+        e2 = np.array([ 132.27368901,   82.33774434,   19.65382406])
+        e3 = np.array([  85.81508387,  144.90319877,  341.56505118])
+        np.testing.assert_almost_equal(self.q1.toEulers(), e1)
+        np.testing.assert_almost_equal(self.q2.toEulers(), e2)
+        np.testing.assert_almost_equal(self.q3.toEulers(), e3)
 
     def test_2Rodrigues(self):
         pass

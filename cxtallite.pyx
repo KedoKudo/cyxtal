@@ -54,7 +54,7 @@ import  cython
 import  math, random, os
 import  numpy as np
 cimport numpy as np
-from    libc.math cimport sin, cos, sqrt
+from    libc.math cimport sin, cos, sqrt, atan2, M_PI
 
 
 #############################
@@ -189,11 +189,11 @@ cdef class Quaternion:
     tondarray(self)
         Return the quaternion as a numpy array (preferred)
     toEulers(self)
-        Convert a unitary quaternion into Euler Angles
+        Convert a unitary quaternion into Euler Angles (np.ndarray)
     toRodrigues(self)
-        Convert a unitary quaternion into Rodrigue vector
+        Convert a unitary quaternion into Rodrigue vector (np.ndarray)
     toOrientationMatrix(self)
-        Convert a unitary quaternion into Orientation Matrix
+        Convert a unitary quaternion into Orientation Matrix (np.ndarray)
     -------
     """
 
@@ -204,6 +204,9 @@ cdef class Quaternion:
         self.x = q[1] * sgn
         self.y = q[2] * sgn
         self.z = q[3] * sgn
+
+    def __copy__(self):
+        return Quaternion([self.w,self.x,self.y,self.z])
 
     def __add__(self, Quaternion other):
         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
@@ -324,6 +327,13 @@ cdef class Quaternion:
         return Quaternion(newQ)
 
     def conj(self):
+        """
+        DESCRIPTION
+        -----------
+        q.conj()
+            Representing the inverse rotation of q, provided
+        q is a unitary quaternion.
+        """
         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
 
         newQ[0] =  self.w
@@ -338,8 +348,54 @@ cdef class Quaternion:
     def tondarray(self):
         return np.array(self.tolist())
 
-    def toEulers(self):
-        pass
+    def toEulers(self, inDegrees=True, inStandardRange=True):
+        """
+        Conversion of ACTIVE rotation to Euler angles taken from:
+        Melcher, A.; Unser, A.; Reichhardt, M.; Nestler, B.; Pötschke, M.; Selzer, M.
+        Conversion of EBSD data by a quaternion based algorithm to be used for grain structure simulations
+        Technische Mechanik 30 (2010) pp 401--413
+        """
+        cdef np.ndarray angles = np.zeros(3, dtype=DTYPE)
+        cdef DTYPE_t    x      = 0.0
+        cdef DTYPE_t    y      = 0.0
+        cdef DTYPE_t    chi    = 0.0
+        cdef Quaternion q = self.unitary()
+
+        if DTYPE_abs(q.x)<1e-4 and DTYPE_abs(q.y)<1e-4:
+            x = q.w**2.0 - q.z**2.0
+            y = 2.0 * q.w * q.z
+            angles[0] = atan2(y,x)
+        elif DTYPE_abs(q.w) < 1e-4 and DTYPE_abs(q.z)<1e-4:
+            x = q.x**2.0 - q.y**2.0
+            y = 2.0*q.x*q.y
+            angles[0] = atan2(y,x)
+            angles[1] = M_PI
+        else:
+            chi = sqrt((q.w**2 + q.z**2)*(q.x**2 + q.y**2))
+
+            x   = (q.w * q.x - q.y * q.z)/2./chi
+            y   = (q.w * q.y + q.x * q.z)/2./chi
+            angles[0] = atan2(y,x)
+
+            x   = q.w**2 + q.z**2 - (q.x**2 + q.y**2)
+            y   = 2.*chi
+            angles[1] = atan2(y,x)
+
+            x = (q.w * q.x + q.y * q.z)/2./chi
+            y = (q.z * q.x - q.y * q.w)/2./chi
+            angles[2] = atan2(y,x)
+
+        if inStandardRange:
+            angles[0] %= 2*M_PI
+            if angles[1] < 0.0:
+                angles[1] =  angles[1] + M_PI
+                angles[2] = -angles[2]
+            angles[2] %= 2*M_PI
+
+        if inDegrees:
+            angles = np.degrees(angles)
+
+        return angles
 
     def toRodrigues(self):
         pass

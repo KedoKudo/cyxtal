@@ -22,6 +22,7 @@ ctypedef np.float64_t DTYPE_t
 
 
 cdef inline DTYPE_t DTYPE_sgn(DTYPE_t a): return 1.0 if a >= 0.0 else -1.0
+cdef inline DTYPE_t DTYPE_abs(DTYPE_t a): return a if a>=0 else -a
 
 
 ######################
