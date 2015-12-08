@@ -35,8 +35,9 @@ cdef class Quaternion:
     cdef public double w,x,y,z
 
 
-cdef class Rodgiues:
-    cdef public double[3] v
+cdef class Rodrigues:
+    cdef public np.ndarray v
+    cdef        Quaternion __q
 
 
 cdef class Eulers:
@@ -45,5 +46,5 @@ cdef class Eulers:
 
 
 cdef class OrientationMatrix:
-    cdef public DTYPE_t[:,:] g
+    cdef public np.ndarray g
     cdef        Quaternion   __q

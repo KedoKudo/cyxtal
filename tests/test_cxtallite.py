@@ -40,6 +40,7 @@ import numpy as np
 from cyxtal.cxtallite import Quaternion
 from cyxtal.cxtallite import Eulers
 from cyxtal.cxtallite import OrientationMatrix
+from cyxtal.cxtallite import Rodrigues
 from cyxtal.cxtallite import symmetry
 from cyxtal.cxtallite import Xtallite
 
@@ -171,9 +172,9 @@ class testQuaternion(unittest.TestCase):
         np.testing.assert_almost_equal(v3, myv3)
 
     def test_cmp(self):
-        self.assertTrue(self.q2 ==  self.q2)
-        self.assertTrue(self.q3 == -self.q3)
-        self.assertFalse(self.q1 == self.q2)
+        self.assertTrue( self.q2 ==  self.q2)
+        self.assertTrue( self.q3 == -self.q3)
+        self.assertFalse(self.q1 ==  self.q2)
 
     def test_avgQuaternions(self):
         qs      = [self.q5, self.q6, self.q7]
@@ -218,26 +219,18 @@ class testOrienationMatrix(unittest.TestCase):
         g = self.g.tondarray()
         np.testing.assert_almost_equal(q,g)
 
+
 class testRodrigues(unittest.TestCase):
-    pass
-
-
-class testOrientations(unittest.TestCase):
 
     def setUp(self):
-        pass
+        tmp    = np.array([2.33333333, 3.0, 0.66666667])
+        tmp    = tmp/np.linalg.norm(tmp)
+        self.r = Rodrigues(tmp)
 
-    def test_fromQuaternions(self):
-        pass
-
-    def test_fromEulers(self):
-        pass
-
-    def test_fromRodrigues(self):
-        pass
-
-    def test_fromMatrices(self):
-        pass
+    def test_toQuaternion(self):
+        r = self.r.tondarray()
+        q = self.r.toQuaternion().toRodrigues()
+        np.testing.assert_almost_equal(r,q)
 
 
 class testAverageOrientations(unittest.TestCase):

@@ -54,7 +54,7 @@ import  cython
 import  math, random, os
 import  numpy as np
 cimport numpy as np
-from    libc.math cimport sin, cos, sqrt, atan2, M_PI
+from    libc.math cimport sin, cos, sqrt, atan2, M_PI, atan
 
 
 #############################
@@ -663,7 +663,13 @@ cdef class OrientationMatrix:
     """
 
     def __init__(self, DTYPE_t[:,:] g):
-        self.g   = g.copy()
+        cdef int i, j
+
+        self.g = np.zeros((3,3), dtype=DTYPE)
+        for i in range(3):
+            for j in range(3):
+                self.g[i,j]   = g[i,j]
+
         self.__q = self.__getq()
 
     def __getq(self):
@@ -717,6 +723,57 @@ cdef class OrientationMatrix:
 
     def toQuaternion(self):
         return self.__q
+
+
+cdef class Rodrigues:
+    """
+    DESCRIPTION
+    -----------
+    Rodrigues representation of orientation, a wrapper class that use
+    Quaternion class as engine.
+    """
+
+    def __init__(self, DTYPE_t[:] v):
+        cdef int i
+
+        self.v = np.zeros(3, dtype=DTYPE)
+        for i in range(3):
+            self.v[i] = v[i]
+
+        self.__q = self.__getq()
+
+    def __getq(self):
+        cdef np.ndarray qv = np.zeros(4, dtype=DTYPE)
+        cdef DTYPE_t    halfangle, c, s
+
+        halfangle = atan(np.linalg.norm(self.v))
+        c         = cos(halfangle)
+        s         = sin(halfangle)
+
+        qv[0] = s
+        qv[1] = c * self.v[0]
+        qv[2] = c * self.v[1]
+        qv[3] = c * self.v[2]
+
+        return Quaternion(qv)
+
+    def tolist(self):
+        return list(self.v)
+
+    def tondarray(self):
+        return np.array(self.tolist())
+
+    def toQuaternion(self):
+        return self.__q
+
+    def toAngleAxis(self):
+        return self.__q.toAngleAxis()
+
+    def toEulers(self):
+        return self.__q.toEulers()
+
+    def toOrientationMatrix(self):
+        return self.__q.toOrientationMatrix()
 
 
 cdef class Xtallite:
