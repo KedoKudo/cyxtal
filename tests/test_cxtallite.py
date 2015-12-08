@@ -70,11 +70,13 @@ class testQuaternion(unittest.TestCase):
 
     def setUp(self):
 
-        self.q1 = Quaternion(np.array([-1.0, 0.0, 0.0, 0.0]))
-        self.q2 = Quaternion(np.array([ 1.0, 2.0, 3.0, 4.0]))
-        self.q3 = Quaternion(np.array([ 3.0, 7.0, 9.0, 2.0]))
-        self.q4 = Quaternion(np.array([ 1.0, 2.0,-5.0, 1.0]))
+        self.q1 = Quaternion(np.array([-1.0, 0.0, 0.0, 0.0  ]))
+        self.q2 = Quaternion(np.array([ 1.0, 2.0, 3.0, 4.0  ]))
+        self.q3 = Quaternion(np.array([ 3.0, 7.0, 9.0, 2.0  ]))
+        self.q4 = Quaternion(np.array([ 1.0, 2.0,-5.0, 1.0  ]))
         self.q5 = Quaternion(np.array([ 0.7071, 0, 0, 0.7071]))
+        self.q6 = Quaternion(np.array([0.9961946980917455, 0.000000, 0.000000, 0.08715574274765817]))
+        self.q7 = Quaternion(np.array([0.9659258262890683, 0.000000, 0.000000, 0.25881904510252074]))
 
         self.u1 = self.q1.unitary()
         self.u2 = self.q2.unitary()
@@ -172,7 +174,13 @@ class testQuaternion(unittest.TestCase):
         self.assertFalse(self.q1 == self.q2)
 
     def test_avgQuaternions(self):
-        pass
+        qs      = [self.q5, self.q6, self.q7]
+        average = Quaternion.average(qs)
+        e_avg   = average.toEulers()
+        t_avg   = np.array([42.12201286, 0.0, 0.0])
+        target  = np.array([0.9331983, 0.000000, 0.000000, 0.3593618])
+        np.testing.assert_almost_equal(average.tondarray(), target)
+        np.testing.assert_almost_equal(e_avg, t_avg)
 
 
 class testEulers(unittest.TestCase):

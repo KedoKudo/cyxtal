@@ -152,6 +152,13 @@ cpdef symmetry(lattice):
                      [ 0.5*tmp, 0.0,     0.0,     0.5*tmp ],
                      [-0.5*tmp, 0.0,     0.0,     0.5*tmp ],
                     ]
+    elif lattice == 'orthorhombic':
+        symQuats =  [
+                     [ 1.0,0.0,0.0,0.0 ],
+                     [ 0.0,1.0,0.0,0.0 ],
+                     [ 0.0,0.0,1.0,0.0 ],
+                     [ 0.0,0.0,0.0,1.0 ],
+                    ]
     elif lattice == 'triclinic':
         symQuats =  [
                      [ 1.0,0.0,0.0,0.0 ],
@@ -549,9 +556,27 @@ cdef class Quaternion:
         NOTE
         ----
             No crystal symmetry considered at this level, just plain averaging
-        list of unitary quaternions.
+        list of unitary quaternions. Also the results coming out of this method
+        is not accurate, e.g. Euler angles [10,0,0], [30,0,0], [90,0,0]
+            theoretical results: [43.33, 0.0, 0.0]
+            numerical results:   [42.12, 0.0, 0.0]
         """
-        pass
+        cdef int        N   = len(qs)
+        cdef np.ndarray M   = np.zeros((4,4), dtype=DTYPE)
+        cdef np.ndarray eig = np.empty( 4,    dtype=DTYPE)
+        cdef np.ndarray vec = np.empty((4,4), dtype=DTYPE)
+
+        cdef Quaternion q
+        cdef int        i
+
+
+        for i in range(N):
+            q = qs[i].unitary()
+            M += np.outer(q.tondarray(), q.tondarray())
+
+        eig, vec = np.linalg.eig(M/N)
+
+        return Quaternion(np.real(vec.T[eig.argmax()]))
 
 
 cdef class Eulers:
