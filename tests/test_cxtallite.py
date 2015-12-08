@@ -138,7 +138,18 @@ class testQuaternion(unittest.TestCase):
         np.testing.assert_almost_equal(self.q3.toRodrigues(), r3)
 
     def test_2OrientationMatrix(self):
-        pass
+        m1 = np.array([[ 1.,  0.,  0.],
+                       [ 0.,  1.,  0.],
+                       [ 0.,  0.,  1.]])
+        m2 = np.array([[-0.66666667,  0.13333333,  0.73333333],
+                       [ 0.66666667, -0.33333333,  0.66666667],
+                       [ 0.33333333,  0.93333333,  0.13333333]])
+        m3 = np.array([[-0.18881119,  0.7972028 ,  0.57342657],
+                       [ 0.96503497,  0.25874126, -0.04195804],
+                       [-0.18181818,  0.54545455, -0.81818182]])
+        np.testing.assert_almost_equal(self.q1.toOrientationMatrix(), m1)
+        np.testing.assert_almost_equal(self.q2.toOrientationMatrix(), m2)
+        np.testing.assert_almost_equal(self.q3.toOrientationMatrix(), m3)
 
     def test_2AngleAxis(self):
         a1, v1 = (0.0,                np.array([ 1.,  0.,  0.]))

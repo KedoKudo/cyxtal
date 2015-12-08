@@ -429,7 +429,14 @@ cdef class Quaternion:
         return r
 
     def toOrientationMatrix(self):
-        pass
+        cdef Quaternion q = self.unitary()
+        cdef np.ndarray m = np.empty((3,3), dtype=DTYPE)
+
+        m = np.array([[1.0-2.0*(q.y*q.y+q.z*q.z),     2.0*(q.x*q.y-q.z*q.w),     2.0*(q.x*q.z+q.y*q.w)],
+                      [    2.0*(q.x*q.y+q.z*q.w), 1.0-2.0*(q.x*q.x+q.z*q.z),     2.0*(q.y*q.z-q.x*q.w)],
+                      [    2.0*(q.x*q.z-q.y*q.w),     2.0*(q.x*q.w+q.y*q.z), 1.0-2.0*(q.x*q.x+q.y*q.y)]])
+
+        return m
 
     def toAngleAxis(self):
         """
