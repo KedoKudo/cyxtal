@@ -201,7 +201,15 @@ cdef class Quaternion:
         Convert a unitary quaternion into Rodrigue vector (np.ndarray)
     toOrientationMatrix(self)
         Convert a unitary quaternion into Orientation Matrix (np.ndarray)
-    -------
+    CLASSMETHOD
+    -----------
+    scale(Quaternion q, DTYPE_t scalar)
+        Scale a quaternion vector with given scalar.
+    rotate(Quaternion q, DTYPE_t[:] pt)
+        Rotate pt around origin by q.
+    average(list qs)
+        Return an approximation of the average quaternion (forced to unitary)
+        for qs (list of quaternions).
     """
 
     def __init__(self, DTYPE_t[:] q):
