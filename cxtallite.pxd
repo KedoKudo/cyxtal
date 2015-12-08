@@ -40,9 +40,10 @@ cdef class Rodgiues:
 
 
 cdef class Eulers:
-    cdef public double phi1, PHI, phi2
+    cdef public double     phi1, PHI, phi2
     cdef        Quaternion __q
 
 
 cdef class OrientationMatrix:
     cdef public DTYPE_t[:,:] g
+    cdef        Quaternion   __q
