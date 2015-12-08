@@ -208,6 +208,25 @@ cdef class Quaternion:
     def __copy__(self):
         return Quaternion([self.w,self.x,self.y,self.z])
 
+    def __richcmp__(self, Quaternion other, int op):
+        cdef bint flag
+
+        flag = ( abs( self.w-other.w) < 1e-8 and \
+                 abs( self.x-other.x) < 1e-8 and \
+                 abs( self.y-other.y) < 1e-8 and \
+                 abs( self.z-other.z) < 1e-8)    \
+                or                               \
+               ( abs(-self.w-other.w) < 1e-8 and \
+                 abs(-self.x-other.x) < 1e-8 and \
+                 abs(-self.y-other.y) < 1e-8 and \
+                 abs(-self.z-other.z) < 1e-8)
+        if op == 2:  #__eq__
+            return flag
+        elif op == 3:
+            return not flag
+        else:
+            return NotImplemented
+
     def __add__(self, Quaternion other):
         cdef np.ndarray newQ = np.zeros(4, dtype=DTYPE)
 
@@ -508,6 +527,25 @@ cdef class Quaternion:
                    2 * w * x * Vy - x * x * Vz + w * w * Vz
         return newPt
 
+    @classmethod
+    def average(cls, list qs):
+        """
+        DESCRIPTION
+        -----------
+        Q_avg = Quaternion.average(listOfQuaternions)
+            Return the average quaternion based on algorithm published in
+        F. Landis Markley, Yang Cheng, John Lucas Crassidis, and Yaakov Oshman.
+        Averaging Quaternions,
+        Journal of Guidance, Control, and Dynamics,
+        Vol. 30, No. 4 (2007), pp. 1193-1197.
+        doi: 10.2514/1.28949
+        NOTE
+        ----
+            No crystal symmetry considered at this level, just plain averaging
+        list of unitary quaternions.
+        """
+        pass
+
 
 cdef class Eulers:
     """
@@ -564,6 +602,5 @@ cdef class Xtallite:
     cdef public Quaternion   orientation
     cdef public double[:,:]  op_sym
 
-    def __init__(self, eulers, lattice):
-        self.orientation = Quaternion.eulers2Quaternion(eulers)
-        self.op_sym = symmetry(lattice)
+    def __init__(self):
+        pass
