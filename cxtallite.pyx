@@ -398,10 +398,52 @@ cdef class Quaternion:
         return angles
 
     def toRodrigues(self):
-        pass
+        cdef np.ndarray r = np.ones(3, dtype=DTYPE)
+
+        if DTYPE_abs(self.w)<1e-6:
+            r = np.inf * r
+        else:
+            r[0] = self.x/self.w
+            r[1] = self.y/self.w
+            r[2] = self.z/self.w
+
+        return r
 
     def toOrientationMatrix(self):
         pass
+
+    def toAngleAxis(self):
+        """
+        DESCRIPTION
+        -----------
+        angle, rotation_axis = q.toAngleAxis()
+            Return the angle-axis pair that equivalent to the rotation
+        represented by q.unitary().
+        RETURNS
+        -------
+        (angle, v) : tuple
+        """
+        cdef np.ndarray v = np.zeros(3, dtype=DTYPE)
+        cdef Quaternion q = self.unitary()
+        cdef DTYPE_t    s,x,y,angle
+
+        s = sqrt(1.0 - q.w**2)
+        x = 2.0*q.w**2 - 1.0
+        y = 2.0*q.w*s
+
+        angle = atan2(y,x)
+        if angle < 0.0:
+            angle = -angle
+            s     = -s
+
+        if DTYPE_abs(angle) < 1e-4:
+            v[0] = 1.0
+        else:
+            v[0] = q.x/s
+            v[1] = q.y/s
+            v[2] = q.z/s
+
+        return (angle, v)
 
     @classmethod
     def scale(cls, Quaternion q, double s):

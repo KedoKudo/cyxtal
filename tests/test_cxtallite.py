@@ -133,10 +133,30 @@ class testQuaternion(unittest.TestCase):
         np.testing.assert_almost_equal(self.q3.toEulers(), e3)
 
     def test_2Rodrigues(self):
-        pass
+        r1 = np.array([-0., -0., -0.])
+        r2 = np.array([ 2.,  3.,  4.])
+        r3 = np.array([ 2.33333333,  3.        ,  0.66666667])
+        np.testing.assert_almost_equal(self.q1.toRodrigues(), r1)
+        np.testing.assert_almost_equal(self.q2.toRodrigues(), r2)
+        np.testing.assert_almost_equal(self.q3.toRodrigues(), r3)
 
     def test_2OrientationMatrix(self):
         pass
+
+    def test_2AngleAxis(self):
+        a1, v1 = (0.0,                np.array([ 1.,  0.,  0.]))
+        a2, v2 = (2.774384633031956,  np.array([ 0.37139068,  0.55708601,  0.74278135]))
+        a3, v3 = (2.6344294922932665, np.array([ 0.6047079 ,  0.77748158,  0.17277369]))
+        mya1, myv1 = self.q1.toAngleAxis()
+        mya2, myv2 = self.q2.toAngleAxis()
+        mya3, myv3 = self.q3.toAngleAxis()
+
+        np.testing.assert_almost_equal(a1, mya1)
+        np.testing.assert_almost_equal(v1, myv1)
+        np.testing.assert_almost_equal(a2, mya2)
+        np.testing.assert_almost_equal(v2, myv2)
+        np.testing.assert_almost_equal(a3, mya3)
+        np.testing.assert_almost_equal(v3, myv3)
 
 
 class testEulers(unittest.TestCase):
