@@ -38,6 +38,7 @@ DESCRIPTION
 import unittest
 import numpy as np
 from cyxtal.cxtallite import Quaternion
+from cyxtal.cxtallite import Eulers
 from cyxtal.cxtallite import symmetry
 from cyxtal.cxtallite import Xtallite
 
@@ -184,7 +185,24 @@ class testQuaternion(unittest.TestCase):
 
 
 class testEulers(unittest.TestCase):
-    pass
+
+    def setUp(self):
+        self.euler1 = Eulers(10.0, 20.0, 30.0)
+
+    def test_2Quaternion(self):
+        q = self.euler1.toQuaternion().unitary()
+        np.testing.assert_almost_equal(self.euler1.tolist(),
+                                       q.toEulers())
+
+    def test_2Rodrigues(self):
+        r1 = self.euler1.toQuaternion().toRodrigues()
+        r2 = self.euler1.toRodrigues()
+        np.testing.assert_almost_equal(r1, r2)
+
+    def test_2OrientationMatrix(self):
+        g1 = self.euler1.toQuaternion().toOrientationMatrix()
+        g2 = self.euler1.toOrientationMatrix()
+        np.testing.assert_almost_equal(g1, g2)
 
 
 class testOrienationMatrix(unittest.TestCase):

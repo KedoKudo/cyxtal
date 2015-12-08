@@ -74,7 +74,7 @@ ELSE:
 DTYPE = np.float64
 
 
-cpdef symmetry(lattice):
+cpdef symmetry(str lattice):
     """
     DESCRIPTION
     -----------
@@ -602,14 +602,55 @@ cdef class Eulers:
         second of Euler angle
     phi2: double
         third of Euler angle
+
     METHODS
     -------
     """
 
-    def __init__(self, phi1, PHI, phi2):
+    def __init__(self, double phi1, double PHI, double phi2):
         self.phi1 = phi1
         self.PHI  = PHI
         self.phi2 = phi2
+        self.__q  = Quaternion(self.__getq())
+
+    def __getq(self):
+        """ Return a quaternion based on given Euler Angles """
+        cdef np.ndarray  qv = np.zeros(4, dtype=DTYPE)
+        cdef DTYPE_t    d2r = M_PI/180.0
+        cdef DTYPE_t    c1,s1,c2,s2,c3,s3
+
+        c1 = cos(self.phi1 * d2r / 2.0)
+        s1 = sin(self.phi1 * d2r / 2.0)
+        c2 = cos(self.PHI  * d2r / 2.0)
+        s2 = sin(self.PHI  * d2r / 2.0)
+        c3 = cos(self.phi2 * d2r / 2.0)
+        s3 = sin(self.phi2 * d2r / 2.0)
+
+        qv[0] =   c1 * c2 * c3 - s1 * c2 * s3
+        qv[1] =   c1 * s2 * c3 + s1 * s2 * s3
+        qv[2] = - c1 * s2 * s3 + s1 * s2 * c3
+        qv[3] =   c1 * c2 * s3 + s1 * c2 * c3
+
+        return qv
+
+    def toQuaternion(self):
+        return self.__q
+
+    def tolist(self):
+        return [self.phi1, self.PHI, self.phi2]
+
+    def tondarray(self):
+        return np.array(self.tolist())
+
+    def toRodrigues(self):
+        return self.__q.toRodrigues()
+
+    def toOrientationMatrix(self):
+        return self.__q.toOrientationMatrix()
+
+    def toAngleAxis(self):
+        return self.__q.toAngleAxis()
+
 
 cdef class OrientationMatrix:
     """

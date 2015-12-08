@@ -28,16 +28,21 @@ cdef inline DTYPE_t DTYPE_abs(DTYPE_t a): return a if a>=0 else -a
 ######################
 # MODULE DECLARATION #
 ######################
-cpdef symmetry(lattice)
+cpdef symmetry(str lattice)
+
 
 cdef class Quaternion:
     cdef public double w,x,y,z
 
+
 cdef class Rodgiues:
     cdef public double[3] v
 
+
 cdef class Eulers:
     cdef public double phi1, PHI, phi2
+    cdef        Quaternion __q
+
 
 cdef class OrientationMatrix:
     cdef public DTYPE_t[:,:] g
