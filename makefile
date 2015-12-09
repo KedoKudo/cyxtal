@@ -39,7 +39,7 @@ all:
 	python setup.py build_ext --inplace
 
 test:
-	nosetests tests
+	nosetests -v tests
 
 clean:
 	rm -rvf build *.so

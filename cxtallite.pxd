@@ -50,7 +50,9 @@ cdef class OrientationMatrix:
     cdef        Quaternion   __q
 
 cdef class Xtallite:
-    cdef public Quaternion q
+    cdef public np.ndarray eulers, pt, dv, stress, strain
+    cdef public str        lattice
+    cdef        Quaternion __q
 
 cdef class Aggregate:
     cdef list xtals

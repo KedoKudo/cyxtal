@@ -698,8 +698,49 @@ cdef class Xtallite:
     -------
     """
 
-    def __init__(self):
+    def __init__(self,
+                 DTYPE_t[:]   eulers=np.zeros(3, dtype=DTYPE),
+                 DTYPE_t[:]   pt=np.zeros(3, dtype=DTYPE),
+                 str          lattice='bcc',
+                 DTYPE_t[:]   dv=np.zeros(3, dtype=DTYPE),
+                 DTYPE_t[:,:] stress=np.zeros((3,3), dtype=DTYPE),
+                 DTYPE_t[:,:] strain=np.zeros((3,3), dtype=DTYPE)
+                 ):
+        cdef double phi1,PHI,phi2
+
+        self.eulers = np.copy(eulers)
+        phi1        = self.eulers[0]
+        PHI         = self.eulers[1]
+        phi2        = self.eulers[2]
+        self.__q    = Eulers(phi1, PHI, phi2).toQuaternion()
+
+        self.pt      = np.copy(pt)
+        self.dv      = np.copy(dv)
+        self.stress  = np.copy(stress)
+        self.strain  = np.copy(strain)
+
+        self.lattice = lattice
+
+    def setEulers(self, DTYPE_t phi1, DTYPE_t PHI, DTYPE_t phi2):
+        self.eulers = np.array([phi1, PHI, phi2])
+        self.__q    = Eulers(phi1, PHI, phi2).toQuaternion()
+
+    def setLattice(self, str newLattice):
+        self.lattice = newLattice
+
+    def toFundamentalZone(self, str mode='eulers'):
         pass
+
+    def disorientation(self, Xtallite other, str unit='degrees'):
+        pass
+
+    def disorientations(self, list others, str unit='degrees'):
+        pass
+
+    @classmethod
+    def random(cls):
+        eulers  = np.degrees(np.random.random(3))
+        return Xtallite(eulers=eulers)
 
 
 cdef class Aggregate:
@@ -708,9 +749,9 @@ cdef class Aggregate:
     pass
 
 
-#------------------------#
-# MODULE LEVEL FUNCTIONS #
-#------------------------#
+#-------------------------#
+# MODULE LEVEL SINGLETONS #
+#-------------------------#
 cpdef symmetry(str lattice):
     """
     DESCRIPTION

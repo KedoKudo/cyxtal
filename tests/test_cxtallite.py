@@ -234,33 +234,39 @@ class testRodrigues(unittest.TestCase):
         np.testing.assert_almost_equal(r,q)
 
 
-class testXtalliateGeneral(unittest.TestCase):
+class testXtalliate(unittest.TestCase):
 
     def setUp(self):
         self.xtal0 = Xtallite()
 
-        self.xtal1 = Xtallite(eulers=(10,20,30),
-                              pt=(1,1,1),
+        euler1     = np.array((10,20,30), dtype=np.float64)
+        pt1        = np.array((1,1,1),    dtype=np.float64)
+        dv1        = np.array((1,2,3),    dtype=np.float64)
+        self.xtal1 = Xtallite(eulers=euler1,
+                              pt=pt1,
                               lattice='hexagonal',
-                              dv=(0,0,0),
-                              stress=np.random((3,3)),
-                              strain=np.random((3,3)))
+                              dv=dv1,
+                              stress=np.random.random((3,3)),
+                              strain=np.random.random((3,3)))
         self.xtal1.setEulers(10, 0, 0)
 
-        self.xtal2 = Xtallite(eulers=(20, 0, 30),
-                              lattice='hexagonal')
+        euler2     = np.array((20, 0,30), dtype=np.float64)
+        self.xtal2 = Xtallite(eulers=euler2)
+        self.xtal2.setLattice('hexagonal')
 
-        self.xtal3 = Xtallite(eulers=(20, 0, 0),
+        euler3     = np.array((20, 0, 0), dtype=np.float64)
+        self.xtal3 = Xtallite(eulers=euler3,
                               lattice='hexagonal')
 
         self.xtal4 = Xtallite.random()
 
-        self.xtal5 = Xtallite(eulers=(100, 50, 94),
+        euler5     = np.array([100, 50, 94], dtype=np.float64)
+        self.xtal5 = Xtallite(eulers=euler5,
                               lattice='hexagonal')
 
     def test_disorientation(self):
         target = 40.0
-        calc   = self.xatl1.disorientation(self.xtal2)
+        calc   = self.xtal1.disorientation(self.xtal2)
         np.testing.assert_almost_equal(calc, target)
 
     def test_disorientations(self):
