@@ -806,6 +806,7 @@ struct __pyx_obj_9cxtallite_Rodrigues;
 struct __pyx_obj_9cxtallite_Eulers;
 struct __pyx_obj_9cxtallite_OrientationMatrix;
 struct __pyx_obj_9cxtallite_Xtallite;
+struct __pyx_obj_9cxtallite_Aggregate;
 struct __pyx_array_obj;
 struct __pyx_MemviewEnum_obj;
 struct __pyx_memoryview_obj;
@@ -907,17 +908,28 @@ struct __pyx_obj_9cxtallite_OrientationMatrix {
 };
 
 
-/* "cxtallite.pyx":779
- * 
+/* "cxtallite.pxd":52
+ *     cdef        Quaternion   __q
  * 
  * cdef class Xtallite:             # <<<<<<<<<<<<<<
- *     """Aggregate class to represent real crystallite in material.
+ *     cdef public Quaternion q
  * 
  */
 struct __pyx_obj_9cxtallite_Xtallite {
   PyObject_HEAD
-  struct __pyx_obj_9cxtallite_Quaternion *orientation;
-  __Pyx_memviewslice op_sym;
+  struct __pyx_obj_9cxtallite_Quaternion *q;
+};
+
+
+/* "cxtallite.pxd":55
+ *     cdef public Quaternion q
+ * 
+ * cdef class Aggregate:             # <<<<<<<<<<<<<<
+ *     cdef list xtals
+ */
+struct __pyx_obj_9cxtallite_Aggregate {
+  PyObject_HEAD
+  PyObject *xtals;
 };
 
 
@@ -1432,9 +1444,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
 
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
 
-static PyObject *__pyx_memview_get_double(const char *itemp);
-static int __pyx_memview_set_double(const char *itemp, PyObject *obj);
-
 #include "descrobject.h"
 static PyObject* __Pyx_Method_ClassMethod(PyObject *method);
 
@@ -1557,8 +1566,6 @@ static CYTHON_INLINE char __Pyx_PyInt_As_char(PyObject *);
 
 static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *);
 
-static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dsds_double(PyObject *);
-
 static int __Pyx_check_binary_version(void);
 
 static int __Pyx_ExportFunction(const char *name, void (*f)(void), const char *sig);
@@ -1628,6 +1635,7 @@ static PyTypeObject *__pyx_ptype_9cxtallite_Rodrigues = 0;
 static PyTypeObject *__pyx_ptype_9cxtallite_Eulers = 0;
 static PyTypeObject *__pyx_ptype_9cxtallite_OrientationMatrix = 0;
 static PyTypeObject *__pyx_ptype_9cxtallite_Xtallite = 0;
+static PyTypeObject *__pyx_ptype_9cxtallite_Aggregate = 0;
 static PyTypeObject *__pyx_array_type = 0;
 static PyTypeObject *__pyx_MemviewEnum_type = 0;
 static PyTypeObject *__pyx_memoryview_type = 0;
@@ -1673,7 +1681,6 @@ static void __pyx_memoryview_refcount_objects_in_slice(char *, Py_ssize_t *, Py_
 static void __pyx_memoryview_slice_assign_scalar(__Pyx_memviewslice *, int, size_t, void *, int); /*proto*/
 static void __pyx_memoryview__slice_assign_scalar(char *, Py_ssize_t *, Py_ssize_t *, int, size_t, void *); /*proto*/
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_9cxtallite_DTYPE_t = { "DTYPE_t", NULL, sizeof(__pyx_t_9cxtallite_DTYPE_t), { 0 }, 0, 'R', 0, 0 };
-static __Pyx_TypeInfo __Pyx_TypeInfo_double = { "double", NULL, sizeof(double), { 0 }, 0, 'R', 0, 0 };
 #define __Pyx_MODULE_NAME "cxtallite"
 int __pyx_module_is_main_cxtallite = 0;
 
@@ -2048,11 +2055,9 @@ static PyObject *__pyx_pf_9cxtallite_9Rodrigues_1v___get__(struct __pyx_obj_9cxt
 static int __pyx_pf_9cxtallite_9Rodrigues_1v_2__set__(struct __pyx_obj_9cxtallite_Rodrigues *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
 static int __pyx_pf_9cxtallite_9Rodrigues_1v_4__del__(struct __pyx_obj_9cxtallite_Rodrigues *__pyx_v_self); /* proto */
 static int __pyx_pf_9cxtallite_8Xtallite___init__(CYTHON_UNUSED struct __pyx_obj_9cxtallite_Xtallite *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_9cxtallite_8Xtallite_11orientation___get__(struct __pyx_obj_9cxtallite_Xtallite *__pyx_v_self); /* proto */
-static int __pyx_pf_9cxtallite_8Xtallite_11orientation_2__set__(struct __pyx_obj_9cxtallite_Xtallite *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
-static int __pyx_pf_9cxtallite_8Xtallite_11orientation_4__del__(struct __pyx_obj_9cxtallite_Xtallite *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_9cxtallite_8Xtallite_6op_sym___get__(struct __pyx_obj_9cxtallite_Xtallite *__pyx_v_self); /* proto */
-static int __pyx_pf_9cxtallite_8Xtallite_6op_sym_2__set__(struct __pyx_obj_9cxtallite_Xtallite *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
+static PyObject *__pyx_pf_9cxtallite_8Xtallite_1q___get__(struct __pyx_obj_9cxtallite_Xtallite *__pyx_v_self); /* proto */
+static int __pyx_pf_9cxtallite_8Xtallite_1q_2__set__(struct __pyx_obj_9cxtallite_Xtallite *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
+static int __pyx_pf_9cxtallite_8Xtallite_1q_4__del__(struct __pyx_obj_9cxtallite_Xtallite *__pyx_v_self); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __pyx_array_obj *__pyx_v_self, PyObject *__pyx_v_shape, Py_ssize_t __pyx_v_itemsize, PyObject *__pyx_v_format, PyObject *__pyx_v_mode, int __pyx_v_allocate_buffer); /* proto */
@@ -2092,6 +2097,7 @@ static PyObject *__pyx_tp_new_9cxtallite_Rodrigues(PyTypeObject *t, PyObject *a,
 static PyObject *__pyx_tp_new_9cxtallite_Eulers(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_9cxtallite_OrientationMatrix(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_9cxtallite_Xtallite(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
+static PyObject *__pyx_tp_new_9cxtallite_Aggregate(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_array(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_Enum(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_memoryview(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
@@ -12057,6 +12063,7 @@ static PyObject *__pyx_pf_9cxtallite_17OrientationMatrix_10toQuaternion(struct _
  * cdef class OrientationMatrix:
  *     cdef public np.ndarray g             # <<<<<<<<<<<<<<
  *     cdef        Quaternion   __q
+ * 
  */
 
 /* Python wrapper */
@@ -13187,11 +13194,12 @@ static int __pyx_pf_9cxtallite_9Rodrigues_1v_4__del__(struct __pyx_obj_9cxtallit
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":796
- *     cdef public double[:,:]  op_sym
+/* "cxtallite.pyx":793
+ *     """
  * 
  *     def __init__(self):             # <<<<<<<<<<<<<<
  *         pass
+ * 
  */
 
 /* Python wrapper */
@@ -13221,34 +13229,34 @@ static int __pyx_pf_9cxtallite_8Xtallite___init__(CYTHON_UNUSED struct __pyx_obj
   return __pyx_r;
 }
 
-/* "cxtallite.pyx":793
- *     -------
- *     """
- *     cdef public Quaternion   orientation             # <<<<<<<<<<<<<<
- *     cdef public double[:,:]  op_sym
+/* "cxtallite.pxd":53
  * 
+ * cdef class Xtallite:
+ *     cdef public Quaternion q             # <<<<<<<<<<<<<<
+ * 
+ * cdef class Aggregate:
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9cxtallite_8Xtallite_11orientation_1__get__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_9cxtallite_8Xtallite_11orientation_1__get__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_9cxtallite_8Xtallite_1q_1__get__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_9cxtallite_8Xtallite_1q_1__get__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_9cxtallite_8Xtallite_11orientation___get__(((struct __pyx_obj_9cxtallite_Xtallite *)__pyx_v_self));
+  __pyx_r = __pyx_pf_9cxtallite_8Xtallite_1q___get__(((struct __pyx_obj_9cxtallite_Xtallite *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9cxtallite_8Xtallite_11orientation___get__(struct __pyx_obj_9cxtallite_Xtallite *__pyx_v_self) {
+static PyObject *__pyx_pf_9cxtallite_8Xtallite_1q___get__(struct __pyx_obj_9cxtallite_Xtallite *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__", 0);
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_INCREF(((PyObject *)__pyx_v_self->orientation));
-  __pyx_r = ((PyObject *)__pyx_v_self->orientation);
+  __Pyx_INCREF(((PyObject *)__pyx_v_self->q));
+  __pyx_r = ((PyObject *)__pyx_v_self->q);
   goto __pyx_L0;
 
   /* function exit code */
@@ -13259,19 +13267,19 @@ static PyObject *__pyx_pf_9cxtallite_8Xtallite_11orientation___get__(struct __py
 }
 
 /* Python wrapper */
-static int __pyx_pw_9cxtallite_8Xtallite_11orientation_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
-static int __pyx_pw_9cxtallite_8Xtallite_11orientation_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
+static int __pyx_pw_9cxtallite_8Xtallite_1q_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
+static int __pyx_pw_9cxtallite_8Xtallite_1q_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__set__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_9cxtallite_8Xtallite_11orientation_2__set__(((struct __pyx_obj_9cxtallite_Xtallite *)__pyx_v_self), ((PyObject *)__pyx_v_value));
+  __pyx_r = __pyx_pf_9cxtallite_8Xtallite_1q_2__set__(((struct __pyx_obj_9cxtallite_Xtallite *)__pyx_v_self), ((PyObject *)__pyx_v_value));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static int __pyx_pf_9cxtallite_8Xtallite_11orientation_2__set__(struct __pyx_obj_9cxtallite_Xtallite *__pyx_v_self, PyObject *__pyx_v_value) {
+static int __pyx_pf_9cxtallite_8Xtallite_1q_2__set__(struct __pyx_obj_9cxtallite_Xtallite *__pyx_v_self, PyObject *__pyx_v_value) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -13279,13 +13287,13 @@ static int __pyx_pf_9cxtallite_8Xtallite_11orientation_2__set__(struct __pyx_obj
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__set__", 0);
-  if (!(likely(((__pyx_v_value) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_value, __pyx_ptype_9cxtallite_Quaternion))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 793; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_v_value) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_value, __pyx_ptype_9cxtallite_Quaternion))))) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 53; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_t_1 = __pyx_v_value;
   __Pyx_INCREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
-  __Pyx_GOTREF(__pyx_v_self->orientation);
-  __Pyx_DECREF(((PyObject *)__pyx_v_self->orientation));
-  __pyx_v_self->orientation = ((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v_self->q);
+  __Pyx_DECREF(((PyObject *)__pyx_v_self->q));
+  __pyx_v_self->q = ((struct __pyx_obj_9cxtallite_Quaternion *)__pyx_t_1);
   __pyx_t_1 = 0;
 
   /* function exit code */
@@ -13293,7 +13301,7 @@ static int __pyx_pf_9cxtallite_8Xtallite_11orientation_2__set__(struct __pyx_obj
   goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("cxtallite.Xtallite.orientation.__set__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cxtallite.Xtallite.q.__set__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
@@ -13301,118 +13309,30 @@ static int __pyx_pf_9cxtallite_8Xtallite_11orientation_2__set__(struct __pyx_obj
 }
 
 /* Python wrapper */
-static int __pyx_pw_9cxtallite_8Xtallite_11orientation_5__del__(PyObject *__pyx_v_self); /*proto*/
-static int __pyx_pw_9cxtallite_8Xtallite_11orientation_5__del__(PyObject *__pyx_v_self) {
+static int __pyx_pw_9cxtallite_8Xtallite_1q_5__del__(PyObject *__pyx_v_self); /*proto*/
+static int __pyx_pw_9cxtallite_8Xtallite_1q_5__del__(PyObject *__pyx_v_self) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__del__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_9cxtallite_8Xtallite_11orientation_4__del__(((struct __pyx_obj_9cxtallite_Xtallite *)__pyx_v_self));
+  __pyx_r = __pyx_pf_9cxtallite_8Xtallite_1q_4__del__(((struct __pyx_obj_9cxtallite_Xtallite *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static int __pyx_pf_9cxtallite_8Xtallite_11orientation_4__del__(struct __pyx_obj_9cxtallite_Xtallite *__pyx_v_self) {
+static int __pyx_pf_9cxtallite_8Xtallite_1q_4__del__(struct __pyx_obj_9cxtallite_Xtallite *__pyx_v_self) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__del__", 0);
   __Pyx_INCREF(Py_None);
   __Pyx_GIVEREF(Py_None);
-  __Pyx_GOTREF(__pyx_v_self->orientation);
-  __Pyx_DECREF(((PyObject *)__pyx_v_self->orientation));
-  __pyx_v_self->orientation = ((struct __pyx_obj_9cxtallite_Quaternion *)Py_None);
+  __Pyx_GOTREF(__pyx_v_self->q);
+  __Pyx_DECREF(((PyObject *)__pyx_v_self->q));
+  __pyx_v_self->q = ((struct __pyx_obj_9cxtallite_Quaternion *)Py_None);
 
   /* function exit code */
   __pyx_r = 0;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "cxtallite.pyx":794
- *     """
- *     cdef public Quaternion   orientation
- *     cdef public double[:,:]  op_sym             # <<<<<<<<<<<<<<
- * 
- *     def __init__(self):
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_9cxtallite_8Xtallite_6op_sym_1__get__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_9cxtallite_8Xtallite_6op_sym_1__get__(PyObject *__pyx_v_self) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_9cxtallite_8Xtallite_6op_sym___get__(((struct __pyx_obj_9cxtallite_Xtallite *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_9cxtallite_8Xtallite_6op_sym___get__(struct __pyx_obj_9cxtallite_Xtallite *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("__get__", 0);
-  __Pyx_XDECREF(__pyx_r);
-  if (unlikely(!__pyx_v_self->op_sym.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 794; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
-  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_self->op_sym, 2, (PyObject *(*)(char *)) __pyx_memview_get_double, (int (*)(char *, PyObject *)) __pyx_memview_set_double, 0);; if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 794; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("cxtallite.Xtallite.op_sym.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* Python wrapper */
-static int __pyx_pw_9cxtallite_8Xtallite_6op_sym_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
-static int __pyx_pw_9cxtallite_8Xtallite_6op_sym_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__set__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_9cxtallite_8Xtallite_6op_sym_2__set__(((struct __pyx_obj_9cxtallite_Xtallite *)__pyx_v_self), ((PyObject *)__pyx_v_value));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static int __pyx_pf_9cxtallite_8Xtallite_6op_sym_2__set__(struct __pyx_obj_9cxtallite_Xtallite *__pyx_v_self, PyObject *__pyx_v_value) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __Pyx_memviewslice __pyx_t_1 = { 0, 0, { 0 }, { 0 }, { 0 } };
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("__set__", 0);
-  __pyx_t_1 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(__pyx_v_value);
-  if (unlikely(!__pyx_t_1.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 794; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __PYX_XDEC_MEMVIEW(&__pyx_v_self->op_sym, 0);
-  __pyx_v_self->op_sym = __pyx_t_1;
-  __pyx_t_1.memview = NULL;
-  __pyx_t_1.data = NULL;
-
-  /* function exit code */
-  __pyx_r = 0;
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __PYX_XDEC_MEMVIEW(&__pyx_t_1, 1);
-  __Pyx_AddTraceback("cxtallite.Xtallite.op_sym.__set__", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = -1;
-  __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
@@ -27822,9 +27742,7 @@ static PyObject *__pyx_tp_new_9cxtallite_Xtallite(PyTypeObject *t, CYTHON_UNUSED
   }
   if (unlikely(!o)) return 0;
   p = ((struct __pyx_obj_9cxtallite_Xtallite *)o);
-  p->orientation = ((struct __pyx_obj_9cxtallite_Quaternion *)Py_None); Py_INCREF(Py_None);
-  p->op_sym.data = NULL;
-  p->op_sym.memview = NULL;
+  p->q = ((struct __pyx_obj_9cxtallite_Quaternion *)Py_None); Py_INCREF(Py_None);
   return o;
 }
 
@@ -27836,16 +27754,15 @@ static void __pyx_tp_dealloc_9cxtallite_Xtallite(PyObject *o) {
   }
   #endif
   PyObject_GC_UnTrack(o);
-  Py_CLEAR(p->orientation);
-  __PYX_XDEC_MEMVIEW(&p->op_sym, 1);
+  Py_CLEAR(p->q);
   (*Py_TYPE(o)->tp_free)(o);
 }
 
 static int __pyx_tp_traverse_9cxtallite_Xtallite(PyObject *o, visitproc v, void *a) {
   int e;
   struct __pyx_obj_9cxtallite_Xtallite *p = (struct __pyx_obj_9cxtallite_Xtallite *)o;
-  if (p->orientation) {
-    e = (*v)(((PyObject*)p->orientation), a); if (e) return e;
+  if (p->q) {
+    e = (*v)(((PyObject*)p->q), a); if (e) return e;
   }
   return 0;
 }
@@ -27853,36 +27770,22 @@ static int __pyx_tp_traverse_9cxtallite_Xtallite(PyObject *o, visitproc v, void 
 static int __pyx_tp_clear_9cxtallite_Xtallite(PyObject *o) {
   PyObject* tmp;
   struct __pyx_obj_9cxtallite_Xtallite *p = (struct __pyx_obj_9cxtallite_Xtallite *)o;
-  tmp = ((PyObject*)p->orientation);
-  p->orientation = ((struct __pyx_obj_9cxtallite_Quaternion *)Py_None); Py_INCREF(Py_None);
+  tmp = ((PyObject*)p->q);
+  p->q = ((struct __pyx_obj_9cxtallite_Quaternion *)Py_None); Py_INCREF(Py_None);
   Py_XDECREF(tmp);
   return 0;
 }
 
-static PyObject *__pyx_getprop_9cxtallite_8Xtallite_orientation(PyObject *o, CYTHON_UNUSED void *x) {
-  return __pyx_pw_9cxtallite_8Xtallite_11orientation_1__get__(o);
+static PyObject *__pyx_getprop_9cxtallite_8Xtallite_q(PyObject *o, CYTHON_UNUSED void *x) {
+  return __pyx_pw_9cxtallite_8Xtallite_1q_1__get__(o);
 }
 
-static int __pyx_setprop_9cxtallite_8Xtallite_orientation(PyObject *o, PyObject *v, CYTHON_UNUSED void *x) {
+static int __pyx_setprop_9cxtallite_8Xtallite_q(PyObject *o, PyObject *v, CYTHON_UNUSED void *x) {
   if (v) {
-    return __pyx_pw_9cxtallite_8Xtallite_11orientation_3__set__(o, v);
+    return __pyx_pw_9cxtallite_8Xtallite_1q_3__set__(o, v);
   }
   else {
-    return __pyx_pw_9cxtallite_8Xtallite_11orientation_5__del__(o);
-  }
-}
-
-static PyObject *__pyx_getprop_9cxtallite_8Xtallite_op_sym(PyObject *o, CYTHON_UNUSED void *x) {
-  return __pyx_pw_9cxtallite_8Xtallite_6op_sym_1__get__(o);
-}
-
-static int __pyx_setprop_9cxtallite_8Xtallite_op_sym(PyObject *o, PyObject *v, CYTHON_UNUSED void *x) {
-  if (v) {
-    return __pyx_pw_9cxtallite_8Xtallite_6op_sym_3__set__(o, v);
-  }
-  else {
-    PyErr_SetString(PyExc_NotImplementedError, "__del__");
-    return -1;
+    return __pyx_pw_9cxtallite_8Xtallite_1q_5__del__(o);
   }
 }
 
@@ -27891,8 +27794,7 @@ static PyMethodDef __pyx_methods_9cxtallite_Xtallite[] = {
 };
 
 static struct PyGetSetDef __pyx_getsets_9cxtallite_Xtallite[] = {
-  {(char *)"orientation", __pyx_getprop_9cxtallite_8Xtallite_orientation, __pyx_setprop_9cxtallite_8Xtallite_orientation, 0, 0},
-  {(char *)"op_sym", __pyx_getprop_9cxtallite_8Xtallite_op_sym, __pyx_setprop_9cxtallite_8Xtallite_op_sym, 0, 0},
+  {(char *)"q", __pyx_getprop_9cxtallite_8Xtallite_q, __pyx_setprop_9cxtallite_8Xtallite_q, 0, 0},
   {0, 0, 0, 0, 0}
 };
 
@@ -27922,7 +27824,7 @@ static PyTypeObject __pyx_type_9cxtallite_Xtallite = {
   0, /*tp_setattro*/
   0, /*tp_as_buffer*/
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC, /*tp_flags*/
-  "Aggregate class to represent real crystallite in material.\n\n    NOTE\n    ----\n    PARAMETERS\n    ----------\n        eulers  : Euler angles in degrees\n        lattice : lattice structure, e.g. \"hexagonal\"\n    ATTRIBUTES\n    ----------\n    METHODS\n    -------\n    ", /*tp_doc*/
+  "\n    DESCRIPTION\n    -----------\n    Composite class to represent material point in general crystal plasticity\n    simulation.\n\n    PARAMETERS\n    ----------\n\n    METHODS\n    -------\n    ", /*tp_doc*/
   __pyx_tp_traverse_9cxtallite_Xtallite, /*tp_traverse*/
   __pyx_tp_clear_9cxtallite_Xtallite, /*tp_clear*/
   0, /*tp_richcompare*/
@@ -27940,6 +27842,108 @@ static PyTypeObject __pyx_type_9cxtallite_Xtallite = {
   __pyx_pw_9cxtallite_8Xtallite_1__init__, /*tp_init*/
   0, /*tp_alloc*/
   __pyx_tp_new_9cxtallite_Xtallite, /*tp_new*/
+  0, /*tp_free*/
+  0, /*tp_is_gc*/
+  0, /*tp_bases*/
+  0, /*tp_mro*/
+  0, /*tp_cache*/
+  0, /*tp_subclasses*/
+  0, /*tp_weaklist*/
+  0, /*tp_del*/
+  0, /*tp_version_tag*/
+  #if PY_VERSION_HEX >= 0x030400a1
+  0, /*tp_finalize*/
+  #endif
+};
+
+static PyObject *__pyx_tp_new_9cxtallite_Aggregate(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
+  struct __pyx_obj_9cxtallite_Aggregate *p;
+  PyObject *o;
+  if (likely((t->tp_flags & Py_TPFLAGS_IS_ABSTRACT) == 0)) {
+    o = (*t->tp_alloc)(t, 0);
+  } else {
+    o = (PyObject *) PyBaseObject_Type.tp_new(t, __pyx_empty_tuple, 0);
+  }
+  if (unlikely(!o)) return 0;
+  p = ((struct __pyx_obj_9cxtallite_Aggregate *)o);
+  p->xtals = ((PyObject*)Py_None); Py_INCREF(Py_None);
+  return o;
+}
+
+static void __pyx_tp_dealloc_9cxtallite_Aggregate(PyObject *o) {
+  struct __pyx_obj_9cxtallite_Aggregate *p = (struct __pyx_obj_9cxtallite_Aggregate *)o;
+  #if PY_VERSION_HEX >= 0x030400a1
+  if (unlikely(Py_TYPE(o)->tp_finalize) && !_PyGC_FINALIZED(o)) {
+    if (PyObject_CallFinalizerFromDealloc(o)) return;
+  }
+  #endif
+  PyObject_GC_UnTrack(o);
+  Py_CLEAR(p->xtals);
+  (*Py_TYPE(o)->tp_free)(o);
+}
+
+static int __pyx_tp_traverse_9cxtallite_Aggregate(PyObject *o, visitproc v, void *a) {
+  int e;
+  struct __pyx_obj_9cxtallite_Aggregate *p = (struct __pyx_obj_9cxtallite_Aggregate *)o;
+  if (p->xtals) {
+    e = (*v)(p->xtals, a); if (e) return e;
+  }
+  return 0;
+}
+
+static int __pyx_tp_clear_9cxtallite_Aggregate(PyObject *o) {
+  PyObject* tmp;
+  struct __pyx_obj_9cxtallite_Aggregate *p = (struct __pyx_obj_9cxtallite_Aggregate *)o;
+  tmp = ((PyObject*)p->xtals);
+  p->xtals = ((PyObject*)Py_None); Py_INCREF(Py_None);
+  Py_XDECREF(tmp);
+  return 0;
+}
+
+static PyTypeObject __pyx_type_9cxtallite_Aggregate = {
+  PyVarObject_HEAD_INIT(0, 0)
+  "cxtallite.Aggregate", /*tp_name*/
+  sizeof(struct __pyx_obj_9cxtallite_Aggregate), /*tp_basicsize*/
+  0, /*tp_itemsize*/
+  __pyx_tp_dealloc_9cxtallite_Aggregate, /*tp_dealloc*/
+  0, /*tp_print*/
+  0, /*tp_getattr*/
+  0, /*tp_setattr*/
+  #if PY_MAJOR_VERSION < 3
+  0, /*tp_compare*/
+  #endif
+  #if PY_MAJOR_VERSION >= 3
+  0, /*tp_as_async*/
+  #endif
+  0, /*tp_repr*/
+  0, /*tp_as_number*/
+  0, /*tp_as_sequence*/
+  0, /*tp_as_mapping*/
+  0, /*tp_hash*/
+  0, /*tp_call*/
+  0, /*tp_str*/
+  0, /*tp_getattro*/
+  0, /*tp_setattro*/
+  0, /*tp_as_buffer*/
+  Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC, /*tp_flags*/
+  "\n    ", /*tp_doc*/
+  __pyx_tp_traverse_9cxtallite_Aggregate, /*tp_traverse*/
+  __pyx_tp_clear_9cxtallite_Aggregate, /*tp_clear*/
+  0, /*tp_richcompare*/
+  0, /*tp_weaklistoffset*/
+  0, /*tp_iter*/
+  0, /*tp_iternext*/
+  0, /*tp_methods*/
+  0, /*tp_members*/
+  0, /*tp_getset*/
+  0, /*tp_base*/
+  0, /*tp_dict*/
+  0, /*tp_descr_get*/
+  0, /*tp_descr_set*/
+  0, /*tp_dictoffset*/
+  0, /*tp_init*/
+  0, /*tp_alloc*/
+  __pyx_tp_new_9cxtallite_Aggregate, /*tp_new*/
   0, /*tp_free*/
   0, /*tp_is_gc*/
   0, /*tp_bases*/
@@ -29670,6 +29674,10 @@ PyMODINIT_FUNC PyInit_cxtallite(void)
   __pyx_type_9cxtallite_Xtallite.tp_print = 0;
   if (PyObject_SetAttrString(__pyx_m, "Xtallite", (PyObject *)&__pyx_type_9cxtallite_Xtallite) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 779; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_9cxtallite_Xtallite = &__pyx_type_9cxtallite_Xtallite;
+  if (PyType_Ready(&__pyx_type_9cxtallite_Aggregate) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 797; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_type_9cxtallite_Aggregate.tp_print = 0;
+  if (PyObject_SetAttrString(__pyx_m, "Aggregate", (PyObject *)&__pyx_type_9cxtallite_Aggregate) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 797; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_ptype_9cxtallite_Aggregate = &__pyx_type_9cxtallite_Aggregate;
   if (PyType_Ready(&__pyx_type___pyx_array) < 0) {__pyx_filename = __pyx_f[3]; __pyx_lineno = 101; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type___pyx_array.tp_print = 0;
   __pyx_array_type = &__pyx_type___pyx_array;
@@ -32723,17 +32731,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
     }
 }
 
-static PyObject *__pyx_memview_get_double(const char *itemp) {
-    return (PyObject *) PyFloat_FromDouble(*(double *) itemp);
-}
-static int __pyx_memview_set_double(const char *itemp, PyObject *obj) {
-    double value = __pyx_PyFloat_AsDouble(obj);
-    if ((value == (double)-1) && PyErr_Occurred())
-        return 0;
-    *(double *) itemp = value;
-    return 1;
-}
-
 static PyObject* __Pyx_Method_ClassMethod(PyObject *method) {
 #if CYTHON_COMPILING_IN_PYPY
     if (PyObject_TypeCheck(method, &PyWrapperDescr_Type)) {
@@ -33541,28 +33538,6 @@ raise_neg_overflow:
     PyErr_SetString(PyExc_OverflowError,
         "can't convert negative value to long");
     return (long) -1;
-}
-
-static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dsds_double(PyObject *obj) {
-    __Pyx_memviewslice result = { 0, 0, { 0 }, { 0 }, { 0 } };
-    __Pyx_BufFmt_StackElem stack[1];
-    int axes_specs[] = { (__Pyx_MEMVIEW_DIRECT | __Pyx_MEMVIEW_STRIDED), (__Pyx_MEMVIEW_DIRECT | __Pyx_MEMVIEW_STRIDED) };
-    int retcode;
-    if (obj == Py_None) {
-        result.memview = (struct __pyx_memoryview_obj *) Py_None;
-        return result;
-    }
-    retcode = __Pyx_ValidateAndInit_memviewslice(axes_specs, 0,
-                                                 PyBUF_RECORDS, 2,
-                                                 &__Pyx_TypeInfo_double, stack,
-                                                 &result, obj);
-    if (unlikely(retcode == -1))
-        goto __pyx_fail;
-    return result;
-__pyx_fail:
-    result.memview = NULL;
-    result.data = NULL;
-    return result;
 }
 
 static int __Pyx_check_binary_version(void) {

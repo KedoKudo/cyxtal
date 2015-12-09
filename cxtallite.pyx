@@ -74,101 +74,9 @@ ELSE:
 DTYPE = np.float64
 
 
-cpdef symmetry(str lattice):
-    """
-    DESCRIPTION
-    -----------
-    sym_operator = symmetry(lattice)
-        Return the symmetry operators in list of quaternion for given
-        lattice structure.
-    PARAMETERS
-    ----------
-    lattice: string ['cubic', 'hexagonal', 'tetragonal', 'orthorhombic']
-        Lattice structure for target crystal system
-    RETURNS
-    -------
-    sym_operator: ndarray
-        The symmetry operators used to calculate equivalent crystal
-        orientation.
-    """
-    cdef double tmp
-    cdef list   lattice_hcp   = ['hexagonal', 'hex', 'hcp']
-    cdef list   lattice_cubic = ['bcc', 'fcc', 'cubic']
-
-    lattice = str(lattice.lower())
-    if lattice in lattice_cubic:
-        tmp = sqrt(2)
-        symQuats = [
-                    [ 1.0,     0.0,     0.0,     0.0     ],
-                    [ 0.0,     1.0,     0.0,     0.0     ],
-                    [ 0.0,     0.0,     1.0,     0.0     ],
-                    [ 0.0,     0.0,     0.0,     1.0     ],
-                    [ 0.0,     0.0,     0.5*tmp, 0.5*tmp ],
-                    [ 0.0,     0.0,     0.5*tmp,-0.5*tmp ],
-                    [ 0.0,     0.5*tmp, 0.0,     0.5*tmp ],
-                    [ 0.0,     0.5*tmp, 0.0,    -0.5*tmp ],
-                    [ 0.0,     0.5*tmp,-0.5*tmp, 0.0     ],
-                    [ 0.0,    -0.5*tmp,-0.5*tmp, 0.0     ],
-                    [ 0.5,     0.5,     0.5,     0.5     ],
-                    [-0.5,     0.5,     0.5,     0.5     ],
-                    [-0.5,     0.5,     0.5,    -0.5     ],
-                    [-0.5,     0.5,    -0.5,     0.5     ],
-                    [-0.5,    -0.5,     0.5,     0.5     ],
-                    [-0.5,    -0.5,     0.5,    -0.5     ],
-                    [-0.5,    -0.5,    -0.5,     0.5     ],
-                    [-0.5,     0.5,    -0.5,    -0.5     ],
-                    [-0.5*tmp, 0.0,     0.0,     0.5*tmp ],
-                    [ 0.5*tmp, 0.0,     0.0,     0.5*tmp ],
-                    [-0.5*tmp, 0.0,     0.5*tmp, 0.0     ],
-                    [-0.5*tmp, 0.0,    -0.5*tmp, 0.0     ],
-                    [-0.5*tmp, 0.5*tmp, 0.0,     0.0     ],
-                    [-0.5*tmp,-0.5*tmp, 0.0,     0.0     ],
-                   ]
-    elif lattice in lattice_hcp:
-        tmp = sqrt(3)
-        symQuats =  [
-                     [ 1.0,      0.0,     0.0,      0.0     ],
-                     [-0.5*tmp,  0.0,     0.0,     -0.5     ],
-                     [ 0.5,      0.0,     0.0,      0.5*tmp ],
-                     [ 0.0,      0.0,     0.0,      1.0     ],
-                     [-0.5,      0.0,     0.0,      0.5*tmp ],
-                     [-0.5*tmp,  0.0,     0.0,      0.5     ],
-                     [ 0.0,      1.0,     0.0,      0.0     ],
-                     [ 0.0,     -0.5*tmp, 0.5,      0.0     ],
-                     [ 0.0,      0.5,    -0.5*tmp,  0.0     ],
-                     [ 0.0,      0.0,     1.0,      0.0     ],
-                     [ 0.0,     -0.5,    -0.5*tmp,  0.0     ],
-                     [ 0.0,      0.5*tmp, 0.5,      0.0     ],
-                    ]
-    elif lattice == 'tetragonal':
-        tmp = sqrt(2)
-        symQuats =  [
-                     [ 1.0,     0.0,     0.0,     0.0     ],
-                     [ 0.0,     1.0,     0.0,     0.0     ],
-                     [ 0.0,     0.0,     1.0,     0.0     ],
-                     [ 0.0,     0.0,     0.0,     1.0     ],
-                     [ 0.0,     0.5*tmp, 0.5*tmp, 0.0     ],
-                     [ 0.0,    -0.5*tmp, 0.5*tmp, 0.0     ],
-                     [ 0.5*tmp, 0.0,     0.0,     0.5*tmp ],
-                     [-0.5*tmp, 0.0,     0.0,     0.5*tmp ],
-                    ]
-    elif lattice == 'orthorhombic':
-        symQuats =  [
-                     [ 1.0,0.0,0.0,0.0 ],
-                     [ 0.0,1.0,0.0,0.0 ],
-                     [ 0.0,0.0,1.0,0.0 ],
-                     [ 0.0,0.0,0.0,1.0 ],
-                    ]
-    elif lattice == 'triclinic':
-        symQuats =  [
-                     [ 1.0,0.0,0.0,0.0 ],
-                    ]
-    else:
-        raise ValueError("Unknown lattice structure: {}".format(lattice))
-
-    return np.array(symQuats)
-
-
+#----------------------#
+# MODULE LEVEL CLASSES #
+#----------------------#
 cdef class Quaternion:
     """
     DESCRIPTION
@@ -777,21 +685,264 @@ cdef class Rodrigues:
 
 
 cdef class Xtallite:
-    """Aggregate class to represent real crystallite in material.
+    """
+    DESCRIPTION
+    -----------
+    Composite class to represent material point in general crystal plasticity
+    simulation.
 
-    NOTE
-    ----
     PARAMETERS
     ----------
-        eulers  : Euler angles in degrees
-        lattice : lattice structure, e.g. "hexagonal"
-    ATTRIBUTES
-    ----------
+
     METHODS
     -------
     """
-    cdef public Quaternion   orientation
-    cdef public double[:,:]  op_sym
 
     def __init__(self):
         pass
+
+
+cdef class Aggregate:
+    """
+    """
+    pass
+
+
+#------------------------#
+# MODULE LEVEL FUNCTIONS #
+#------------------------#
+cpdef symmetry(str lattice):
+    """
+    DESCRIPTION
+    -----------
+    sym_operator = symmetry(lattice)
+        Return the symmetry operators in list of quaternion for given
+        lattice structure.
+    PARAMETERS
+    ----------
+    lattice: string ['cubic', 'hexagonal', 'tetragonal', 'orthorhombic']
+        Lattice structure for target crystal system
+    RETURNS
+    -------
+    sym_operator: ndarray
+        The symmetry operators used to calculate equivalent crystal
+        orientation.
+    """
+    cdef double tmp
+    cdef list   lattice_hcp   = ['hexagonal', 'hex', 'hcp']
+    cdef list   lattice_cubic = ['bcc', 'fcc', 'cubic']
+
+    lattice = str(lattice.lower())
+    if lattice in lattice_cubic:
+        tmp = sqrt(2)
+        symQuats = [
+                    [ 1.0,     0.0,     0.0,     0.0     ],
+                    [ 0.0,     1.0,     0.0,     0.0     ],
+                    [ 0.0,     0.0,     1.0,     0.0     ],
+                    [ 0.0,     0.0,     0.0,     1.0     ],
+                    [ 0.0,     0.0,     0.5*tmp, 0.5*tmp ],
+                    [ 0.0,     0.0,     0.5*tmp,-0.5*tmp ],
+                    [ 0.0,     0.5*tmp, 0.0,     0.5*tmp ],
+                    [ 0.0,     0.5*tmp, 0.0,    -0.5*tmp ],
+                    [ 0.0,     0.5*tmp,-0.5*tmp, 0.0     ],
+                    [ 0.0,    -0.5*tmp,-0.5*tmp, 0.0     ],
+                    [ 0.5,     0.5,     0.5,     0.5     ],
+                    [-0.5,     0.5,     0.5,     0.5     ],
+                    [-0.5,     0.5,     0.5,    -0.5     ],
+                    [-0.5,     0.5,    -0.5,     0.5     ],
+                    [-0.5,    -0.5,     0.5,     0.5     ],
+                    [-0.5,    -0.5,     0.5,    -0.5     ],
+                    [-0.5,    -0.5,    -0.5,     0.5     ],
+                    [-0.5,     0.5,    -0.5,    -0.5     ],
+                    [-0.5*tmp, 0.0,     0.0,     0.5*tmp ],
+                    [ 0.5*tmp, 0.0,     0.0,     0.5*tmp ],
+                    [-0.5*tmp, 0.0,     0.5*tmp, 0.0     ],
+                    [-0.5*tmp, 0.0,    -0.5*tmp, 0.0     ],
+                    [-0.5*tmp, 0.5*tmp, 0.0,     0.0     ],
+                    [-0.5*tmp,-0.5*tmp, 0.0,     0.0     ],
+                   ]
+    elif lattice in lattice_hcp:
+        tmp = sqrt(3)
+        symQuats =  [
+                     [ 1.0,      0.0,     0.0,      0.0     ],
+                     [-0.5*tmp,  0.0,     0.0,     -0.5     ],
+                     [ 0.5,      0.0,     0.0,      0.5*tmp ],
+                     [ 0.0,      0.0,     0.0,      1.0     ],
+                     [-0.5,      0.0,     0.0,      0.5*tmp ],
+                     [-0.5*tmp,  0.0,     0.0,      0.5     ],
+                     [ 0.0,      1.0,     0.0,      0.0     ],
+                     [ 0.0,     -0.5*tmp, 0.5,      0.0     ],
+                     [ 0.0,      0.5,    -0.5*tmp,  0.0     ],
+                     [ 0.0,      0.0,     1.0,      0.0     ],
+                     [ 0.0,     -0.5,    -0.5*tmp,  0.0     ],
+                     [ 0.0,      0.5*tmp, 0.5,      0.0     ],
+                    ]
+    elif lattice == 'tetragonal':
+        tmp = sqrt(2)
+        symQuats =  [
+                     [ 1.0,     0.0,     0.0,     0.0     ],
+                     [ 0.0,     1.0,     0.0,     0.0     ],
+                     [ 0.0,     0.0,     1.0,     0.0     ],
+                     [ 0.0,     0.0,     0.0,     1.0     ],
+                     [ 0.0,     0.5*tmp, 0.5*tmp, 0.0     ],
+                     [ 0.0,    -0.5*tmp, 0.5*tmp, 0.0     ],
+                     [ 0.5*tmp, 0.0,     0.0,     0.5*tmp ],
+                     [-0.5*tmp, 0.0,     0.0,     0.5*tmp ],
+                    ]
+    elif lattice == 'orthorhombic':
+        symQuats =  [
+                     [ 1.0,0.0,0.0,0.0 ],
+                     [ 0.0,1.0,0.0,0.0 ],
+                     [ 0.0,0.0,1.0,0.0 ],
+                     [ 0.0,0.0,0.0,1.0 ],
+                    ]
+    elif lattice == 'triclinic':
+        symQuats =  [
+                     [ 1.0,0.0,0.0,0.0 ],
+                    ]
+    else:
+        raise ValueError("Unknown lattice structure: {}".format(lattice))
+
+    return np.array(symQuats)
+
+
+cdef slip_systems(str lattice):
+    """
+    DESCRIPTION
+    -----------
+    ss = slipSystems('latticeStructure')
+        Return slip systems for given lattice structure
+    PARAMETERS
+    ----------
+    lattice: str
+        Name of the lattice structure ['hexagonal', 'hcp', 'bcc', 'fcc',
+                                       'hexagonal', 'hcp+' ]
+    RETURNS
+    -------
+    ss: np.ndarray
+        Multi-dimensional arrays
+            [[slipDirection1, slipPlane1],
+              slipDirection2, slipPlane2],
+              ...]
+    """
+    cdef np.ndarray ss = np.zeros((50,2,4), dtype=DTYPE)
+    cdef int slicer
+
+    lattice = lattice.lower()
+
+    if lattice in ['hcp+', 'hexagonal+']:
+        # Basal slip <1120>{0001}
+        ss[ 0, :, :] = np.array([[ 2,-1,-1, 0], [ 0, 0, 0, 1]])
+        ss[ 1, :, :] = np.array([[-1, 2,-1, 0], [ 0, 0, 0, 1]])
+        ss[ 2, :, :] = np.array([[-1,-1, 2, 0], [ 0, 0, 0, 1]])
+        # Prism Slip <1120>{1010}
+        ss[ 3, :, :] = np.array([[ 2,-1,-1, 0], [ 0, 1,-1, 0]])
+        ss[ 4, :, :] = np.array([[-1, 2,-1, 0], [-1, 0, 1, 0]])
+        ss[ 5, :, :] = np.array([[-1,-1, 2, 0], [ 1,-1, 0, 0]])
+        # 2nd Prism Slip <1010>{1120}
+        ss[ 6, :, :] = np.array([[ 0, 1,-1, 0], [ 2,-1,-1, 0]])
+        ss[ 7, :, :] = np.array([[-1, 0, 1, 0], [-1, 2,-1, 0]])
+        ss[ 8, :, :] = np.array([[ 1,-1, 0, 0], [-1,-1, 2, 0]])
+        # Pyramidal a Slip <1120>{1011}
+        ss[ 9, :, :] = np.array([[ 2,-1,-1, 0], [ 0, 1,-1, 1]])
+        ss[10, :, :] = np.array([[-1, 2,-1, 0], [-1, 0, 1, 1]])
+        ss[11, :, :] = np.array([[-1,-1, 2, 0], [ 1,-1, 0, 1]])
+        ss[12, :, :] = np.array([[ 1, 1,-2, 0], [-1, 1, 0, 1]])
+        ss[13, :, :] = np.array([[-2, 1, 1, 0], [ 0,-1, 1, 1]])
+        ss[14, :, :] = np.array([[ 1,-2, 1, 0], [ 1, 0,-1, 1]])
+        # Pyramidal c+a Slip <2113>{1011}
+        ss[15, :, :] = np.array([[ 2,-1,-1, 3], [-1, 1, 0, 1]])
+        ss[16, :, :] = np.array([[ 1,-2, 1, 3], [-1, 1, 0, 1]])
+        ss[17, :, :] = np.array([[-1,-1, 2, 3], [ 1, 0,-1, 1]])
+        ss[18, :, :] = np.array([[-2, 1, 1, 3], [ 1, 0,-1, 1]])
+        ss[19, :, :] = np.array([[-1, 2,-1, 3], [ 0,-1, 1, 1]])
+        ss[20, :, :] = np.array([[ 1, 1,-2, 3], [ 0,-1, 1, 1]])
+        ss[21, :, :] = np.array([[-2, 1, 1, 3], [ 1,-1, 0, 1]])
+        ss[22, :, :] = np.array([[-1, 2,-1, 3], [ 1,-1, 0, 1]])
+        ss[23, :, :] = np.array([[ 1, 1,-2, 3], [-1, 0, 1, 1]])
+        ss[24, :, :] = np.array([[ 2,-1,-1, 3], [-1, 0, 1, 1]])
+        ss[25, :, :] = np.array([[ 1,-2, 1, 3], [ 0, 1,-1, 1]])
+        ss[26, :, :] = np.array([[-1,-1, 2, 3], [ 0, 1,-1, 1]])
+        # Set slicer
+        slicer = 27
+    elif lattice in ['hcp', 'hexagonal']:
+        # Basal slip <1120>{0001}
+        ss[ 0, :, :] = np.array([[ 2,-1,-1, 0], [ 0, 0, 0, 1]])
+        ss[ 1, :, :] = np.array([[-1, 2,-1, 0], [ 0, 0, 0, 1]])
+        ss[ 2, :, :] = np.array([[-1,-1, 2, 0], [ 0, 0, 0, 1]])
+        # Prism Slip <1120>{1010}
+        ss[ 3, :, :] = np.array([[ 2,-1,-1, 0], [ 0, 1,-1, 0]])
+        ss[ 4, :, :] = np.array([[-1, 2,-1, 0], [-1, 0, 1, 0]])
+        ss[ 5, :, :] = np.array([[-1,-1, 2, 0], [ 1,-1, 0, 0]])
+        # Pyramidal a Slip <1120>{1011}
+        ss[ 6, :, :] = np.array([[ 2,-1,-1, 0], [ 0, 1,-1, 1]])
+        ss[ 7, :, :] = np.array([[-1, 2,-1, 0], [-1, 0, 1, 1]])
+        ss[ 8, :, :] = np.array([[-1,-1, 2, 0], [ 1,-1, 0, 1]])
+        ss[ 9, :, :] = np.array([[ 1, 1,-2, 0], [-1, 1, 0, 1]])
+        ss[10, :, :] = np.array([[-2, 1, 1, 0], [ 0,-1, 1, 1]])
+        ss[11, :, :] = np.array([[ 1,-2, 1, 0], [ 1, 0,-1, 1]])
+        # Pyramidal c+a Slip <2113>{1011}
+        ss[12, :, :] = np.array([[ 2,-1,-1, 3], [-1, 1, 0, 1]])
+        ss[13, :, :] = np.array([[ 1,-2, 1, 3], [-1, 1, 0, 1]])
+        ss[14, :, :] = np.array([[-1,-1, 2, 3], [ 1, 0,-1, 1]])
+        ss[15, :, :] = np.array([[-2, 1, 1, 3], [ 1, 0,-1, 1]])
+        ss[16, :, :] = np.array([[-1, 2,-1, 3], [ 0,-1, 1, 1]])
+        ss[17, :, :] = np.array([[ 1, 1,-2, 3], [ 0,-1, 1, 1]])
+        ss[18, :, :] = np.array([[-2, 1, 1, 3], [ 1,-1, 0, 1]])
+        ss[19, :, :] = np.array([[-1, 2,-1, 3], [ 1,-1, 0, 1]])
+        ss[20, :, :] = np.array([[ 1, 1,-2, 3], [-1, 0, 1, 1]])
+        ss[21, :, :] = np.array([[ 2,-1,-1, 3], [-1, 0, 1, 1]])
+        ss[22, :, :] = np.array([[ 1,-2, 1, 3], [ 0, 1,-1, 1]])
+        ss[23, :, :] = np.array([[-1,-1, 2, 3], [ 0, 1,-1, 1]])
+        # Set slicer
+        slicer = 24
+    elif lattice in ['bcc']:
+        # Slip system <111>{110}
+        ss[ 0, :, :] = np.array([[ 1,-1, 1], [ 0, 1, 1]])
+        ss[ 1, :, :] = np.array([[-1,-1, 1], [ 0, 1, 1]])
+        ss[ 2, :, :] = np.array([[ 1, 1, 1], [ 0,-1, 1]])
+        ss[ 3, :, :] = np.array([[-1, 1, 1], [ 0,-1, 1]])
+        ss[ 4, :, :] = np.array([[-1, 1, 1], [ 1, 0, 1]])
+        ss[ 5, :, :] = np.array([[-1,-1, 1], [ 1, 0, 1]])
+        ss[ 6, :, :] = np.array([[ 1, 1, 1], [-1, 0, 1]])
+        ss[ 7, :, :] = np.array([[ 1,-1, 1], [-1, 0, 1]])
+        ss[ 8, :, :] = np.array([[-1, 1, 1], [ 1, 1, 0]])
+        ss[ 9, :, :] = np.array([[-1, 1,-1], [ 1, 1, 0]])
+        ss[10, :, :] = np.array([[ 1, 1, 1], [-1, 1, 0]])
+        ss[11, :, :] = np.array([[ 1, 1,-1], [-1, 1, 0]])
+        # Slip system <111>{112}
+        ss[12, :, :] = np.array([[-1, 1, 1], [ 2, 1, 1]])
+        ss[13, :, :] = np.array([[ 1, 1, 1], [-2, 1, 1]])
+        ss[14, :, :] = np.array([[ 1, 1,-1], [ 2,-1, 1]])
+        ss[15, :, :] = np.array([[ 1,-1, 1], [ 2, 1,-1]])
+        ss[16, :, :] = np.array([[ 1,-1, 1], [ 1, 2, 1]])
+        ss[17, :, :] = np.array([[ 1, 1,-1], [-1, 2, 1]])
+        ss[18, :, :] = np.array([[ 1, 1, 1], [ 1,-2, 1]])
+        ss[19, :, :] = np.array([[-1, 1, 1], [ 1, 2,-1]])
+        ss[20, :, :] = np.array([[ 1, 1,-1], [ 1, 1, 2]])
+        ss[21, :, :] = np.array([[ 1,-1, 1], [-1, 1, 2]])
+        ss[22, :, :] = np.array([[-1, 1, 1], [ 1,-1, 2]])
+        ss[23, :, :] = np.array([[ 1, 1, 1], [ 1, 1,-2]])
+        # Set slicer
+        slicer = 24
+    elif lattice in ['fcc']:
+        ss[ 0, :, :] = np.array([[ 0, 1,-1], [ 1, 1, 1]])
+        ss[ 1, :, :] = np.array([[-1, 0, 1], [ 1, 1, 1]])
+        ss[ 2, :, :] = np.array([[ 1,-1, 0], [ 1, 1, 1]])
+        ss[ 3, :, :] = np.array([[ 0,-1,-1], [-1,-1, 1]])
+        ss[ 4, :, :] = np.array([[ 1, 0, 1], [-1,-1, 1]])
+        ss[ 5, :, :] = np.array([[-1, 1, 0], [-1,-1, 1]])
+        ss[ 6, :, :] = np.array([[ 0,-1, 1], [ 1,-1,-1]])
+        ss[ 7, :, :] = np.array([[-1, 0,-1], [ 1,-1,-1]])
+        ss[ 8, :, :] = np.array([[ 1, 1, 0], [ 1,-1,-1]])
+        ss[ 9, :, :] = np.array([[ 0, 1, 1], [-1, 1,-1]])
+        ss[10, :, :] = np.array([[ 1, 0,-1], [-1, 1,-1]])
+        ss[11, :, :] = np.array([[-1,-1, 0], [-1, 1,-1]])
+    else:
+        raise ValueError("Unknown lattice structure: {}".format(lattice))
+
+    return np.copy(ss[0:slicer,:,:])
+
+#-------------#
+# END OF FILE #
+#-------------#

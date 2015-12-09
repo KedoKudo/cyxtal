@@ -48,3 +48,9 @@ cdef class Eulers:
 cdef class OrientationMatrix:
     cdef public np.ndarray g
     cdef        Quaternion   __q
+
+cdef class Xtallite:
+    cdef public Quaternion q
+
+cdef class Aggregate:
+    cdef list xtals

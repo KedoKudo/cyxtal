@@ -37,11 +37,12 @@ DESCRIPTION
 
 import unittest
 import numpy as np
+
+from cyxtal.cxtallite import symmetry
 from cyxtal.cxtallite import Quaternion
 from cyxtal.cxtallite import Eulers
 from cyxtal.cxtallite import OrientationMatrix
 from cyxtal.cxtallite import Rodrigues
-from cyxtal.cxtallite import symmetry
 from cyxtal.cxtallite import Xtallite
 
 # void random seed for testing
@@ -231,6 +232,70 @@ class testRodrigues(unittest.TestCase):
         r = self.r.tondarray()
         q = self.r.toQuaternion().toRodrigues()
         np.testing.assert_almost_equal(r,q)
+
+
+class testXtalliateGeneral(unittest.TestCase):
+
+    def setUp(self):
+        self.xtal0 = Xtallite()
+
+        self.xtal1 = Xtallite(eulers=(10,20,30),
+                              pt=(1,1,1),
+                              lattice='hexagonal',
+                              dv=(0,0,0),
+                              stress=np.random((3,3)),
+                              strain=np.random((3,3)))
+        self.xtal1.setEulers(10, 0, 0)
+
+        self.xtal2 = Xtallite(eulers=(20, 0, 30),
+                              lattice='hexagonal')
+
+        self.xtal3 = Xtallite(eulers=(20, 0, 0),
+                              lattice='hexagonal')
+
+        self.xtal4 = Xtallite.random()
+
+        self.xtal5 = Xtallite(eulers=(100, 50, 94),
+                              lattice='hexagonal')
+
+    def test_disorientation(self):
+        target = 40.0
+        calc   = self.xatl1.disorientation(self.xtal2)
+        np.testing.assert_almost_equal(calc, target)
+
+    def test_disorientations(self):
+        tmp = [self.xtal2, self.xtal3]
+        targets = np.array([40.0, 10.0])
+        calcs   = self.xtal1.disorientations(tmp)
+        np.testing.assert_almost_equal(calcs, targets)
+
+    def test_toFundamentalZone(self):
+        target1 = np.array([10, 20, -30])
+        calc1   = self.xtal1.toFundamentalZone(mode='eulers')
+        np.testing.assert_almost_equal(calc1, target1)
+
+        target5 = np.array([100.0, 50.0, -86.0])
+        calc5   = self.xtal5.toFundamentalZone(mode='eulers')
+        np.testing.assert_almost_equal(calc5, target5)
+
+
+class testAggregate(unittest.TestCase):
+
+    def setUp(self):
+        xtals   = [Xtallite(eulers=(10, 0, 0), lattice='hexagonal'),
+                   Xtallite(eulers=(20, 0, 0), lattice='hexagonal'),
+                   Xtallite(eulers=(30, 0, 0), lattice='hexagonal'),
+                   Xtallite(eulers=(40, 0, 0), lattice='hexagonal')]
+        texture = 1
+        ID      = 0
+        self.grain = Aggregate(xtals,
+                               texture=texture,
+                               gid=ID)
+
+    def test_averageOrienation(self):
+        targ = [50.0, 0.0, 0.0]
+        calc = self.grain.getAverageOrientation(mode='eulers')
+        np.testing.assert_almost_equal(cacl, targ)
 
 
 class testAverageOrientations(unittest.TestCase):
