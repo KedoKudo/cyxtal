@@ -728,8 +728,62 @@ cdef class Xtallite:
     def setLattice(self, str newLattice):
         self.lattice = newLattice
 
-    def toFundamentalZone(self, str mode='eulers'):
-        pass
+    def toFundamentalZone(self):
+        cdef Quaternion q
+        cdef np.ndarray symop
+        cdef int        i
+
+        symops = symmetry(self.lattice, mode='quaternion')
+        for i in range(len(symops)):
+            q = self.__q * symops[i]
+            if Xtallite.inFundamentalZone(q.toRodrigues(), self.lattice):
+                self.__q = q
+                self.eulers = q.toEulers()
+
+        return self.eulers
+
+    @classmethod
+    def inFundamentalZone(cls,
+                          DTYPE_t[:] r,
+                          str lattice):
+        """
+        DESCRIPTION
+        -----------
+        flag = Xtallite.inFundamentalZone(r, lattice)
+            Check whether given Rodrigues vector is in the fundamental zone
+        for lattice structure
+        """
+        cdef np.ndarray R     = np.absolute(r)
+        cdef DTYPE_t    sqrt2 = sqrt(2.0)
+        cdef DTYPE_t    sqrt3 = sqrt(3.0)
+        cdef list       lattice_hcp   = ['hexagonal', 'hex', 'hcp']
+        cdef list       lattice_cubic = ['bcc', 'fcc', 'cubic']
+        cdef list       lattice_tet   = ['tetragonal']
+        cdef list       lattice_orth  = ['orthorhombic']
+
+        if lattice in lattice_cubic:
+            return     (sqrt2 - 1.0 >= R[0]) \
+                   and (sqrt2 - 1.0 >= R[1]) \
+                   and (sqrt2 - 1.0 >= R[2]) \
+                   and 1.0 >= R[0]+R[1]+R[2]
+        elif lattice in lattice_hcp:
+            return     1.0 >= R[0] \
+                   and 1.0 >= R[1] \
+                   and 1.0 >= R[2] \
+                   and 2.0 >= sqrt3*R[0] + R[1] \
+                   and 2.0 >= sqrt3*R[1] + R[0] \
+                   and 2.0 >= sqrt3 + R[2]
+        elif lattice in lattice_tet:
+            return     1.0 >= R[0] \
+                   and 1.0 >= R[1] \
+                   and sqrt2 >= R[0] + R[1] \
+                   and sqrt2 >= R[2] + 1.0
+        elif lattice in lattice_orth:
+            return     1.0 >= R[0] \
+                   and 1.0 >= R[1] \
+                   and 1.0 >= R[2]
+        else:
+            raise ValueError("Unknown lattice structure: {}".format(lattice))
 
     def disorientation(self, Xtallite other, str unit='degrees'):
         pass
@@ -752,7 +806,8 @@ cdef class Aggregate:
 #-------------------------#
 # MODULE LEVEL SINGLETONS #
 #-------------------------#
-cpdef symmetry(str lattice):
+def symmetry(str lattice,
+             str mode='numpy'):
     """
     DESCRIPTION
     -----------
@@ -844,10 +899,17 @@ cpdef symmetry(str lattice):
     else:
         raise ValueError("Unknown lattice structure: {}".format(lattice))
 
-    return np.array(symQuats)
+    mode = mode.lower()
+    if mode == 'numpy':
+        symQuats = np.array(symQuats)
+    elif mode == 'quaternion':
+        symQuats = [Quaternion(np.array(item)) for item in symQuats]
+    else:
+        raise ValueError("Unknown mode: {}".format(mode))
+    return symQuats
 
 
-cdef slip_systems(str lattice):
+def slip_systems(str lattice):
     """
     DESCRIPTION
     -----------

@@ -239,7 +239,7 @@ class testXtalliate(unittest.TestCase):
     def setUp(self):
         self.xtal0 = Xtallite()
 
-        euler1     = np.array((10,20,30), dtype=np.float64)
+        euler1     = np.array((10,0,0), dtype=np.float64)
         pt1        = np.array((1,1,1),    dtype=np.float64)
         dv1        = np.array((1,2,3),    dtype=np.float64)
         self.xtal1 = Xtallite(eulers=euler1,
@@ -248,7 +248,7 @@ class testXtalliate(unittest.TestCase):
                               dv=dv1,
                               stress=np.random.random((3,3)),
                               strain=np.random.random((3,3)))
-        self.xtal1.setEulers(10, 0, 0)
+        self.xtal1.setEulers(10,20,30)
 
         euler2     = np.array((20, 0,30), dtype=np.float64)
         self.xtal2 = Xtallite(eulers=euler2)
@@ -264,6 +264,15 @@ class testXtalliate(unittest.TestCase):
         self.xtal5 = Xtallite(eulers=euler5,
                               lattice='hexagonal')
 
+    def test_toFundamentalZone(self):
+        target1 = np.array([10, 20, 330])
+        calc1   = self.xtal1.toFundamentalZone()
+        np.testing.assert_almost_equal(calc1, target1)
+
+        target5 = np.array([100.0, 50.0, 274.0])
+        calc5   = self.xtal5.toFundamentalZone()
+        np.testing.assert_almost_equal(calc5, target5)
+
     def test_disorientation(self):
         target = 40.0
         calc   = self.xtal1.disorientation(self.xtal2)
@@ -275,14 +284,7 @@ class testXtalliate(unittest.TestCase):
         calcs   = self.xtal1.disorientations(tmp)
         np.testing.assert_almost_equal(calcs, targets)
 
-    def test_toFundamentalZone(self):
-        target1 = np.array([10, 20, -30])
-        calc1   = self.xtal1.toFundamentalZone(mode='eulers')
-        np.testing.assert_almost_equal(calc1, target1)
 
-        target5 = np.array([100.0, 50.0, -86.0])
-        calc5   = self.xtal5.toFundamentalZone(mode='eulers')
-        np.testing.assert_almost_equal(calc5, target5)
 
 
 class testAggregate(unittest.TestCase):

@@ -28,9 +28,6 @@ cdef inline DTYPE_t DTYPE_abs(DTYPE_t a): return a if a>=0 else -a
 ######################
 # MODULE DECLARATION #
 ######################
-cpdef symmetry(str lattice)
-
-
 cdef class Quaternion:
     cdef public double w,x,y,z
 
