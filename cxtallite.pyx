@@ -73,6 +73,16 @@ ELSE:
 
 DTYPE = np.float64
 
+# CONSTANT #
+cdef list       lattice_hcp   = ['hexagonal', 'hex', 'hcp']
+cdef list       lattice_cubic = ['bcc', 'fcc', 'cubic']
+cdef list       lattice_tet   = ['tetragonal']
+cdef list       lattice_orth  = ['orthorhombic']
+cdef list       lattice_tric  = ['triclinic']
+cdef DTYPE_t    d2r           = M_PI/180.0
+cdef DTYPE_t    sqrt2         = sqrt(2.0)
+cdef DTYPE_t    sqrt3         = sqrt(3.0)
+
 
 #----------------------#
 # MODULE LEVEL CLASSES #
@@ -524,7 +534,6 @@ cdef class Eulers:
     def __getq(self):
         """ Return a quaternion based on given Euler Angles """
         cdef np.ndarray  qv = np.zeros(4, dtype=DTYPE)
-        cdef DTYPE_t    d2r = M_PI/180.0
         cdef DTYPE_t    c1,s1,c2,s2,c3,s3
 
         c1 = cos(self.phi1 * d2r / 2.0)
@@ -760,9 +769,6 @@ cdef class Xtallite:
             lattice structure
         """
         cdef np.ndarray R     = np.absolute(r)
-        cdef DTYPE_t    sqrt2 = sqrt(2.0)
-        cdef DTYPE_t    sqrt3 = sqrt(3.0)
-
 
         if lattice in lattice_cubic:
             return     (sqrt2 - 1.0 >= R[0]) \
@@ -827,64 +833,60 @@ def symmetry(str lattice,
         The symmetry operators used to calculate equivalent crystal
         orientation.
     """
-    cdef double tmp
+    lattice = lattice.lower()
 
-    lattice = str(lattice.lower())
     if lattice in lattice_cubic:
-        tmp = sqrt(2)
         symQuats = [
-                    [ 1.0,     0.0,     0.0,     0.0     ],
-                    [ 0.0,     1.0,     0.0,     0.0     ],
-                    [ 0.0,     0.0,     1.0,     0.0     ],
-                    [ 0.0,     0.0,     0.0,     1.0     ],
-                    [ 0.0,     0.0,     0.5*tmp, 0.5*tmp ],
-                    [ 0.0,     0.0,     0.5*tmp,-0.5*tmp ],
-                    [ 0.0,     0.5*tmp, 0.0,     0.5*tmp ],
-                    [ 0.0,     0.5*tmp, 0.0,    -0.5*tmp ],
-                    [ 0.0,     0.5*tmp,-0.5*tmp, 0.0     ],
-                    [ 0.0,    -0.5*tmp,-0.5*tmp, 0.0     ],
-                    [ 0.5,     0.5,     0.5,     0.5     ],
-                    [-0.5,     0.5,     0.5,     0.5     ],
-                    [-0.5,     0.5,     0.5,    -0.5     ],
-                    [-0.5,     0.5,    -0.5,     0.5     ],
-                    [-0.5,    -0.5,     0.5,     0.5     ],
-                    [-0.5,    -0.5,     0.5,    -0.5     ],
-                    [-0.5,    -0.5,    -0.5,     0.5     ],
-                    [-0.5,     0.5,    -0.5,    -0.5     ],
-                    [-0.5*tmp, 0.0,     0.0,     0.5*tmp ],
-                    [ 0.5*tmp, 0.0,     0.0,     0.5*tmp ],
-                    [-0.5*tmp, 0.0,     0.5*tmp, 0.0     ],
-                    [-0.5*tmp, 0.0,    -0.5*tmp, 0.0     ],
-                    [-0.5*tmp, 0.5*tmp, 0.0,     0.0     ],
-                    [-0.5*tmp,-0.5*tmp, 0.0,     0.0     ],
+                    [ 1.0,       0.0,       0.0,       0.0       ],
+                    [ 0.0,       1.0,       0.0,       0.0       ],
+                    [ 0.0,       0.0,       1.0,       0.0       ],
+                    [ 0.0,       0.0,       0.0,       1.0       ],
+                    [ 0.0,       0.0,       0.5*sqrt2, 0.5*sqrt2 ],
+                    [ 0.0,       0.0,       0.5*sqrt2,-0.5*sqrt2 ],
+                    [ 0.0,       0.5*sqrt2, 0.0,       0.5*sqrt2 ],
+                    [ 0.0,       0.5*sqrt2, 0.0,      -0.5*sqrt2 ],
+                    [ 0.0,       0.5*sqrt2,-0.5*sqrt2, 0.0       ],
+                    [ 0.0,      -0.5*sqrt2,-0.5*sqrt2, 0.0       ],
+                    [ 0.5,       0.5,       0.5,       0.5       ],
+                    [-0.5,       0.5,       0.5,       0.5       ],
+                    [-0.5,       0.5,       0.5,      -0.5       ],
+                    [-0.5,       0.5,      -0.5,       0.5       ],
+                    [-0.5,      -0.5,       0.5,       0.5       ],
+                    [-0.5,      -0.5,       0.5,      -0.5       ],
+                    [-0.5,      -0.5,      -0.5,       0.5       ],
+                    [-0.5,       0.5,      -0.5,      -0.5       ],
+                    [-0.5*sqrt2, 0.0,       0.0,       0.5*sqrt2 ],
+                    [ 0.5*sqrt2, 0.0,       0.0,       0.5*sqrt2 ],
+                    [-0.5*sqrt2, 0.0,       0.5*sqrt2, 0.0       ],
+                    [-0.5*sqrt2, 0.0,      -0.5*sqrt2, 0.0       ],
+                    [-0.5*sqrt2, 0.5*sqrt2, 0.0,       0.0       ],
+                    [-0.5*sqrt2,-0.5*sqrt2, 0.0,       0.0       ],
                    ]
     elif lattice in lattice_hcp:
-        tmp = sqrt(3)
         symQuats =  [
-                     [ 1.0,      0.0,     0.0,      0.0     ],
-                     [-0.5*tmp,  0.0,     0.0,     -0.5     ],
-                     [ 0.5,      0.0,     0.0,      0.5*tmp ],
-                     [ 0.0,      0.0,     0.0,      1.0     ],
-                     [-0.5,      0.0,     0.0,      0.5*tmp ],
-                     [-0.5*tmp,  0.0,     0.0,      0.5     ],
-                     [ 0.0,      1.0,     0.0,      0.0     ],
-                     [ 0.0,     -0.5*tmp, 0.5,      0.0     ],
-                     [ 0.0,      0.5,    -0.5*tmp,  0.0     ],
-                     [ 0.0,      0.0,     1.0,      0.0     ],
-                     [ 0.0,     -0.5,    -0.5*tmp,  0.0     ],
-                     [ 0.0,      0.5*tmp, 0.5,      0.0     ],
+                     [ 1.0,        0.0,       0.0,        0.0       ],
+                     [-0.5*sqrt3,  0.0,       0.0,       -0.5       ],
+                     [ 0.5,        0.0,       0.0,        0.5*sqrt3 ],
+                     [ 0.0,        0.0,       0.0,        1.0       ],
+                     [-0.5,        0.0,       0.0,        0.5*sqrt3 ],
+                     [-0.5*sqrt3,  0.0,       0.0,        0.5       ],
+                     [ 0.0,        1.0,       0.0,        0.0       ],
+                     [ 0.0,       -0.5*sqrt3, 0.5,        0.0       ],
+                     [ 0.0,        0.5,      -0.5*sqrt3,  0.0       ],
+                     [ 0.0,        0.0,       1.0,        0.0       ],
+                     [ 0.0,       -0.5,      -0.5*sqrt3,  0.0       ],
+                     [ 0.0,        0.5*sqrt3, 0.5,        0.0       ],
                     ]
     elif lattice in lattice_tet:
-        tmp = sqrt(2)
         symQuats =  [
-                     [ 1.0,     0.0,     0.0,     0.0     ],
-                     [ 0.0,     1.0,     0.0,     0.0     ],
-                     [ 0.0,     0.0,     1.0,     0.0     ],
-                     [ 0.0,     0.0,     0.0,     1.0     ],
-                     [ 0.0,     0.5*tmp, 0.5*tmp, 0.0     ],
-                     [ 0.0,    -0.5*tmp, 0.5*tmp, 0.0     ],
-                     [ 0.5*tmp, 0.0,     0.0,     0.5*tmp ],
-                     [-0.5*tmp, 0.0,     0.0,     0.5*tmp ],
+                     [ 1.0,       0.0,       0.0,       0.0       ],
+                     [ 0.0,       1.0,       0.0,       0.0       ],
+                     [ 0.0,       0.0,       1.0,       0.0       ],
+                     [ 0.0,       0.0,       0.0,       1.0       ],
+                     [ 0.0,       0.5*sqrt2, 0.5*sqrt2, 0.0       ],
+                     [ 0.0,      -0.5*sqrt2, 0.5*sqrt2, 0.0       ],
+                     [ 0.5*sqrt2, 0.0,       0.0,       0.5*sqrt2 ],
+                     [-0.5*sqrt2, 0.0,       0.0,       0.5*sqrt2 ],
                     ]
     elif lattice in lattice_orth:
         symQuats =  [
@@ -907,6 +909,7 @@ def symmetry(str lattice,
         symQuats = [Quaternion(np.array(item)) for item in symQuats]
     else:
         raise ValueError("Unknown mode: {}".format(mode))
+
     return symQuats
 
 

@@ -52,9 +52,9 @@ np.random.seed(1960)
 class testSymmetry(unittest.TestCase):
 
     def test_hcp(self):
-        sym1 = symmetry('hexagonal')
-        sym2 = symmetry('hcp')
-        sym3 = symmetry('hex')
+        sym1 = symmetry('hexagonal', mode='numpy')
+        sym2 = symmetry('hcp'      , mode='numpy')
+        sym3 = symmetry('hex'      , mode='numpy')
         self.assertListEqual(sym1.tolist(), sym2.tolist())
         self.assertListEqual(sym2.tolist(), sym3.tolist())
 
@@ -283,8 +283,6 @@ class testXtalliate(unittest.TestCase):
         targets = np.array([40.0, 10.0])
         calcs   = self.xtal1.disorientations(tmp)
         np.testing.assert_almost_equal(calcs, targets)
-
-
 
 
 class testAggregate(unittest.TestCase):
