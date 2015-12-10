@@ -752,14 +752,17 @@ cdef class Xtallite:
         flag = Xtallite.inFundamentalZone(r, lattice)
             Check whether given Rodrigues vector is in the fundamental zone
         for lattice structure
+        PARAMETERS
+        ----------
+        r: DTYPE_t[:]
+            Rodrigues vector in numpy array
+        lattice: str
+            lattice structure
         """
         cdef np.ndarray R     = np.absolute(r)
         cdef DTYPE_t    sqrt2 = sqrt(2.0)
         cdef DTYPE_t    sqrt3 = sqrt(3.0)
-        cdef list       lattice_hcp   = ['hexagonal', 'hex', 'hcp']
-        cdef list       lattice_cubic = ['bcc', 'fcc', 'cubic']
-        cdef list       lattice_tet   = ['tetragonal']
-        cdef list       lattice_orth  = ['orthorhombic']
+
 
         if lattice in lattice_cubic:
             return     (sqrt2 - 1.0 >= R[0]) \
@@ -825,8 +828,6 @@ def symmetry(str lattice,
         orientation.
     """
     cdef double tmp
-    cdef list   lattice_hcp   = ['hexagonal', 'hex', 'hcp']
-    cdef list   lattice_cubic = ['bcc', 'fcc', 'cubic']
 
     lattice = str(lattice.lower())
     if lattice in lattice_cubic:
@@ -873,7 +874,7 @@ def symmetry(str lattice,
                      [ 0.0,     -0.5,    -0.5*tmp,  0.0     ],
                      [ 0.0,      0.5*tmp, 0.5,      0.0     ],
                     ]
-    elif lattice == 'tetragonal':
+    elif lattice in lattice_tet:
         tmp = sqrt(2)
         symQuats =  [
                      [ 1.0,     0.0,     0.0,     0.0     ],
@@ -885,14 +886,14 @@ def symmetry(str lattice,
                      [ 0.5*tmp, 0.0,     0.0,     0.5*tmp ],
                      [-0.5*tmp, 0.0,     0.0,     0.5*tmp ],
                     ]
-    elif lattice == 'orthorhombic':
+    elif lattice in lattice_orth:
         symQuats =  [
                      [ 1.0,0.0,0.0,0.0 ],
                      [ 0.0,1.0,0.0,0.0 ],
                      [ 0.0,0.0,1.0,0.0 ],
                      [ 0.0,0.0,0.0,1.0 ],
                     ]
-    elif lattice == 'triclinic':
+    elif lattice in lattice_tric:
         symQuats =  [
                      [ 1.0,0.0,0.0,0.0 ],
                     ]
