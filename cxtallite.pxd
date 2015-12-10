@@ -46,6 +46,9 @@ cdef class OrientationMatrix:
     cdef public np.ndarray g
     cdef        Quaternion   __q
 
+    cdef Quaternion __getq(self)
+
+
 cdef class Xtallite:
     cdef public np.ndarray eulers, pt, dv, stress, strain
     cdef public str        lattice
@@ -53,5 +56,8 @@ cdef class Xtallite:
 
     cdef Quaternion getDq(self, Quaternion q0, Quaternion q1, str lattice)
 
+
 cdef class Aggregate:
-    cdef list xtals
+    cdef list       xtals
+    cdef INTP_t     texture
+    cdef INTP_t     gid

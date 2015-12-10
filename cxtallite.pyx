@@ -589,7 +589,7 @@ cdef class OrientationMatrix:
 
         self.__q = self.__getq()
 
-    def __getq(self):
+    cdef Quaternion __getq(self):
         cdef DTYPE_t trace, s, t
         cdef np.ndarray qv = np.zeros(4, dtype=DTYPE)
         cdef DTYPE_t w, x, y, z
@@ -708,12 +708,12 @@ cdef class Xtallite:
     """
 
     def __init__(self,
-                 DTYPE_t[:]   eulers=np.zeros(3, dtype=DTYPE),
-                 DTYPE_t[:]   pt=np.zeros(3, dtype=DTYPE),
-                 str          lattice='bcc',
-                 DTYPE_t[:]   dv=np.zeros(3, dtype=DTYPE),
-                 DTYPE_t[:,:] stress=np.zeros((3,3), dtype=DTYPE),
-                 DTYPE_t[:,:] strain=np.zeros((3,3), dtype=DTYPE)
+                 eulers=np.zeros(3, dtype=DTYPE),
+                 pt=np.zeros(3, dtype=DTYPE),
+                 lattice='bcc',
+                 dv=np.zeros(3, dtype=DTYPE),
+                 stress=np.zeros((3,3), dtype=DTYPE),
+                 strain=np.zeros((3,3), dtype=DTYPE)
                  ):
         cdef double phi1,PHI,phi2
 
@@ -766,83 +766,6 @@ cdef class Xtallite:
                 self.eulers = q.toEulers()
 
         return self.eulers
-
-    @classmethod
-    def inFundamentalZone(cls,
-                          DTYPE_t[:] r,
-                          str lattice):
-        """
-        DESCRIPTION
-        -----------
-        flag = Xtallite.inFundamentalZone(r, lattice)
-            Check whether given Rodrigues vector is in the fundamental zone
-        for lattice structure
-        PARAMETERS
-        ----------
-        r: DTYPE_t[:]
-            Rodrigues vector in numpy array
-        lattice: str
-            lattice structure
-        """
-        cdef np.ndarray R     = np.absolute(r)
-
-        if lattice in lattice_cubic:
-            return     (sqrt_2 - 1.0 >= R[0]) \
-                   and (sqrt_2 - 1.0 >= R[1]) \
-                   and (sqrt_2 - 1.0 >= R[2]) \
-                   and 1.0 >= R[0]+R[1]+R[2]
-        elif lattice in lattice_hcp:
-            return     1.0 >= R[0] \
-                   and 1.0 >= R[1] \
-                   and 1.0 >= R[2] \
-                   and 2.0 >= sqrt_3*R[0] + R[1] \
-                   and 2.0 >= sqrt_3*R[1] + R[0] \
-                   and 2.0 >= sqrt_3 + R[2]
-        elif lattice in lattice_tet:
-            return     1.0 >= R[0] \
-                   and 1.0 >= R[1] \
-                   and sqrt_2 >= R[0] + R[1] \
-                   and sqrt_2 >= R[2] + 1.0
-        elif lattice in lattice_orth:
-            return     1.0 >= R[0] \
-                   and 1.0 >= R[1] \
-                   and 1.0 >= R[2]
-        else:
-            raise ValueError("Unknown lattice structure: {}".format(lattice))
-
-    @classmethod
-    def inDisorientationStandardZone(cls,
-                                     Quaternion deltaQ,
-                                     str        lattice):
-        '''
-        DESCRIPTION
-        -----------
-        flag = Xtallite.inDisorientationStandardZone(q, lattice)
-        Check whether given Rodrigues vector (of misorientation) falls into standard stereographic triangle of own symmetry.
-        Determination of disorientations follow the work of A. Heinz and P. Neumann:
-        Representation of Orientation and Disorientation Data for Cubic, Hexagonal, Tetragonal and Orthorhombic Crystals
-        Acta Cryst. (1991). A47, 780-789
-
-        PARAMETERS
-        ----------
-        '''
-        cdef DTYPE_t    epsilon = 0.0
-        cdef DTYPE_t[:] R       = deltaQ.toRodrigues()
-
-        if lattice in lattice_cubic:
-            return R[0] >= R[1]+epsilon                and R[1] >= R[2]+epsilon    and R[2] >= epsilon
-
-        elif lattice in lattice_hcp:
-            return R[0] >= math.sqrt(3)*(R[1]-epsilon) and R[1] >= epsilon         and R[2] >= epsilon
-
-        elif lattice in lattice_tet:
-            return R[0] >= R[1]-epsilon                and R[1] >= epsilon         and R[2] >= epsilon
-
-        elif lattice in lattice_orth:
-            return R[0] >= epsilon                     and R[1] >= epsilon         and R[2] >= epsilon
-
-        else:
-            return True
 
     def disorientation(self, Xtallite other, str mode='angle'):
         """
@@ -922,17 +845,134 @@ cdef class Xtallite:
 
         return dqs
 
-
     @classmethod
     def random(cls):
         eulers  = np.degrees(np.random.random(3))
         return Xtallite(eulers=eulers)
 
+    @classmethod
+    def inDisorientationStandardZone(cls,
+                                     Quaternion deltaQ,
+                                     str        lattice):
+        '''
+        DESCRIPTION
+        -----------
+        flag = Xtallite.inDisorientationStandardZone(q, lattice)
+        Check whether given Rodrigues vector (of misorientation) falls into standard stereographic triangle of own symmetry.
+        Determination of disorientations follow the work of A. Heinz and P. Neumann:
+        Representation of Orientation and Disorientation Data for Cubic, Hexagonal, Tetragonal and Orthorhombic Crystals
+        Acta Cryst. (1991). A47, 780-789
+
+        PARAMETERS
+        ----------
+        '''
+        cdef DTYPE_t    epsilon = 0.0
+        cdef DTYPE_t[:] R       = deltaQ.toRodrigues()
+
+        if lattice in lattice_cubic:
+            return R[0] >= R[1]+epsilon                and R[1] >= R[2]+epsilon    and R[2] >= epsilon
+
+        elif lattice in lattice_hcp:
+            return R[0] >= math.sqrt(3)*(R[1]-epsilon) and R[1] >= epsilon         and R[2] >= epsilon
+
+        elif lattice in lattice_tet:
+            return R[0] >= R[1]-epsilon                and R[1] >= epsilon         and R[2] >= epsilon
+
+        elif lattice in lattice_orth:
+            return R[0] >= epsilon                     and R[1] >= epsilon         and R[2] >= epsilon
+
+        else:
+            return True
+
+    @classmethod
+    def inFundamentalZone(cls,
+                          DTYPE_t[:] r,
+                          str lattice):
+        """
+        DESCRIPTION
+        -----------
+        flag = Xtallite.inFundamentalZone(r, lattice)
+            Check whether given Rodrigues vector is in the fundamental zone
+        for lattice structure
+        PARAMETERS
+        ----------
+        r: DTYPE_t[:]
+            Rodrigues vector in numpy array
+        lattice: str
+            lattice structure
+        """
+        cdef np.ndarray R     = np.absolute(r)
+
+        if lattice in lattice_cubic:
+            return     (sqrt_2 - 1.0 >= R[0]) \
+                   and (sqrt_2 - 1.0 >= R[1]) \
+                   and (sqrt_2 - 1.0 >= R[2]) \
+                   and 1.0 >= R[0]+R[1]+R[2]
+        elif lattice in lattice_hcp:
+            return     1.0 >= R[0] \
+                   and 1.0 >= R[1] \
+                   and 1.0 >= R[2] \
+                   and 2.0 >= sqrt_3*R[0] + R[1] \
+                   and 2.0 >= sqrt_3*R[1] + R[0] \
+                   and 2.0 >= sqrt_3 + R[2]
+        elif lattice in lattice_tet:
+            return     1.0 >= R[0] \
+                   and 1.0 >= R[1] \
+                   and sqrt_2 >= R[0] + R[1] \
+                   and sqrt_2 >= R[2] + 1.0
+        elif lattice in lattice_orth:
+            return     1.0 >= R[0] \
+                   and 1.0 >= R[1] \
+                   and 1.0 >= R[2]
+        else:
+            raise ValueError("Unknown lattice structure: {}".format(lattice))
+
 
 cdef class Aggregate:
     """
+    DESCRIPTION
+    -----------
+    grainX = Aggregate(ListOfXtallites)
+        A container class that holds several
     """
-    pass
+
+    def __init__(self, list xtals,
+                 INTP_t texture=0,
+                 INTP_t gid=0):
+        self.xtals   = xtals
+        self.texture = texture
+        self.gid     = gid
+
+    def getOrientation(self, mode='eulers'):
+        """
+        DESCRIPTION
+        -----------
+        Orientaiton_grain = grain.getOrientation()
+            Return the grain average orientation by averaging all the
+        orientations within this aggregate.
+        """
+        cdef INTP_t     N       = len(self.xtals)
+        cdef list       qs      = [None] * N
+        cdef str        lattice = self.xtals[0].lattice
+
+        cdef int        i
+        cdef Quaternion Qavg
+
+        for i in range(N):
+            self.xtals[i].toFundamentalZone()  # reduce orientation to fundamental zone
+            qs[i] = self.xtals[i].getOrientation(mode='quaternion')
+
+        Qavg = Quaternion.average(qs)
+
+        mode = mode.lower()
+        if mode == 'eulers':
+            return Qavg.toEulers()
+        elif mode == 'quaternion':
+            return Qavg
+        elif mode == 'rodrigue':
+            return Qavg.toRodrigues()
+        else:
+            raise ValueError("Unknown mode: {}".format(mode))
 
 
 #-------------------------#

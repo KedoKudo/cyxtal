@@ -44,6 +44,7 @@ from cyxtal.cxtallite import Eulers
 from cyxtal.cxtallite import OrientationMatrix
 from cyxtal.cxtallite import Rodrigues
 from cyxtal.cxtallite import Xtallite
+from cyxtal.cxtallite import Aggregate
 
 # void random seed for testing
 np.random.seed(1960)
@@ -239,7 +240,7 @@ class testXtalliate(unittest.TestCase):
     def setUp(self):
         self.xtal0 = Xtallite()
 
-        euler1     = np.array((10,0,0), dtype=np.float64)
+        euler1     = np.array((10,0,0),   dtype=np.float64)
         pt1        = np.array((1,1,1),    dtype=np.float64)
         dv1        = np.array((1,2,3),    dtype=np.float64)
         self.xtal1 = Xtallite(eulers=euler1,
@@ -295,20 +296,25 @@ class testXtalliate(unittest.TestCase):
 class testAggregate(unittest.TestCase):
 
     def setUp(self):
-        xtals   = [Xtallite(eulers=(10, 0, 0), lattice='hexagonal'),
-                   Xtallite(eulers=(20, 0, 0), lattice='hexagonal'),
-                   Xtallite(eulers=(30, 0, 0), lattice='hexagonal'),
-                   Xtallite(eulers=(40, 0, 0), lattice='hexagonal')]
+        xtals   = [Xtallite(eulers=np.array([10, 0, 0]),
+                            lattice='hexagonal'),
+                   Xtallite(eulers=np.array([20,30, 0]),
+                            lattice='hexagonal'),
+                   Xtallite(eulers=np.array([ 0,40, 0]),
+                            lattice='hexagonal'),
+                   Xtallite(eulers=np.array([ 0,40,20]),
+                            lattice='hexagonal')]
         texture = 1
         ID      = 0
+
         self.grain = Aggregate(xtals,
                                texture=texture,
                                gid=ID)
 
     def test_averageOrienation(self):
-        targ = [50.0, 0.0, 0.0]
-        calc = self.grain.getAverageOrientation(mode='eulers')
-        np.testing.assert_almost_equal(cacl, targ)
+        targ = [5.40316323449, 27.5021745076, 7.1440290079]
+        calc = self.grain.getOrientation(mode='eulers')
+        np.testing.assert_almost_equal(calc, targ)
 
 
 class testAverageOrientations(unittest.TestCase):
