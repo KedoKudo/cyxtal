@@ -274,8 +274,15 @@ class testXtalliate(unittest.TestCase):
         np.testing.assert_almost_equal(calc5, target5)
 
     def test_disorientation(self):
-        target = 40.0
+        target = 22.33790562470999
         calc   = self.xtal1.disorientation(self.xtal2)
+        np.testing.assert_almost_equal(calc, target)
+
+        calc   = self.xtal2.disorientation(self.xtal1)
+        np.testing.assert_almost_equal(calc, target)
+
+        target = 30.0
+        calc   = self.xtal2.disorientation(self.xtal3)
         np.testing.assert_almost_equal(calc, target)
 
     def test_disorientations(self):

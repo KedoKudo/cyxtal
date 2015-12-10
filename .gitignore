@@ -6,3 +6,9 @@
 *.pyc
 
 *.so
+
+.ropeproject/config.py
+
+.ropeproject/history
+
+.ropeproject/objectdb

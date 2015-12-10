@@ -51,5 +51,7 @@ cdef class Xtallite:
     cdef public str        lattice
     cdef        Quaternion __q
 
+    cdef Quaternion getDq(self, Quaternion q0, Quaternion q1, str lattice)
+
 cdef class Aggregate:
     cdef list xtals

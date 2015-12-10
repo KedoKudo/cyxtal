@@ -80,8 +80,8 @@ cdef list       lattice_tet   = ['tetragonal']
 cdef list       lattice_orth  = ['orthorhombic']
 cdef list       lattice_tric  = ['triclinic']
 cdef DTYPE_t    d2r           = M_PI/180.0
-cdef DTYPE_t    sqrt2         = sqrt(2.0)
-cdef DTYPE_t    sqrt3         = sqrt(3.0)
+cdef DTYPE_t    sqrt_2        = sqrt(2.0)
+cdef DTYPE_t    sqrt_3        = sqrt(3.0)
 
 
 #----------------------#
@@ -737,6 +737,22 @@ cdef class Xtallite:
     def setLattice(self, str newLattice):
         self.lattice = newLattice
 
+    def getOrientation(self, str mode='eulers'):
+        """
+        DESCRIPTION
+        -----------
+        """
+        mode = mode.lower()
+
+        if mode == 'eulers':
+            return self.__q.toEulers()
+        elif mode == 'quaternion':
+            return self.__q
+        elif mode == 'rodrigue':
+            return self.__q.toRodrigues()
+        else:
+            raise ValueError("Unknown mode: {}".format(mode))
+
     def toFundamentalZone(self):
         cdef Quaternion q
         cdef np.ndarray symop
@@ -771,22 +787,22 @@ cdef class Xtallite:
         cdef np.ndarray R     = np.absolute(r)
 
         if lattice in lattice_cubic:
-            return     (sqrt2 - 1.0 >= R[0]) \
-                   and (sqrt2 - 1.0 >= R[1]) \
-                   and (sqrt2 - 1.0 >= R[2]) \
+            return     (sqrt_2 - 1.0 >= R[0]) \
+                   and (sqrt_2 - 1.0 >= R[1]) \
+                   and (sqrt_2 - 1.0 >= R[2]) \
                    and 1.0 >= R[0]+R[1]+R[2]
         elif lattice in lattice_hcp:
             return     1.0 >= R[0] \
                    and 1.0 >= R[1] \
                    and 1.0 >= R[2] \
-                   and 2.0 >= sqrt3*R[0] + R[1] \
-                   and 2.0 >= sqrt3*R[1] + R[0] \
-                   and 2.0 >= sqrt3 + R[2]
+                   and 2.0 >= sqrt_3*R[0] + R[1] \
+                   and 2.0 >= sqrt_3*R[1] + R[0] \
+                   and 2.0 >= sqrt_3 + R[2]
         elif lattice in lattice_tet:
             return     1.0 >= R[0] \
                    and 1.0 >= R[1] \
-                   and sqrt2 >= R[0] + R[1] \
-                   and sqrt2 >= R[2] + 1.0
+                   and sqrt_2 >= R[0] + R[1] \
+                   and sqrt_2 >= R[2] + 1.0
         elif lattice in lattice_orth:
             return     1.0 >= R[0] \
                    and 1.0 >= R[1] \
@@ -794,8 +810,95 @@ cdef class Xtallite:
         else:
             raise ValueError("Unknown lattice structure: {}".format(lattice))
 
-    def disorientation(self, Xtallite other, str unit='degrees'):
-        pass
+    @classmethod
+    def inDisorientationStandardZone(cls,
+                                     Quaternion deltaQ,
+                                     str        lattice):
+        '''
+        DESCRIPTION
+        -----------
+        flag = Xtallite.inDisorientationStandardZone(q, lattice)
+        Check whether given Rodrigues vector (of misorientation) falls into standard stereographic triangle of own symmetry.
+        Determination of disorientations follow the work of A. Heinz and P. Neumann:
+        Representation of Orientation and Disorientation Data for Cubic, Hexagonal, Tetragonal and Orthorhombic Crystals
+        Acta Cryst. (1991). A47, 780-789
+
+        PARAMETERS
+        ----------
+        '''
+        cdef DTYPE_t    epsilon = 0.0
+        cdef DTYPE_t[:] R       = deltaQ.toRodrigues()
+
+        if lattice in lattice_cubic:
+            return R[0] >= R[1]+epsilon                and R[1] >= R[2]+epsilon    and R[2] >= epsilon
+
+        elif lattice in lattice_hcp:
+            return R[0] >= math.sqrt(3)*(R[1]-epsilon) and R[1] >= epsilon         and R[2] >= epsilon
+
+        elif lattice in lattice_tet:
+            return R[0] >= R[1]-epsilon                and R[1] >= epsilon         and R[2] >= epsilon
+
+        elif lattice in lattice_orth:
+            return R[0] >= epsilon                     and R[1] >= epsilon         and R[2] >= epsilon
+
+        else:
+            return True
+
+    def disorientation(self, Xtallite other, str mode='angle'):
+        """
+        DESCRIPTION
+        -----------
+        """
+        cdef Quaternion q0 = self.getOrientation(mode='quaternion')
+        cdef Quaternion q1 = other.getOrientation(mode='quaternion')
+        cdef Quaternion dq
+        cdef str        lattice
+
+        if self.lattice.lower() != other.lattice.lower():
+            raise ValueError("ERROR: {}!={}".format(self.lattice, other.lattice))
+        else:
+            lattice = self.lattice.lower()
+
+        dq = self.getDq(q0, q1, lattice)
+
+        mode = mode.lower()
+        if mode == 'angle':
+            return np.degrees(dq.toAngleAxis()[0])
+        elif mode == 'quaternion':
+            return dq
+        elif mode == 'angleaxis':
+            return dq.toAngleAxis()
+        elif mode == 'eulers':
+            return dq.toEulers()
+        elif mode == 'axis':
+            return dq.toAngleAxis()[1]
+        else:
+            raise ValueError("Unknown mode: {}".format(mode))
+
+    cdef Quaternion getDq(self, Quaternion q0, Quaternion q1, str lattice):
+        """
+        DESCRIPTION
+        -----------
+        dQ = getDq(q0, q1, lattice)
+        """
+        cdef Quaternion deltaQ, tmp0, tmp1, tmpQ
+        cdef np.ndarray symop
+        cdef int        i, j
+        cdef DTYPE_t    angle = 360
+
+        symops = symmetry(lattice, mode='quaternion')
+
+        # use brutal force to get the smallest rotation angle
+        for i in range(len(symops)):
+            for j in range(len(symops)):
+                tmp0   = q0*symops[i]
+                tmp1   = q1*symops[j]
+                tmpQ   = tmp0.conj() * tmp1
+                if angle > tmpQ.toAngleAxis()[0]:
+                    angle  = tmpQ.toAngleAxis()[0]
+                    deltaQ = tmpQ
+
+        return deltaQ
 
     def disorientations(self, list others, str unit='degrees'):
         pass
@@ -841,12 +944,12 @@ def symmetry(str lattice,
                     [ 0.0,       1.0,       0.0,       0.0       ],
                     [ 0.0,       0.0,       1.0,       0.0       ],
                     [ 0.0,       0.0,       0.0,       1.0       ],
-                    [ 0.0,       0.0,       0.5*sqrt2, 0.5*sqrt2 ],
-                    [ 0.0,       0.0,       0.5*sqrt2,-0.5*sqrt2 ],
-                    [ 0.0,       0.5*sqrt2, 0.0,       0.5*sqrt2 ],
-                    [ 0.0,       0.5*sqrt2, 0.0,      -0.5*sqrt2 ],
-                    [ 0.0,       0.5*sqrt2,-0.5*sqrt2, 0.0       ],
-                    [ 0.0,      -0.5*sqrt2,-0.5*sqrt2, 0.0       ],
+                    [ 0.0,       0.0,       0.5*sqrt_2, 0.5*sqrt_2 ],
+                    [ 0.0,       0.0,       0.5*sqrt_2,-0.5*sqrt_2 ],
+                    [ 0.0,       0.5*sqrt_2, 0.0,       0.5*sqrt_2 ],
+                    [ 0.0,       0.5*sqrt_2, 0.0,      -0.5*sqrt_2 ],
+                    [ 0.0,       0.5*sqrt_2,-0.5*sqrt_2, 0.0       ],
+                    [ 0.0,      -0.5*sqrt_2,-0.5*sqrt_2, 0.0       ],
                     [ 0.5,       0.5,       0.5,       0.5       ],
                     [-0.5,       0.5,       0.5,       0.5       ],
                     [-0.5,       0.5,       0.5,      -0.5       ],
@@ -855,27 +958,27 @@ def symmetry(str lattice,
                     [-0.5,      -0.5,       0.5,      -0.5       ],
                     [-0.5,      -0.5,      -0.5,       0.5       ],
                     [-0.5,       0.5,      -0.5,      -0.5       ],
-                    [-0.5*sqrt2, 0.0,       0.0,       0.5*sqrt2 ],
-                    [ 0.5*sqrt2, 0.0,       0.0,       0.5*sqrt2 ],
-                    [-0.5*sqrt2, 0.0,       0.5*sqrt2, 0.0       ],
-                    [-0.5*sqrt2, 0.0,      -0.5*sqrt2, 0.0       ],
-                    [-0.5*sqrt2, 0.5*sqrt2, 0.0,       0.0       ],
-                    [-0.5*sqrt2,-0.5*sqrt2, 0.0,       0.0       ],
+                    [-0.5*sqrt_2, 0.0,       0.0,       0.5*sqrt_2 ],
+                    [ 0.5*sqrt_2, 0.0,       0.0,       0.5*sqrt_2 ],
+                    [-0.5*sqrt_2, 0.0,       0.5*sqrt_2, 0.0       ],
+                    [-0.5*sqrt_2, 0.0,      -0.5*sqrt_2, 0.0       ],
+                    [-0.5*sqrt_2, 0.5*sqrt_2, 0.0,       0.0       ],
+                    [-0.5*sqrt_2,-0.5*sqrt_2, 0.0,       0.0       ],
                    ]
     elif lattice in lattice_hcp:
         symQuats =  [
                      [ 1.0,        0.0,       0.0,        0.0       ],
-                     [-0.5*sqrt3,  0.0,       0.0,       -0.5       ],
-                     [ 0.5,        0.0,       0.0,        0.5*sqrt3 ],
+                     [-0.5*sqrt_3,  0.0,       0.0,       -0.5       ],
+                     [ 0.5,        0.0,       0.0,        0.5*sqrt_3 ],
                      [ 0.0,        0.0,       0.0,        1.0       ],
-                     [-0.5,        0.0,       0.0,        0.5*sqrt3 ],
-                     [-0.5*sqrt3,  0.0,       0.0,        0.5       ],
+                     [-0.5,        0.0,       0.0,        0.5*sqrt_3 ],
+                     [-0.5*sqrt_3,  0.0,       0.0,        0.5       ],
                      [ 0.0,        1.0,       0.0,        0.0       ],
-                     [ 0.0,       -0.5*sqrt3, 0.5,        0.0       ],
-                     [ 0.0,        0.5,      -0.5*sqrt3,  0.0       ],
+                     [ 0.0,       -0.5*sqrt_3, 0.5,        0.0       ],
+                     [ 0.0,        0.5,      -0.5*sqrt_3,  0.0       ],
                      [ 0.0,        0.0,       1.0,        0.0       ],
-                     [ 0.0,       -0.5,      -0.5*sqrt3,  0.0       ],
-                     [ 0.0,        0.5*sqrt3, 0.5,        0.0       ],
+                     [ 0.0,       -0.5,      -0.5*sqrt_3,  0.0       ],
+                     [ 0.0,        0.5*sqrt_3, 0.5,        0.0       ],
                     ]
     elif lattice in lattice_tet:
         symQuats =  [
@@ -883,10 +986,10 @@ def symmetry(str lattice,
                      [ 0.0,       1.0,       0.0,       0.0       ],
                      [ 0.0,       0.0,       1.0,       0.0       ],
                      [ 0.0,       0.0,       0.0,       1.0       ],
-                     [ 0.0,       0.5*sqrt2, 0.5*sqrt2, 0.0       ],
-                     [ 0.0,      -0.5*sqrt2, 0.5*sqrt2, 0.0       ],
-                     [ 0.5*sqrt2, 0.0,       0.0,       0.5*sqrt2 ],
-                     [-0.5*sqrt2, 0.0,       0.0,       0.5*sqrt2 ],
+                     [ 0.0,       0.5*sqrt_2, 0.5*sqrt_2, 0.0       ],
+                     [ 0.0,      -0.5*sqrt_2, 0.5*sqrt_2, 0.0       ],
+                     [ 0.5*sqrt_2, 0.0,       0.0,       0.5*sqrt_2 ],
+                     [-0.5*sqrt_2, 0.0,       0.0,       0.5*sqrt_2 ],
                     ]
     elif lattice in lattice_orth:
         symQuats =  [
