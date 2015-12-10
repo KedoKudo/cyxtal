@@ -298,11 +298,11 @@ class testAggregate(unittest.TestCase):
     def setUp(self):
         xtals   = [Xtallite(eulers=np.array([10, 0, 0]),
                             lattice='hexagonal'),
-                   Xtallite(eulers=np.array([20,30, 0]),
+                   Xtallite(eulers=np.array([20, 0, 0]),
                             lattice='hexagonal'),
-                   Xtallite(eulers=np.array([ 0,40, 0]),
+                   Xtallite(eulers=np.array([30, 0, 0]),
                             lattice='hexagonal'),
-                   Xtallite(eulers=np.array([ 0,40,20]),
+                   Xtallite(eulers=np.array([40, 0, 0]),
                             lattice='hexagonal')]
         texture = 1
         ID      = 0
@@ -312,7 +312,7 @@ class testAggregate(unittest.TestCase):
                                gid=ID)
 
     def test_averageOrienation(self):
-        targ = [5.40316323449, 27.5021745076, 7.1440290079]
+        targ = [25.0, 0.0, 0.0]
         calc = self.grain.getOrientation(mode='eulers')
         np.testing.assert_almost_equal(calc, targ)
 
