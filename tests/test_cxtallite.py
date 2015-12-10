@@ -317,23 +317,5 @@ class testAggregate(unittest.TestCase):
         np.testing.assert_almost_equal(calc, targ)
 
 
-class testAverageOrientations(unittest.TestCase):
-
-    def setUp(self):
-        pass
-
-    def test_avgQuaternions(self):
-        pass
-
-    def test_avgEulers(self):
-        pass
-
-    def test_avgRogrigues(self):
-        pass
-
-    def test_avgOrientationMatrix(self):
-        pass
-
-
 if __name__ == '__main__':
     unittest.main()
