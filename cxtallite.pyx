@@ -849,7 +849,7 @@ cdef class Xtallite:
         DESCRIPTION
         -----------
         """
-        cdef Quaternion q0 = self.getOrientation(mode='quaternion')
+        cdef Quaternion q0 = self.__q
         cdef Quaternion q1 = other.getOrientation(mode='quaternion')
         cdef Quaternion dq
         cdef str        lattice
@@ -900,8 +900,28 @@ cdef class Xtallite:
 
         return deltaQ
 
-    def disorientations(self, list others, str unit='degrees'):
-        pass
+    def disorientations(self, list others):
+        """
+        DESCRIPTION
+        -----------
+        dQs = disorientations(list ListOfXtallite)
+            Provide batch processing capability of disorientation
+        calculation. Assuming the crystallites in the list has the
+        same lattice structure as self.
+        """
+        cdef Quaternion q0  = self.__q
+        cdef Quaternion q1, dq
+        cdef np.ndarray dqs = np.empty(len(others), dtype=DTYPE)
+        cdef int        N   = len(others)
+        cdef int        i
+
+        for i in range(N):
+            q1     = others[i].getOrientation(mode='quaternion')
+            dq     = self.getDq(q0,q1,self.lattice)
+            dqs[i] = np.degrees(dq.toAngleAxis()[0])
+
+        return dqs
+
 
     @classmethod
     def random(cls):
