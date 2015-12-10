@@ -61,3 +61,5 @@ cdef class Aggregate:
     cdef list       xtals
     cdef INTP_t     texture
     cdef INTP_t     gid
+
+    cdef Quaternion __findAverageQ(self)

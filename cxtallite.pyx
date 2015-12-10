@@ -951,18 +951,9 @@ cdef class Aggregate:
             Return the grain average orientation by averaging all the
         orientations within this aggregate.
         """
-        cdef INTP_t     N       = len(self.xtals)
-        cdef list       qs      = [None] * N
-        cdef str        lattice = self.xtals[0].lattice
-
-        cdef int        i
         cdef Quaternion Qavg
 
-        for i in range(N):
-            self.xtals[i].toFundamentalZone()  # reduce orientation to fundamental zone
-            qs[i] = self.xtals[i].getOrientation(mode='quaternion')
-
-        Qavg = Quaternion.average(qs)
+        Qavg = self.__findAverageQ()
 
         mode = mode.lower()
         if mode == 'eulers':
@@ -974,6 +965,41 @@ cdef class Aggregate:
         else:
             raise ValueError("Unknown mode: {}".format(mode))
 
+    cdef Quaternion __findAverageQ(self):
+        """
+        DESCRIPTION
+        -----------
+        """
+        cdef INTP_t     N       = len(self.xtals)
+        cdef list       qs      = [None] * N
+        cdef str        lattice = self.xtals[0].lattice
+        cdef list       symops  = symmetry(lattice, mode='quaternion')
+        cdef INTP_t     Nsyms   = len(symops)
+
+        cdef int        i
+        cdef double     angle, dA
+        cdef Quaternion Qavg, refQ, Qtmp, dQ, close2refQ
+        cdef Xtallite   refXtal = self.xtals[0]
+
+        # use first xtallite as orientation reference
+        refXtal.toFundamentalZone()
+        refQ  = refXtal.getOrientation(mode='quaternion')
+        qs[0] = refQ
+
+        for i in range(1, N):
+            angle = 360.0
+            Qtmp  = self.xtals[i].getOrientation(mode='quaternion')
+            qs[i] = Qtmp
+            # find q equivalent q close to reference
+            for j in range(Nsyms):
+                dQ = refXtal.getDq(refQ, Qtmp*symops[j], lattice)
+                dA = np.degrees(dQ.toAngleAxis()[0])
+                if angle > dA:
+                    angle = dA
+                    qs[i] = Qtmp*symops[j]
+
+        Qavg = Quaternion.average(qs)
+        return Qavg
 
 #-------------------------#
 # MODULE LEVEL SINGLETONS #
