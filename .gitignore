@@ -12,3 +12,11 @@
 .ropeproject/history
 
 .ropeproject/objectdb
+
+*.outputConstitutive
+
+*.outputCrystallite
+
+*.outputHomogenization
+
+*.spectralOut

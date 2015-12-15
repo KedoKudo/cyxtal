@@ -36,19 +36,18 @@ DESCRIPTION
 python spectral2HDF.py ${RST.spectralOut} [-o outputFileName]
     This script is used to directly convert a spectralOut file from DAMASK
     spectral analysis to a HDF5 file for further data processing.
+    The real interface is defined in ext_damask/auxMPIE.py .
 """
+
 
 import os, sys, argparse
 import h5py
-import numpy as np
+from   cyxtal.ext_damask import MPIE_spectralOut
+from   cyxtal.ext_damask import MPIE_marc
 
 
-###########
-# MARCROS #
-
-
-##########
-# PARSER #
+##
+# PARSER
 parser = argparse.ArgumentParser(prog='sepctral2HDF5',
                                  epilog='require h5py and numpy',
                                  description='convert binary results to hdf5.')
@@ -60,7 +59,7 @@ parser.add_argument('-v', '--version',
                     version="%(prog)s 0.1")
 parser.add_argument('-o', '--output',
                     help='output file name.'
-                    default='run.hdf5')
+                    default=None)
 parser.add_argument('-d', '--debug',
                     action='store_true',
                     default=False,
@@ -75,5 +74,30 @@ if not args.silent:
     print "*"
 
 
-################
-# READ IN DATA #
+##
+# START PROCESSING
+rst_f = args.sourceFile
+try:
+    tmp_f = open(rst_f, "rb")
+    tmp_f.close()
+except:
+    raise ValueError("Invalid spectralOut file: {}".format(rst_f))
+
+# Invoke the auxMPIE interface for data extraction
+rst_ext = rst_f.split(".")[-1]
+if rst_ext == "spectralOut":
+    converter = MPIE_spectralOut(rst_f)
+elif rst_ext == "t16":
+    converter = MPIE_marc(rst_f)
+else:
+    raise ValueError("Unsupported type: *.{}".format(rst_ext))
+
+# Setting properties for output file
+outFileName = args.output
+if outFileName is None:
+    outFileName = rst_f.replace(".spectralOut", ".hdf5")
+converter.convert(outFileName)
+
+# Finishing up
+if not args.silent:
+    print "All done, output HDF5 file is: {}".format(outFileName)
