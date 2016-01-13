@@ -1,0 +1,99 @@
+\usepackage{amsmath,amssymb,amsfonts,mathrsfs}
+\usepackage{miller}
+\usepackage{multirow}
+\usepackage{subeqnarray}
+\usepackage{bm}
+\usepackage{natbib}
+
+\usepackage{graphicx}
+\graphicspath{{./}{./figure/}{../Figures/}}
+\DeclareGraphicsExtensions{.pdf,.png}
+\usepackage[pdftex,                                     % hyper-references for pdftex
+bookmarksnumbered=true,%                                % generate bookmarks with numbers
+%pagebackref=true,%                                      % generate backref in biblio
+colorlinks=true,%
+linkcolor=blue,
+citecolor=red,
+urlcolor=blue,
+pdfpagelabels=false,
+plainpages = false,
+]{hyperref}%
+
+\usepackage[capitalise]{cleveref}                                   % for clever referencing
+
+
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+\usetikzlibrary{automata,positioning}
+
+
+% SOMETHING USEFUL
+\newcommand{\ie}{\textit{i.e.}}
+\newcommand{\eg}{\textit{e.g.}}
+\newcommand{\cf}{\textit{cf.}}
+\newcommand{\Euler}{\term{Euler}}
+\newcommand{\Gauss}{\term{Gauss}}
+\newcommand{\Fourier}{\term{Fourier}}
+
+\newcommand{\kB}{\ensuremath{k_\text{B}}}
+
+% FUNCTIONS AND OPERATORS
+\newcommand{\transpose}[1]{\ensuremath{{#1}^{\text T}}}
+\newcommand{\inverse}[1]{\ensuremath{{#1}^{-1}}}
+\newcommand{\invtranspose}[1]{\ensuremath{{#1}^{\text{-T}}}}
+\newcommand{\sign}[1]{\ensuremath{\operatorname{sgn}\left({#1}\right)}}
+\newcommand{\grad}[1][]{\ensuremath{\operatorname{grad}{#1}}}
+\newcommand{\Grad}[1][]{\ensuremath{\operatorname{Grad}{#1}}}
+\newcommand{\divergence}[1][]{\ensuremath{\operatorname{div}{#1}}}
+\newcommand{\Divergence}[1][]{\ensuremath{\operatorname{Div}{#1}}}
+\newcommand{\curl}[1][]{\ensuremath{\operatorname{curl}{#1}}}
+\newcommand{\Curl}[1][]{\ensuremath{\operatorname{Curl}{#1}}}
+\newcommand{\totalder}[2]{\ensuremath{\frac{\inc{#1}}{\inc{#2}}}}
+\newcommand{\partialder}[2]{\ensuremath{\frac{\partial{#1}}{\partial{#2}}}}
+\newcommand{\inc}[1]{\ensuremath{\text d{#1}}}
+\newcommand{\abs}[1]{\ensuremath{\left|{#1}\right|}}
+\newcommand{\norm}[2][]{\ensuremath{\left|\left|{#2}\right|\right|\if\relax\detokenize{#1}\relax\else _{#1}\fi}}
+\newcommand{\avg}[1]{\ensuremath{\overline{#1}}}
+\newcommand{\fluct}[1]{\ensuremath{\widetilde{#1}}}
+\newcommand{\FT}[1]{\ensuremath{\mathcal F\left[{#1}\right]}}
+\newcommand{\invFT}[1]{\ensuremath{\mathcal F^{-1}\left[{#1}\right]}}
+
+\newcommand{\domain}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\tnsrfour}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\tnsr}[1]{\ensuremath{\mathbf{#1}}}
+\newcommand{\tnsrgreek}[1]{\ensuremath{\bm{#1}}}
+\newcommand{\vctr}[1]{\ensuremath{\mathbf{#1}}}
+\newcommand{\vctrgreek}[1]{\ensuremath{\bm{#1}}}
+
+% SPECIAL TENSORS
+\newcommand{\eyetwo}{\ensuremath{\tnsr I}}
+\newcommand{\eyefour}{\ensuremath{\tnsrfour I}}
+
+% VARIABLES
+\newcommand{\defmap}{\ensuremath{\vctrgreek{\chi}}}
+\newcommand{\stiffness}{\tnsrfour C}
+\newcommand{\fPK}{\ensuremath{\tnsr P}}
+\newcommand{\fPKcomponent}{\ensuremath{P}}
+\newcommand{\fPKavg}{\ensuremath{\avg{\fPK}}}
+\newcommand{\sPK}{\ensuremath{\tnsr S}}
+\newcommand{\F}[1][]{\ensuremath{\tnsr F^{#1}}}
+\newcommand{\Fcomponent}[1][]{\ensuremath{F^{#1}}}
+\newcommand{\Fdot}[1][]{\ensuremath{\dot{\tnsr F}^{#1}}}
+\newcommand{\E}{\tnsr E}
+\newcommand{\GL}{\ensuremath{\tnsr E_\text{e}}}
+\newcommand{\Favg}{\ensuremath{\avg{\F}}}
+\newcommand{\Ffluct}{\ensuremath{\fluct{\F}}}
+\newcommand{\Fp}[1][]{\ensuremath{\tnsr F_\text{p}^{#1}}}
+\newcommand{\Fpdot}[1][]{\ensuremath{\dot{\tnsr F}_\text{p}^{#1}}}
+\newcommand{\Fe}[1][]{\ensuremath{\tnsr F_\text{e}^{#1}}}
+\newcommand{\velgrad}{\ensuremath{\tnsr L}}
+\newcommand{\Lp}{\ensuremath{\tnsr L_\text{p}}}
+\newcommand{\bcFdot}{\ensuremath{\dot{\tnsr F}_\text{BC}}}
+\newcommand{\bcF}{\ensuremath{{\F}_\text{BC}}}
+\newcommand{\bcfPK}{\ensuremath{{\fPK}_\text{BC}}}
+\newcommand{\Burgers}[1]{\ensuremath{\vctr b^{#1}}}
+\newcommand{\n}[1]{\ensuremath{\vctr n^{#1}}}
+\newcommand{\velocity}[2]{\ensuremath{v^{#1}_\text{#2}}}
+\newcommand{\galpha}{\ensuremath{\gamma^{\alpha}}}
+\newcommand{\dotgalpha}{\ensuremath{\dot{\gamma}^{\alpha}}}
+\newcommand{\cs}{\ensuremath{\tnsrgreek \sigma}}

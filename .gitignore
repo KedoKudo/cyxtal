@@ -20,3 +20,11 @@
 *.outputHomogenization
 
 *.spectralOut
+
+documentation/development.aux
+
+documentation/development.log
+
+documentation/development.out
+
+documentation/development.synctex.gz
