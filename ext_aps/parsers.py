@@ -35,6 +35,14 @@ DESCRIPTION
 import h5py  as h5
 import numpy as np
 import xml.etree.cElementTree as ET
+from scipy.optimize import minimize
+
+# module level constant
+theta     = -0.75*np.pi
+R_APS2TSL = np.array([[1.0,            0.0,            0.0],
+                      [0.0,  np.cos(theta), -np.sin(theta)],
+                      [0.0,  np.sin(theta),  np.cos(theta)]])
+
 
 class VoxelStep(object):
     """
@@ -51,6 +59,7 @@ class VoxelStep(object):
     hkls:           hkl indices identified
     a|b|cstar:      strain free reciprocal lattice identified
     lc:             lattice constants used in indexation
+    lattice:        lattice structure
     """
 
     def __init__(self):
@@ -68,10 +77,65 @@ class VoxelStep(object):
         self.cstar   = np.nan
         # lattice constant
         self.lc      = np.nan
+        self.lattice = None
+        # validation
+        self._valid  = False
 
-    def check(self):
+    def validate(self):
         """
-        check whether voxel contains corrupted data
+        DESCRIPTION
+        -----------
+        self.validate()
+            Validate all parameters are parsed;
+            Prune q vectors, ensure correct mapping between
+            self.hkls and self.qs;
+            Instance of VoxelStep can only be used when validated.
+        """
+        pass
+
+    def get_coord(self, ref='TSL'):
+        """
+        DESCRIPTION
+        -----------
+        coord = self.get_coord(ref='TSL')
+            Return the coordinates of the voxel in given reference
+            system
+        PARAMETERS
+        ----------
+        ref: string(case insensitive)
+            Name for reference configuration ['TSL'|'APS'|'XHF']
+        """
+        pass
+
+    def get_eulers(self, ref='TSL'):
+        """
+        """
+        pass
+
+    def get_strain(self):
+        """
+        return strain tensor inferred with current data
+        """
+        strain = np.empty((3,3))
+        # check if voxel data is valid
+        if not(self._valid):
+            print "Corrupted voxel found!"
+            return strain.fill(np.nan)
+        # continue on the strain refinement
+
+    def strain_refine(self, new_lc):
+        """
+        DESCRIPTION
+        -----------
+        err = self.strain_refine(new_lc)
+            Return the errors between calculated qs and measurements
+        PARAMETERS
+        ----------
+        new_lc: lattice constant (perturbed)
+        RETURNS
+        -------
+        err:    angular difference between calculated qs using new_lc
+                and measurements (self.qs).
         """
         pass
 
@@ -88,20 +152,5 @@ def parser_xml(intput,
                ref_configuration='aps',
                strain_refine=True)
         Parse the DAXM data from Beamline 34-I-DE to simple ASCII table
-    """
-    pass
-
-
-def strain_refine(lattice_constants,
-                  qv,
-                  hkl,
-                  lattice_structure='hcp'
-                  max_iter=1960,
-                  mode='auto'):
-    """
-    DESCRIPTION
-    -----------
-    strain = strain_refine(LC, qv, hkls)
-        Perform strain refinement based on given lattice constant
     """
     pass
