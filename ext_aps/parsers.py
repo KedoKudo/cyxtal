@@ -32,6 +32,7 @@ DESCRIPTION
 -----------
 """
 
+import h5py  as h5
 import numpy as np
 import xml.etree.cElementTree as ET
 
@@ -39,10 +40,39 @@ class VoxelStep(object):
     """
     DESCRIPTION
     -----------
-    Container class for parsing through data?
+    Container class for parsing through data, all the data is stored
+    as it is in the xml file. Additional methods are provided for
+    various other purposes.
+    PARAMETERS
+    ----------
+    X|Y|Zsample:    sample motor position during scan (X|Y|Z)
+    depth:          wire position
+    qs:             identified diffraction vectors
+    hkls:           hkl indices identified
+    a|b|cstar:      strain free reciprocal lattice identified
+    lc:             lattice constants used in indexation
     """
 
-     def __init__(self):
+    def __init__(self):
+        # coordinates
+        self.Xsample = np.nan
+        self.Ysample = np.nan
+        self.Zsample = np.nan
+        self.depth   = np.nan
+        # indexing (shape unknown)
+        self.qs      = np.nan
+        self.hkls    = np.nan
+        # strain free reciprocal lattice
+        self.astar   = np.nan
+        self.bstar   = np.nan
+        self.cstar   = np.nan
+        # lattice constant
+        self.lc      = np.nan
+
+    def check(self):
+        """
+        check whether voxel contains corrupted data
+        """
         pass
 
 
