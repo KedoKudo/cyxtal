@@ -19,12 +19,65 @@ This particular module include several function that help facilitate the analysi
 %
 \begin{enumerate}
 
-\item parser\_xml(\ldots) \\
+\item \textbf{parser\_xml(\ldots)} \\
 
-\item strain\_refine(\ldots) \\
-The algorithm of strain refinement is based on the igor script written by Dr. Tischler at APS.
- 
+\item \textbf{strain\_refine(\ldots)} \\
+The algorithm of strain refinement is based on the software package ``LaueGo'' developed and maintained by Dr. Tischler at APS, ANL.
+\footnote{\url{http://www.aps.anl.gov/Sectors/33_34/microdiff/}}
+
+%need a good summary of the algorithm used in finding the crystal orientation as well as how the strain refinement is done.
+The strain refinement is not a direct (deterministic) measurement of strain using DAXM characterization.
+Instead, the strain tensor extracted from the Laue diffraction pattern is more of a ``guessed value''. 
+The general algorithm of extracting strain tensor from DAXM scan data is as follows:
+%
+\begin{itemize}
+\item 
+Acquire the crystal orientation by forward prediction of the Laue diffraction pattern.
+Due to small strain and experimental measurement error, the simulated Laue pattern will only partially match the measured pattern. 
+Here the word ``partially'' has two levels of meanings:
+	\begin{itemize}
+	\item
+	Only some of the diffraction spots are used to identify the crystal orientation of the voxel as it is not possible to match all diffraction spots in the pattern due to non-ideal deconvolution process.
+\footnote{The shadows from neighboring grains and echoes from sample internal cannot be fully eliminated during the deconvolution of the diffraction pattern, which is used to acquire Laue pattern for each voxel during post processing of DAXM data.}
+	\item
+	The matching between the calculated diffraction spots and measured diffraction spots are not perfect. 
+	The difference between calculation and measurements can be attributed to experimental error (uncontrollable and hopefully small) and the residual strain present in the crystal lattice, which distort the diffraction spots from its ideal position. 
+	\end{itemize}
+	
+	\item
+	Using the crystal orientation obtained by ignoring the lattice distortion (allowing relatively big mismatch of Laue patterns), it is possible to calculate the ideal [reciprocal] lattice vectors for given voxel.
+	Perturbing the ideal [reciprocal] lattice vectors (or lattice constants) and recalculating the diffraction spots, one can theoretically stumble upon the real lattice vectors with lattice strain present. 
+	Comparing the transformation matrix between the ideal and real, the deformation gradient can be found through
+\[
+	\tnsr F = \tnsr V_\text{ideal} \tnsr V_\text{real}^T
+\]
+where \tnsr V is the bases formed by [reciprocal] lattice vectors.
+	
+	With the deformation gradient known, it is fairly easy to calculate the strain tensor through the Green strain tensor,
+\begin{align*}
+	\tnsr C &= \tnsr F^T \tnsr F \\
+	           &= (1 + \tnsr \epsilon)^2 \\
+	           &\approx 1 + 2 \tnsr \epsilon + O(\tnsr \epsilon^2)
+\end{align*}
+	So the strain tensor for given voxel can be approximated by
+\[
+	\tnsr \epsilon = \dfrac{1}{2}(\tnsr F^T \tnsr F - \tnsr I)
+\]
+
+	\item
+	Since it is not possible to directly compute $\tnsr V_\text{real}$, an automated optimization process is used to find a well ``guessed'' $\tnsr V_\text{real}$.
+	However, it is possible that different optimization algorithm and initial guessing conditions will lead to different $\tnsr V_\text{real}$, which is why the strain tensor extracted using this method is not deterministic.
+
+	\end{itemize} 
 \end{enumerate}
+
+Another point worth mentioning here is that the full strain tensor can only be ``guessed'' when the beam energy is known.
+In other words, without the knowledge of the length of \tnsr q (diffraction vector), it is not possible to inferred the whole strain tensor.
+However, if the volume of the unit cell is assumed to remain constant through deformation, the deviatoric component of the strain tensor is not tied to $||\tnsr q||$.
+Thus, it is necessary to add this assumption to the optimization if white beam calibration is not done, which add one more step to get the deviatoric strain component,
+\[
+	\tnsr \epsilon_{dev} = \tnsr \epsilon - \dfrac{1}{3}\text{tr}(\tnsr \epsilon)
+\]
 \section{External Module: ext\_damask}
 
 \section{External Module: ext\_vtk}

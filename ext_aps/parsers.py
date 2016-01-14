@@ -35,6 +35,16 @@ DESCRIPTION
 import numpy as np
 import xml.etree.cElementTree as ET
 
+class VoxelStep(object):
+    """
+    DESCRIPTION
+    -----------
+    Container class for parsing through data?
+    """
+
+     def __init__(self):
+        pass
+
 
 def parser_xml(intput,
                output_mode='txt',
