@@ -62,26 +62,64 @@ class VoxelStep(object):
     lattice:        lattice structure
     """
 
+    __slots__ = ['_Xsample', '_Ysample', '_Zsample', '_depth',
+                 '_qs', '_hkls',
+                 '_astar', '_bstar', '_castar',
+                 '_lc', '_lattice',
+                 '_valid']
+
     def __init__(self):
         # coordinates
-        self.Xsample = np.nan
-        self.Ysample = np.nan
-        self.Zsample = np.nan
-        self.depth   = np.nan
+        self._Xsample = None
+        self._Ysample = None
+        self._Zsample = None
+        self._depth   = None
         # indexing (shape unknown)
-        self.qs      = np.nan
-        self.hkls    = np.nan
+        self._qs      = None
+        self._hkls    = None
         # strain free reciprocal lattice
-        self.astar   = np.nan
-        self.bstar   = np.nan
-        self.cstar   = np.nan
+        self._astar   = None
+        self._bstar   = None
+        self._cstar   = None
         # lattice constant
-        self.lc      = np.nan
-        self.lattice = None
+        self._lc      = None
+        self._lattice = None
         # validation
         self._valid  = False
 
-    def validate(self):
+    # Not the best way to handle data access constrain, but
+    # we have to settle with this for now. No specific doc
+    # is necessary for this section.
+    @property
+    def Xsample(self):
+        return self._Xsample
+
+    @Xsample.setter
+    def Xsample(self, data):
+        self._Xsample = data
+
+    @property
+    def Ysample(self):
+        return self._Ysample
+
+    @Ysample.setter
+    def Ysample(self, data):
+        self._Ysample = data
+
+    @property
+    def Zsample(self):
+        return self._Zsample
+
+    @Zsample.setter
+    def Zsample(self, data):
+        self._Zsample = data
+
+    # Validate data to make sure we got all the fields
+    # we need from the DAXM data file. Sometime the results file
+    # can be corrupted such that only part of the data is available.
+    # In this case, we have no choice but to mark the affect voxel as
+    # corrupted and discard it from the calculation.
+    def validate(self, skip=False):
         """
         DESCRIPTION
         -----------
@@ -91,7 +129,12 @@ class VoxelStep(object):
             self.hkls and self.qs;
             Instance of VoxelStep can only be used when validated.
         """
-        pass
+        # allow bypass the security check
+        if skip:
+            self._valid = True
+            return self._valid
+        # type assert for all data
+
 
     def get_coord(self, ref='TSL'):
         """
@@ -105,11 +148,16 @@ class VoxelStep(object):
         ref: string(case insensitive)
             Name for reference configuration ['TSL'|'APS'|'XHF']
         """
+        if not(self._valid):
+            msg = "Self validation failed, try self.validate()?."
+            raise ValueError(msg)
         pass
 
     def get_eulers(self, ref='TSL'):
         """
         """
+        if not(self._valid):
+            raise ValueError("Invalid data, abort.")
         pass
 
     def get_strain(self):
@@ -138,6 +186,22 @@ class VoxelStep(object):
                 and measurements (self.qs).
         """
         pass
+
+    @static_method
+    def get_bases(lc, lattice_structure='hcp'):
+        """
+        DESCRIPTION
+        -----------
+        PARAMETERS
+        ----------
+        RETURNS
+        -------
+        """
+        lattice_structure = lattice_structure.lower()
+        if lattice_structure == 'hcp':
+            pass
+        else:
+            return NotImplemented
 
 
 def parser_xml(intput,
