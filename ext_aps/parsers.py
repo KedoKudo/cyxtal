@@ -62,12 +62,6 @@ class VoxelStep(object):
     lattice:        lattice structure
     """
 
-    __slots__ = ['_Xsample', '_Ysample', '_Zsample', '_depth',
-                 '_qs', '_hkls',
-                 '_astar', '_bstar', '_castar',
-                 '_lc', '_lattice',
-                 '_valid']
-
     def __init__(self):
         # coordinates
         self._Xsample = None
@@ -96,7 +90,7 @@ class VoxelStep(object):
 
     @Xsample.setter
     def Xsample(self, data):
-        self._Xsample = data
+        self._Xsample = float(data)
 
     @property
     def Ysample(self):
@@ -104,7 +98,7 @@ class VoxelStep(object):
 
     @Ysample.setter
     def Ysample(self, data):
-        self._Ysample = data
+        self._Ysample = float(data)
 
     @property
     def Zsample(self):
@@ -112,7 +106,67 @@ class VoxelStep(object):
 
     @Zsample.setter
     def Zsample(self, data):
-        self._Zsample = data
+        self._Zsample = float(data)
+
+    @property
+    def depth(self):
+        return self._depth
+
+    @depth.setter
+    def depth(self, data):
+        self._depth = float(data)
+
+    @property
+    def hkls(self):
+        return self._hkls
+
+    @hkls.setter
+    def hkls(self, data):
+        self._hkls = np.array(data)
+
+    @property
+    def astar(self):
+        return self._astar
+
+    @astar.setter
+    def astar(self, data):
+        self._astar = np.array(data)
+
+    @property
+    def bstar(self):
+        return self._bstar
+
+    @bstar.setter
+    def bstar(self, data):
+        self._bstar = np.array(data)
+
+    @property
+    def cstar(self):
+        return self._cstar
+
+    @cstar.setter
+    def cstar(self, data):
+        self._cstar = np.array(data)
+
+    @property
+    def lc(self):
+        return self._lc
+
+    @lc.setter
+    def lc(self, data):
+        self._lc = np.array(data)
+
+    @property
+    def lattice(self):
+        return self._lattice
+
+    @lattice.setter
+    def lattice(self, data):
+        self._lattice = np.array(data)
+
+    @property
+    def rv(self):
+        return np.column_stack((self.astar,self.bstar,self.cstar))
 
     # Validate data to make sure we got all the fields
     # we need from the DAXM data file. Sometime the results file
@@ -128,13 +182,35 @@ class VoxelStep(object):
             Prune q vectors, ensure correct mapping between
             self.hkls and self.qs;
             Instance of VoxelStep can only be used when validated.
+            If strain refinement is not required, set skip=True for
+            quick data process.
+        PARAMETERS
+        ----------
+        skip: boolean
+            This flag allow a simple bypass of the type check that
+            ensures all attributes are properly assigned.
+        RETURNS
+        -------
+        self._valid: boolean
+            Return the state of the voxel (valid/invalid)
         """
-        # allow bypass the security check
-        if skip:
-            self._valid = True
-            return self._valid
-        # type assert for all data
-
+        # allow bypass security if necessary
+        if not skip:
+            # assert that all attributes are assigned
+            assert self.Xsample is not None
+            assert self.Ysample is not None
+            assert sefl.Zsample is not None
+            assert self.depth   is not None
+            # calculate qs based on hkl and reciprocal lattice
+            rv = self.rv
+            n_peaks = self.hkls.shape[0]
+            new_qs = np.empty(self.hkls.shape)
+            for i in range(n_peaks):
+                hkl = self.hkls[i]
+                for j in range(self.qs.shape[0]):
+                    q = np.dot(rv, hkl)
+        self._valid = True
+        return self._valid
 
     def get_coord(self, ref='TSL'):
         """
