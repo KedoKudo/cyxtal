@@ -37,4 +37,6 @@ from cyxtal.ctools    import kmeans
 
 import ext_vtk
 import ext_damask
-import ext_aps
+
+from cyxtal.ext_aps.parsers import VoxelStep
+from cyxtal.ext_aps.parsers import parser_xml
