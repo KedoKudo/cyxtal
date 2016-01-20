@@ -362,16 +362,42 @@ class VoxelStep(object):
         # eulers = np.degrees(eulers.asEulers())
         return OrientationMatrix(g).toEulers()
 
-    def get_strain(self):
+    def get_strain(self, ref='TSL'):
         """
-        return strain tensor inferred with current data
+        DESCRIPTION
+        -----------
+        epsilon = self.get_strain(ref='TSL')
+            Return strain tensor extracted/inferred through strain
+            refinement process for current voxel. The returned strain
+            tensor is transformed into designated coordinate system.
+        PARAMETERS
+        ----------
+        RETURNS
+        -------
+        NOTE
+        ----
         """
         strain = np.empty((3,3))
         # check if voxel data is valid
         if not(self._valid):
             print "Corrupted voxel found!"
             return strain.fill(np.nan)
-        # continue on the strain refinement
+        # some preparation before hard computing
+        ref = ref.upper()
+        if ref == "TSL":
+            r = R_XHF2TSL
+        elif ref == "APS":
+            r = R_XHF2APS
+        elif ref == "XHF":
+            r = np.eye(3)
+        else:
+            raise ValueError("Unknown reference configuration")
+        # extract the rotation (transformation matrix)
+        # call strain_refine to find the relaxed set of lattice parameters
+        # calculate deformation gradient
+        # ref: cyxtal/documentation
+        # transform strain tensor to requested configuration
+        pass
 
     def strain_refine(self, new_lc):
         """
@@ -386,6 +412,9 @@ class VoxelStep(object):
         -------
         err:    angular difference between calculated qs using new_lc
                 and measurements (self.qs).
+        NOTE
+        ----
+
         """
         pass
 
