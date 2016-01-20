@@ -60,7 +60,7 @@ class TestBase(unittest.TestCase):
 
     def test_hcp(self):
         rlvs = get_base(self.lc1)
-        target = np.array([[24.59,   0.0,   0.0],
-                           [12.29, 21.29,   0.0],
+        target = np.array([[21.29,   0.0,   0.0],
+                           [12.29, 24.58,   0.0],
                            [  0.0,   0.0, 13.41]])
-        np.testing.assert_almost_equal(rlvs, target)
+        np.testing.assert_almost_equal(rlvs, target, decimal=2)
