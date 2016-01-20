@@ -38,10 +38,29 @@ DESCRIPTION
 
 import unittest
 import numpy as np
-from cyxtal.ext_aps import parsers
+from cyxtal import get_base
 
 # void random seed for testing
 np.random.seed(1960)
 
-class TestParsers(unittest.TestCase):
-    pass
+class TestBase(unittest.TestCase):
+
+    def setUp(self):
+        # generate several different set of lattice constants
+        self.lc1 = np.array([0.29508, 0.29508, 0.46855, 90.0, 90.0, 120.0])
+        self.lc2 = np.array([1.0, 1.0, 1.0, 90.0, 90.0, 90.0])
+        self.lc3 = np.array([0.2965, 0.2965, 0.4747, 90, 90, 120])
+
+    def test_bcc(self):
+        lvs = get_base(self.lc2)
+        target = np.eye(3)*2*np.pi
+        np.testing.assert_almost_equal(lvs, target)
+        rlvs = get_base(self.lc2, reciprocal=True)
+        np.testing.assert_almost_equal(rlvs, target)
+
+    def test_hcp(self):
+        rlvs = get_base(self.lc1)
+        target = np.array([[24.59,   0.0,   0.0],
+                           [12.29, 21.29,   0.0],
+                           [  0.0,   0.0, 13.41]])
+        np.testing.assert_almost_equal(rlvs, target)

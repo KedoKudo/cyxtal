@@ -408,7 +408,9 @@ def parser_xml(intput,
     pass
 
 
-def get_base(lc):
+def get_base(lc,
+             reciprocal=True,
+             va='x'):
     """
     DESCRIPTION
     -----------
@@ -419,35 +421,42 @@ def get_base(lc):
     lc: numpy.array/list/tuple [a,b,c,alpha,beta,gamma]
         Should contain necessary lattice constants that defines
         crystal structure.
+    domain: string [real/reciprocal]
+        Determine which kind of bases should be returned
     RETURNS
     -------
-    basis: numpy.array
+    rst: numpy.array
         A 3x3 numpy array formed by the base vectors of given
         lattice constant. The base vectors are stack by column.
     """
     # unpack lattice constant
     a,b,c,alpha,beta,gamma = lc
     alpha, beta, gamma = np.radians([alpha, beta, gamma])
-    # construct three bases vectors
-    v1 = [a, 0.0, 0.0]
-    v2 = [np.cos(gamma)*b, np.sin(gamma)*b, 0.0]
-
-    # # construct bases
-    # lattice_structure = lattice_structure.upper()
-    # if lattice_structure == 'HCP':
-    #     va = [a, 0.0, 0.0]
-    #     vb = [np.cos(alpha), np.sin(alpha), 0.0]
-    #     vc = [0.0, 0.0, c]
-    #     basis = np.column_stack((va,vb,vc))
-    # elif lattice_structure == 'BCC':
-    #     basis = np.array([ [a,   0.0, 0.0],
-    #                        [0.0,   b, 0.0],
-    #                        [0.0, 0.0,   c] ])
-    # elif lattice_structure == 'FCC':
-    #     basis = np.array([ [a,   0.0, 0.0],
-    #                        [0.0,   b, 0.0],
-    #                        [0.0, 0.0,   c] ])
-    # else:
-    #     return NotImplemented
-    return basis
-
+    # just trying to make syntax cleaner
+    s_a = np.sin(alpha)
+    c_a = np.cos(alpha)
+    s_b = np.sin(beta)
+    c_b = np.cos(beta)
+    s_g = np.sin(gamma)
+    c_g = np.cos(gamma)
+    # calculating base vectors using lattice constants
+    # ref: cyxtal/documentation
+    factor = 1 + 2*c_a*c_b*c_g - c_a**2 - c_b**2 - c_g**2
+    vol_cell = a*b*c*np.sqrt(factor)
+    if va.lower() == 'x':
+        v1 = [a, 0.0, 0.0]
+        v2 = [b*c_g, b*s_g, 0.0]
+        v3 = [c_b/a, (a*c_a-b*c_b*c_g)/(a*b*s_g), vol_cell/(a*b*s_g)]
+    elif va.lower() == 'y':
+        v1 = [0.0, a, 0.0]
+        v2 = [-b*s_g, b*c_g, 0.0]
+        v3 = [(a*c_a-b*c_b*c_g)/(-a*b*s_g), c_b/a, vol_cell/(a*b*s_g)]
+    else:
+        raise ValueError("a has to be either x or y [axis].")
+    rst = np.column_stack((v1,v2,v3))
+    # calculating reciprocal lattice based on real lattice
+    # ref: https://en.wikipedia.org/wiki/Reciprocal_lattice
+    if reciprocal:
+        rst = 2*np.pi*np.linalg.pinv(rst)
+        rst = rst.T
+    return rst

@@ -153,4 +153,21 @@ where $V$ is the volume of the unit cell and can be calculate through
 \[
 	V = abc\sqrt{1 + 2\cos\alpha\cos\beta\cos\gamma - \cos^2\alpha-\cos^2\beta-\cos^2\gamma}.
 \]
+
+Since the correlation between \vctr a and axes are arbitrary, it is also possible to align the \vctr with y-axis, which will gives us
+\[
+	\vctr a' = (0, a, 0)
+\]
+Following similar strategy by constraining \vctr in the x-y plane, we have
+\[
+	\vctr b' = (-b\sin\gamma, b\cos\gamma, 0)
+\]
+The aforementioned relationship between \vctr a, \vctr b and \vctr c still exist, which gives us
+\[
+	\vctr c' =(\dfrac{a\cos\alpha - b\cos\beta\cos\gamma}{-ab\sin\gamma}, \dfrac{\cos\beta}{a}, \dfrac{V}{ab\sin\gamma})
+\] 
+where $V$ is still the volume of the unit cell. 
+
+Comparing this results with the previous, it is clearly a simple rotation around z-axis.
+Thus, the two types of base vectors for a general unit cell are crystallographically equivalent. 
 \end{document}
