@@ -83,4 +83,74 @@ Thus, it is necessary to add this assumption to the optimization if white beam c
 
 \section{External Module: ext\_vtk}
 
+\section{Appendix}
+\subsection{Find Base Vectors from Lattice Constants}
+\label{sec:lc2bv}
+In the strain refinement, one important step is to find the reciprocal lattice vectors from given lattice constants. 
+The easiest way to find the reciprocal lattice vectors is to find its dual, real space lattice vectors. 
+
+\begin{figure}[htp]
+\centering
+\includegraphics[width=.7\linewidth]{UnitCell.png}
+\caption{A general unit cell with its six lattice constants}
+\label{fig:unitcell}
+\end{figure}
+
+\cref{fig:unitcell} shows an example of unit cell randomly oriented in space. 
+Although there are six parameters ($a,b,c, \alpha, \beta, \gamma$) available to describe the shape of the unit cell, the exact numerical representation of the unit cell, namely the base lattice vectors, is not easy to determine. 
+
+To make the math a little bit easier, let assume that \vctr a is align with x-axis, which gives us
+\[
+	\vctr a = (a_1, a_2, a_3) = (a, 0, 0)
+\]
+Then let's determine the x-y plane through \vctr a and \vctr b.
+In other words, \vctr b can be easily written out as
+\[
+	\vctr b = (b_1, b_2, b_3) = (b\cos\gamma, b\sin\gamma, 0)
+\]
+For a general unit cell, the volume of the cell is determined through its six lattice parameters/constants, 
+\[
+	V = abc\sqrt{1 + 2\cos\alpha\cos\beta\cos\gamma - \cos^2\alpha-\cos^2\beta-\cos^2\gamma}
+\]
+The volume of the unit cell can also be calculated through 
+\[
+	V = A_{xy}\cdot c_z = abc_3\sin\gamma 
+\]
+which gives us 
+\[
+	c_3 = \dfrac{V}{ab\sin\gamma}
+\]
+Arbitrary choice of the reference system should not affect the angle between two vectors, which gives us 
+
+\begin{align*}
+	\vctr a \cdot \vctr c &= \cos\beta   = a_1c_1 + a_2c_2 + a_3c_3 \\
+	\vctr b \cdot \vctr c &= \cos\alpha = b_1c_1 + b_2c_2 + b_3c_3	
+\end{align*}
+Since \vctr a and \vctr b are known, we have
+\begin{align*}
+	a_1c_1 + 0 + 0 &= ac_1 = \cos\beta \\
+	b_1c_1 + b_2c_2 + 0 &= bc_1\cos\gamma  + bc_2\sin\gamma  = \cos\alpha
+\end{align*}
+Solve the above linear system, we have
+\begin{align*}
+	c_1 &= \dfrac{\cos\beta}{a} \\
+	c_2 &= \dfrac{\cos\alpha - b\cos\gamma\dfrac{\cos\beta}{a}}{b\sin\gamma} 
+	         = \dfrac{a\cos\alpha - b\cos\beta\cos\gamma}{ab\sin\gamma}
+\end{align*}
+So the last base vector, \vctr c can be expressed as 
+\[
+	\vctr c = (\dfrac{\cos\beta}{a}, \dfrac{a\cos\alpha - b\cos\beta\cos\gamma}{ab\sin\gamma},  \dfrac{V}{ab\sin\gamma})
+\]
+where $V$ is the volume of the unit cell.
+
+To sum it up, for a general unit cell with six lattice parameters known, if we select \vctr a to be x-axis and \vctr b to lie in the x-y plane, the expression of base lattice vectors can be expressed as 
+\begin{align*}
+	\vctr a &= (a, 0, 0) \\
+	\vctr b &= (b\cos\gamma, b\sin\gamma, 0) \\
+	\vctr c &=  (\dfrac{\cos\beta}{a}, \dfrac{a\cos\alpha - b\cos\beta\cos\gamma}{ab\sin\gamma},  \dfrac{V}{ab\sin\gamma})
+\end{align*}
+where $V$ is the volume of the unit cell and can be calculate through
+\[
+	V = abc\sqrt{1 + 2\cos\alpha\cos\beta\cos\gamma - \cos^2\alpha-\cos^2\beta-\cos^2\gamma}.
+\]
 \end{document}

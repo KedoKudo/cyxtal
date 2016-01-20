@@ -389,23 +389,9 @@ class VoxelStep(object):
         """
         pass
 
-    @staticmethod
-    def get_bases(lc, lattice_structure='hcp'):
-        """
-        DESCRIPTION
-        -----------
-        PARAMETERS
-        ----------
-        RETURNS
-        -------
-        """
-        lattice_structure = lattice_structure.lower()
-        if lattice_structure == 'hcp':
-            pass
-        else:
-            return NotImplemented
-
-
+##################################
+# MODULE LEVEL FUNCTIONS/METHODS #
+##################################
 def parser_xml(intput,
                output_mode='txt',
                ref_configuration='TSL',
@@ -420,3 +406,48 @@ def parser_xml(intput,
         Parse the DAXM data from Beamline 34-I-DE to simple ASCII table
     """
     pass
+
+
+def get_base(lc):
+    """
+    DESCRIPTION
+    -----------
+    basis = get_base(lc)
+        return the basis constructed based given lattice constant.
+    PARAMETERS
+    ----------
+    lc: numpy.array/list/tuple [a,b,c,alpha,beta,gamma]
+        Should contain necessary lattice constants that defines
+        crystal structure.
+    RETURNS
+    -------
+    basis: numpy.array
+        A 3x3 numpy array formed by the base vectors of given
+        lattice constant. The base vectors are stack by column.
+    """
+    # unpack lattice constant
+    a,b,c,alpha,beta,gamma = lc
+    alpha, beta, gamma = np.radians([alpha, beta, gamma])
+    # construct three bases vectors
+    v1 = [a, 0.0, 0.0]
+    v2 = [np.cos(gamma)*b, np.sin(gamma)*b, 0.0]
+
+    # # construct bases
+    # lattice_structure = lattice_structure.upper()
+    # if lattice_structure == 'HCP':
+    #     va = [a, 0.0, 0.0]
+    #     vb = [np.cos(alpha), np.sin(alpha), 0.0]
+    #     vc = [0.0, 0.0, c]
+    #     basis = np.column_stack((va,vb,vc))
+    # elif lattice_structure == 'BCC':
+    #     basis = np.array([ [a,   0.0, 0.0],
+    #                        [0.0,   b, 0.0],
+    #                        [0.0, 0.0,   c] ])
+    # elif lattice_structure == 'FCC':
+    #     basis = np.array([ [a,   0.0, 0.0],
+    #                        [0.0,   b, 0.0],
+    #                        [0.0, 0.0,   c] ])
+    # else:
+    #     return NotImplemented
+    return basis
+
