@@ -47,15 +47,33 @@ import xml.etree.cElementTree as ET
 from scipy.optimize import minimize
 from cyxtal.cxtallite import OrientationMatrix
 
-# module level constant
-theta_1   = -0.75*np.pi
+##
+# MODULE LEVEL CONSTANTS RELATING TO COORDINATE TRANSFORMATION
+# <NOTE>
+#   These are defined in terms of rotation matrices since it is
+#   more intuitive to see how each system is connected through
+#   simple rotation around x-axis (see cyxtal/documentation)
+#
+#** XHF <-> TSL
+theta_1   = -np.pi
 R_XHF2TSL = np.array([[1.0,              0.0,              0.0],
                       [0.0,  np.cos(theta_1), -np.sin(theta_1)],
                       [0.0,  np.sin(theta_1),  np.cos(theta_1)]])
+R_TSL2XHF = R_XHF2TSL.T
+#** XHF <-> APS
 theta_2   = -0.25*np.pi
 R_XHF2APS = np.array([[1.0,              0.0,              0.0],
                       [0.0,  np.cos(theta_2), -np.sin(theta_2)],
                       [0.0,  np.sin(theta_2),  np.cos(theta_2)]])
+R_APS2XHF = R_XHF2APS.T
+#** APS <-> TSL
+theta_3   = -0.75*np.pi
+R_APS2TSL = np.array([[1.0,              0.0,              0.0],
+                      [0.0,  np.cos(theta_1), -np.sin(theta_1)],
+                      [0.0,  np.sin(theta_1),  np.cos(theta_1)]])
+R_TSL2APS = R_APS2TSL.T
+#** self <-> self
+R_TSL2TSL = R_APS2APS = R_XHF2XHF = np.eye(3)
 
 
 class VoxelStep(object):
@@ -193,7 +211,7 @@ class VoxelStep(object):
         self._lattice = np.array(data)
 
     @property
-    def v_rl(self):
+    def reciprocal_basis(self):
         # base vectors (matrix) of reciprocal lattice
         return np.column_stack((self.astar,self.bstar,self.cstar))
 
@@ -235,7 +253,7 @@ class VoxelStep(object):
             assert sefl.Zsample is not None
             assert self.depth   is not None
             # prune through qs to remove non-indexed peaks
-            rl = self.v_rl
+            rl = self.reciprocal_basis
             n_peaks = self.hkls.shape[0]
             new_qs = np.empty(self.hkls.shape)
             #**STAET:PRUNING_Q
@@ -290,6 +308,9 @@ class VoxelStep(object):
         if not(self._valid):
             msg = "Self validation failed, try self.validate()?."
             raise ValueError(msg)
+        # calculate voxel position based on motor position in XHF
+        # // This is the quickest way to get the coordinates
+        coord = [-self.Xsample, -self.Ysample, -self.Zsample+self.depth]
         # depends on the desired configuration, change the rotation
         # matrix accordingly
         ref = ref.upper()
@@ -298,11 +319,9 @@ class VoxelStep(object):
         elif ref == 'APS':
             r = R_XHF2APS
         elif ref == 'XHF':
-            r = np.eye(3)
+            r = R_XHF2XHF
         else:
             raise ValueError("unknown configuration")
-        # calculate voxel position based on motor position in XHF
-        coord = [-self.Xsample, -self.Ysample, -self.Zsample+self.depth]
         # since we are changing coordinate system, use orientation matrix
         # or rotation_matrix.transposed
         rst = np.dot(r.T, coord)
@@ -317,6 +336,9 @@ class VoxelStep(object):
         ----------
         ref: string
             The configuration in which the Euler Angles is computed.
+            The default output (a*,b*,c*) in the xml file is in the
+            APS coordinate system according to
+            http://www.aps.anl.gov/Sectors/33_34/microdiff/Instrument/coordinates-PE-system.pdf
         RETURNS
         -------
         phi1,PHI,phi2: tuple
@@ -334,11 +356,11 @@ class VoxelStep(object):
         # get the rotation matrix first
         ref = ref.upper()
         if ref ==  'TSL':
-            r = R_XHF2TSL
+            r = R_APS2TSL
         elif ref == 'APS':
-            r = R_XHF2APS
+            r = R_APS2APS
         elif ref == 'XHF':
-            r = np.eye(3)
+            r = R_APS2XHF
         else:
             raise ValueError("unknown configuration")
         # calculate the real lattice first
@@ -362,7 +384,11 @@ class VoxelStep(object):
         # eulers = np.degrees(eulers.asEulers())
         return OrientationMatrix(g).toEulers()
 
-    def get_strain(self, ref='TSL'):
+    def get_strain(self,
+                   ref='TSL',
+                   method='nelder-mead',
+                   xtor=1e-8,
+                   disp=True):
         """
         DESCRIPTION
         -----------
@@ -376,6 +402,8 @@ class VoxelStep(object):
         -------
         NOTE
         ----
+            Since the strain is approximated using the (a*,b*,c*), which are
+            in the APS coordinate system.
         """
         strain = np.empty((3,3))
         # check if voxel data is valid
@@ -385,33 +413,57 @@ class VoxelStep(object):
         # some preparation before hard computing
         ref = ref.upper()
         if ref == "TSL":
-            r = R_XHF2TSL
+            r = R_APS2TSL
         elif ref == "APS":
-            r = R_XHF2APS
+            r = R_APS2APS
         elif ref == "XHF":
-            r = np.eye(3)
+            r = R_APS2XHF
         else:
             raise ValueError("Unknown reference configuration")
-        # extract the rotation (transformation matrix)
-        # call strain_refine to find the relaxed set of lattice parameters
-        # calculate deformation gradient
+        ##
+        # step 1: extract rotation (transformation).
+        lc_std = self.lc
+        # rlvs_std: reciprocal lattice vectors from standard lattice constants
+        rlvs_std = get_base(lc_std)
+        # rlvs_xrd: reciprocal lattice vectors measured from DAXM(XRD)
+        rlvs_xrd = self.reciprocal_basis
+        # find the rotation matrix that converts a standard basis to the
+        # current reference configuration (this VoxelStep)
+        r_std2xrd = np.dot(rlvs_xrd, np.linalg.inv(rlvs_std))
+        ##
+        # step 2: call scipy.optmize.minimize on the objective function
+        #         self.get_qmismatch to find the ideal set of lattice
+        #         constants that provide best match to measured Q vectors.
+        lc_ini  = lc_std
+        lc_fin  = minimize(self.get_qmismatch,
+                           lc_ini,
+                           args=tuple([r]),
+                           method=method,
+                           options={'xtol': xtor, 'disp': disp})
+        ##
+        # step 3: calculate the stretch tensor using the deformation gradient
+        #         Dr. Tischler is doing all the calculation in the reciprocal
+        #         space, however the deformation gradient is in real space.
         # ref: cyxtal/documentation
-        # transform strain tensor to requested configuration
+
+        ##
+        # step 4: transform strain tensor to requested configuration
         pass
 
-    def strain_refine(self, new_lc):
+    def get_qmismatch(self, lc, r):
         """
         DESCRIPTION
         -----------
-        err = self.strain_refine(new_lc)
+        qmismatch = self.strain_refine(new_lc)
             Return the errors between calculated qs and measurements
         PARAMETERS
         ----------
         new_lc: lattice constant (perturbed)
         RETURNS
         -------
-        err:    angular difference between calculated qs using new_lc
-                and measurements (self.qs).
+        qmismatch:  float
+            angular difference between calculated qs using new_lc and
+            measurements (self.qs).
         NOTE
         ----
 
@@ -439,7 +491,7 @@ def parser_xml(intput,
 
 def get_base(lc,
              reciprocal=True,
-             va='x'):
+             degrees=True):
     """
     DESCRIPTION
     -----------
@@ -450,8 +502,14 @@ def get_base(lc,
     lc: numpy.array/list/tuple [a,b,c,alpha,beta,gamma]
         Should contain necessary lattice constants that defines
         crystal structure.
-    domain: string [real/reciprocal]
-        Determine which kind of bases should be returned
+    reciprocal: boolean
+        Whether the returned basis vectors in real reciprocal space
+        or real space.
+    va: basis vector construct convention ['x'/'y']
+        The a vector should either lies along x-axis or y-axis. Default
+        set to x-axis as this is what has been used in APS@ANL.
+    degree: boolean
+        The angular lattice parameter are in degrees or radians.
     RETURNS
     -------
     rst: numpy.array
@@ -460,7 +518,8 @@ def get_base(lc,
     """
     # unpack lattice constant
     a,b,c,alpha,beta,gamma = lc
-    alpha, beta, gamma = np.radians([alpha, beta, gamma])
+    if degrees:
+        alpha, beta, gamma = np.radians([alpha, beta, gamma])
     # just trying to make syntax cleaner
     s_a = np.sin(alpha)
     c_a = np.cos(alpha)
@@ -472,16 +531,10 @@ def get_base(lc,
     # ref: cyxtal/documentation
     factor = 1 + 2*c_a*c_b*c_g - c_a**2 - c_b**2 - c_g**2
     vol_cell = a*b*c*np.sqrt(factor)
-    if va.lower() == 'x':
-        v1 = [a, 0.0, 0.0]
-        v2 = [b*c_g, b*s_g, 0.0]
-        v3 = [c_b/a, (a*c_a-b*c_b*c_g)/(a*b*s_g), vol_cell/(a*b*s_g)]
-    elif va.lower() == 'y':
-        v1 = [0.0, a, 0.0]
-        v2 = [-b*s_g, b*c_g, 0.0]
-        v3 = [(a*c_a-b*c_b*c_g)/(-a*b*s_g), c_b/a, vol_cell/(a*b*s_g)]
-    else:
-        raise ValueError("a has to be either x or y [axis].")
+    v1 = [a, 0.0, 0.0]
+    v2 = [b*c_g, b*s_g, 0.0]
+    v3 = [c*c_b, c*(c_a-c_b*c_g)/(s_g), vol_cell/(a*b*s_g)]
+    # form the base
     rst = np.column_stack((v1,v2,v3))
     # calculating reciprocal lattice based on real lattice
     # ref: https://en.wikipedia.org/wiki/Reciprocal_lattice

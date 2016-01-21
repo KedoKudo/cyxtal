@@ -123,23 +123,24 @@ which gives us
 Arbitrary choice of the reference system should not affect the angle between two vectors, which gives us 
 
 \begin{align*}
-	\vctr a \cdot \vctr c &= \cos\beta   = a_1c_1 + a_2c_2 + a_3c_3 \\
-	\vctr b \cdot \vctr c &= \cos\alpha = b_1c_1 + b_2c_2 + b_3c_3	
+	\vctr a \cdot \vctr c &= ac\cos\beta   = a_1c_1 + a_2c_2 + a_3c_3 \\
+	\vctr b \cdot \vctr c &= bc\cos\alpha = b_1c_1 + b_2c_2 + b_3c_3	
 \end{align*}
 Since \vctr a and \vctr b are known, we have
 \begin{align*}
-	a_1c_1 + 0 + 0 &= ac_1 = \cos\beta \\
-	b_1c_1 + b_2c_2 + 0 &= bc_1\cos\gamma  + bc_2\sin\gamma  = \cos\alpha
+	a_1c_1 + 0 + 0 &= ac_1 = ac\cos\beta \\
+	b_1c_1 + b_2c_2 + 0 &= bc_1\cos\gamma  + bc_2\sin\gamma  = bc\cos\alpha
 \end{align*}
 Solve the above linear system, we have
 \begin{align*}
-	c_1 &= \dfrac{\cos\beta}{a} \\
-	c_2 &= \dfrac{\cos\alpha - b\cos\gamma\dfrac{\cos\beta}{a}}{b\sin\gamma} 
-	         = \dfrac{a\cos\alpha - b\cos\beta\cos\gamma}{ab\sin\gamma}
+	c_1 &= c\cos\beta \\
+	c_2 &= \dfrac{\cos\alpha - \cos\beta\cos\gamma}{\sin\gamma}c
 \end{align*}
 So the last base vector, \vctr c can be expressed as 
 \[
-	\vctr c = (\dfrac{\cos\beta}{a}, \dfrac{a\cos\alpha - b\cos\beta\cos\gamma}{ab\sin\gamma},  \dfrac{V}{ab\sin\gamma})
+	\vctr c = ( c \: \cos\beta, 
+	                c \: \dfrac{\cos\alpha - \cos\beta\cos\gamma}{\sin\gamma}, 
+	                \dfrac{V}{ab\sin\gamma})
 \]
 where $V$ is the volume of the unit cell.
 
@@ -147,27 +148,15 @@ To sum it up, for a general unit cell with six lattice parameters known, if we s
 \begin{align*}
 	\vctr a &= (a, 0, 0) \\
 	\vctr b &= (b\cos\gamma, b\sin\gamma, 0) \\
-	\vctr c &=  (\dfrac{\cos\beta}{a}, \dfrac{a\cos\alpha - b\cos\beta\cos\gamma}{ab\sin\gamma},  \dfrac{V}{ab\sin\gamma})
+	\vctr c &= ( c \: \cos\beta, 
+	                c \: \dfrac{\cos\alpha - \cos\beta\cos\gamma}{\sin\gamma}, 
+	                \dfrac{V}{ab\sin\gamma})
 \end{align*}
 where $V$ is the volume of the unit cell and can be calculate through
 \[
 	V = abc\sqrt{1 + 2\cos\alpha\cos\beta\cos\gamma - \cos^2\alpha-\cos^2\beta-\cos^2\gamma}.
 \]
 
-Since the correlation between \vctr a and axes are arbitrary, it is also possible to align the \vctr with y-axis, which will gives us
-\[
-	\vctr a' = (0, a, 0)
-\]
-Following similar strategy by constraining \vctr in the x-y plane, we have
-\[
-	\vctr b' = (-b\sin\gamma, b\cos\gamma, 0)
-\]
-The aforementioned relationship between \vctr a, \vctr b and \vctr c still exist, which gives us
-\[
-	\vctr c' =(\dfrac{a\cos\alpha - b\cos\beta\cos\gamma}{-ab\sin\gamma}, \dfrac{\cos\beta}{a}, \dfrac{V}{ab\sin\gamma})
-\] 
-where $V$ is still the volume of the unit cell. 
-
-Comparing this results with the previous, it is clearly a simple rotation around z-axis.
-Thus, the two types of base vectors for a general unit cell are crystallographically equivalent. 
+Another convection would be forcing \vctr b to be parallel to y-axis, however this convention has been dropped at APS.
+Thus, there is no reason to consider other situation anymore.
 \end{document}

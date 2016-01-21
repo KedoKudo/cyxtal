@@ -59,8 +59,23 @@ class TestBase(unittest.TestCase):
         np.testing.assert_almost_equal(rlvs, target)
 
     def test_hcp(self):
+        lvs = get_base(self.lc1, reciprocal=False)
         rlvs = get_base(self.lc1)
-        target = np.array([[21.29,   0.0,   0.0],
-                           [12.29, 24.58,   0.0],
-                           [  0.0,   0.0, 13.41]])
-        np.testing.assert_almost_equal(rlvs, target, decimal=2)
+        target_v = np.array([
+                             [+0.2950800,  -0.1475400,  +0.0000000],
+                             [+0.0000000,  +0.2555468,  +0.0000000],
+                             [+0.0000000,  +0.0000000,  +0.4685500] ])
+        target_rv = np.array([
+                              [+21.293159,    +0.000000,   +0.000000],
+                              [+12.293611,   +24.587222,   -0.000000],
+                              [ -0.000000,    -0.000000,  +13.409850] ])
+        # test real lattice
+        np.testing.assert_almost_equal(lvs, target_v)
+        # test reciprocal lattice
+        np.testing.assert_almost_equal(rlvs, target_rv, decimal=6)
+
+
+
+
+if __name__ == '__main__':
+    unittest.main()
