@@ -159,4 +159,33 @@ where $V$ is the volume of the unit cell and can be calculate through
 
 Another convection would be forcing \vctr b to be parallel to y-axis, however this convention has been dropped at APS.
 Thus, there is no reason to consider other situation anymore.
+
+\subsection{Coordinates Transformation for DAXM Dataset}
+\label{sec:coord}
+Due to experiment setup of DAXM characterization, there are three different coordinate systems related to our data processing (\cref{fig:daxmcoord}):
+\begin{itemize}
+\item \textcolor{blue}{\textbf{XHF}} \\
+This is the configuration closely tied to the sample stage motor, which records sample movement during the scan.
+The spatial position for each voxel in the DAXM data can be directly calculated from the recording of the motor position (Xsample/Ysample/Zsample) and the wire position(depth).
+
+\item \textcolor{red}{\textbf{APS}} \\
+This is the official coordinate system at APS, where the beam direction is the z-axis.
+At beamline 34-ID-E, the indexation results is computed in this coordinate system.
+In other words, the indexation results, including the reciprocal lattice and diffraction vectors (\tnsr q) are all in this coordinate system.
+
+\item \textcolor{black}{\textbf{TSL}} \\
+This coordinate system is closely tied to the sample where the sample surface normal is usually consider to be z-axis. 
+It is also the default coordinate system in TSL software, where OIM data is processed. 
+To make the coordinate system transformation easier, the x-axis in the TSL system is aligned with the x-axis in APS coordinate system.
+However, this could be changed depending on how the sample is mounted in during EBSD and DAXM scan.
+
+\end{itemize}
+
+\begin{figure}[htp]
+\centering
+\includegraphics[width=.7\linewidth]{daxmcoord.png}
+\caption{Three different coordinate system in DAXM characterization, assuming x-axis is shared by APS and TSL coordinate system.}
+\label{fig:daxmcoord}
+\end{figure}
+
 \end{document}
