@@ -79,11 +79,17 @@ where $\tnsr q_\text{calculated}$ can be calculated by
 \]
 
 Here $\tnsr B^*_\text{strained}$ is the basis in reciprocal space whose columnar vectors are the reciprocal base vectors and $\vctr v_\text{hkl}$ is the indexation for the diffraction peak.
-
-The relationship between $\tnsr B$ and $\tnsr B^*$ is
+The relationship between $\tnsr B$ and $\tnsr B^*$ can be found through
 \[
 	\tnsr B^* = 2 \pi \tnsr B^{-T}
 \]
+
+One of the problem of using numerical approach is that it might leads to a set of lattice constants that satisfy our criterion but completely unrealistic. 
+To avoid situation like this, the objective function for the optimization of strain refinement is constructed with both the mismatch of \tnsr Q as well as the change in the volume of the unit cell, 
+\[
+	F(\tnsr x) = \sum \tnsr q_\text{calculated} \cdot \tnsr q_\text{measured} + \Delta V_\text{unitcell}
+\]
+where \tnsr x represents the lattice constant vector, $\tnsr x = (a,b,c,\alpha,\beta,\gamma)$
 
 Considering most of the searching will be done in the reciprocal space, it is necessary to find the connection between $\tnsr B^*$ and \tnsr F.
 
