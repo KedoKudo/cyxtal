@@ -444,6 +444,7 @@ class VoxelStep(object):
         # step 3: calculate the stretch tensor using the deformation gradient
         #         Dr. Tischler is doing all the calculation in the reciprocal
         #         space, however the deformation gradient is in real space.
+        #         Based on the derivation in the reference, the
         # ref: cyxtal/documentation
 
         ##
