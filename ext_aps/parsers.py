@@ -69,8 +69,8 @@ R_APS2XHF = R_XHF2APS.T
 #** APS <-> TSL
 theta_3   = -0.75*np.pi
 R_APS2TSL = np.array([[1.0,              0.0,              0.0],
-                      [0.0,  np.cos(theta_1), -np.sin(theta_1)],
-                      [0.0,  np.sin(theta_1),  np.cos(theta_1)]])
+                      [0.0,  np.cos(theta_3), -np.sin(theta_3)],
+                      [0.0,  np.sin(theta_3),  np.cos(theta_3)]])
 R_TSL2APS = R_APS2TSL.T
 #** self <-> self
 R_TSL2TSL = R_APS2APS = R_XHF2XHF = np.eye(3)
@@ -413,17 +413,6 @@ class VoxelStep(object):
         if not(self._valid):
             print "Corrupted voxel found!"
             return strain.fill(np.nan)
-        # some preparation before hard computing
-        ref = ref.upper()
-        if ref == "TSL":
-            r = R_APS2TSL
-        elif ref == "APS":
-            r = R_APS2APS
-        elif ref == "XHF":
-            r = R_APS2XHF
-        else:
-            raise ValueError("Unknown reference configuration")
-        g = r.T  # orientation matrix is used to reference transformation
         ##
         # step 1: extract rotation (transformation).
         lc_std = self.lc
@@ -473,6 +462,18 @@ class VoxelStep(object):
             epsilon = epsilon - np.eye(3)*np.trace(epsilon)/3.0
         ##
         # step 4: transform strain tensor to requested configuration
+        # some preparation before hard computing
+        ref = ref.upper()
+        if ref == "TSL":
+            r = R_APS2TSL
+        elif ref == "APS":
+            r = R_APS2APS
+        elif ref == "XHF":
+            r = R_APS2XHF
+        else:
+            raise ValueError("Unknown reference configuration")
+        # orientation matrix is used to reference transformation
+        g = r.T
         return np.dot(g, np.dot(epsilon, g.T))
 
     def strain_refine(self, lc, r, msk):
@@ -504,7 +505,7 @@ class VoxelStep(object):
         # Penalty: delta_Vcell
         #   first calculate the changes in the unit cell volume
         #   use 20% of the change in volume as the penalty term
-        wgt = 0.008
+        wgt = 0.0088
         Vcell0 = np.linalg.det(self.reciprocal_basis)
         Vcell2 = np.linalg.det(Bstar_2)
         dVcell = abs(Vcell2 - Vcell0)
