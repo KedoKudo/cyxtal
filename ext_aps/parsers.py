@@ -250,7 +250,7 @@ class VoxelStep(object):
             # assert that all attributes are assigned
             assert self.Xsample is not None
             assert self.Ysample is not None
-            assert sefl.Zsample is not None
+            assert self.Zsample is not None
             assert self.depth   is not None
             # prune through qs to remove non-indexed peaks
             rl = self.reciprocal_basis
@@ -387,9 +387,12 @@ class VoxelStep(object):
     def get_strain(self,
                    ref='TSL',
                    method='nelder-mead',
+                   mask=(0,0,0,0,0,0),
                    xtor=1e-8,
                    disp=True,
-                   deviatoric=True):
+                   deviatoric=True,
+                   maxiter=1e6,
+                   approximate=False):
         """
         DESCRIPTION
         -----------
@@ -432,7 +435,7 @@ class VoxelStep(object):
         # Bstar_3: strain free, rotated reciprocal lattice
         #          forced u_lattice = I
         Bstar_0 = get_base(lc_std)
-        BStar_3 = self.reciprocal_basis
+        Bstar_3 = self.reciprocal_basis
         # find the rotation matrix that converts a standard reciprocal basis
         # to the APS configuration
         r_lattice = np.dot(Bstar_3, np.linalg.inv(Bstar_0))
@@ -441,11 +444,17 @@ class VoxelStep(object):
         #         self.get_qmismatch to find the ideal set of lattice
         #         constants that provide best match to measured Q vectors.
         lc_ini  = lc_std
-        lc_fin  = minimize(self.strain_refine,
+        refine  = minimize(self.strain_refine,
                            lc_ini,
-                           args=tuple([r_lattice]),
+                           args=tuple([r_lattice, mask]),
                            method=method,
-                           options={'xtol': xtor, 'disp': disp})
+                           options={'xtol': xtor,
+                                    'disp': disp,
+                                    'maxiter': int(maxiter),
+                                    'maxfev' : int(maxiter)})
+        print "ideal: ", self.lc
+        print refine
+        lc_fin = refine.x
         ##
         # step 3: calculate the stretch tensor using the deformation gradient
         #         Dr. Tischler is doing all the calculation in the reciprocal
@@ -456,6 +465,8 @@ class VoxelStep(object):
         # Bstar_2 = np.dot(r_lattice, Bstar_1)
         u_fin = np.dot(np.linalg.inv(Bstar_1.T), Bstar_0.T)
         epsilon = 0.5*(np.dot(u_fin.T, u_fin) - np.eye(3))
+        if approximate:
+            epsilon = u_fin - np.eye(3)  # approximation
         # if no white beam energy provided, remove the hydrostatic component
         # as it has no physical meaning
         if deviatoric:
@@ -464,7 +475,7 @@ class VoxelStep(object):
         # step 4: transform strain tensor to requested configuration
         return np.dot(g, np.dot(epsilon, g.T))
 
-    def strain_refine(self, lc, r):
+    def strain_refine(self, lc, r, msk):
         """
         DESCRIPTION
         -----------
@@ -483,11 +494,21 @@ class VoxelStep(object):
         ----
 
         """
+        # only perturb the lattice parameter indicated by the mask
+        # 1 means keep ideal, 0 means perturb
+        for i in range(6):
+            if msk[i] == 1:
+                lc[i] = self.lc[i]
         Bstar_1 = get_base(lc)
         Bstar_2 = np.dot(r, Bstar_1)
-        # first calculate the changes in the unit cell volume
-        # use 20% of the change in volume as the penalty term
-        rst = 0.2*abs(np.linalg.det(Bstar_2) - np.linalg.det(reciprocal_basis))
+        # Penalty: delta_Vcell
+        #   first calculate the changes in the unit cell volume
+        #   use 20% of the change in volume as the penalty term
+        wgt = 0.008
+        Vcell0 = np.linalg.det(self.reciprocal_basis)
+        Vcell2 = np.linalg.det(Bstar_2)
+        dVcell = abs(Vcell2 - Vcell0)
+        rst = dVcell*wgt
         # now add angular differences into the control
         hkls = self.hkls
         qs = self.qs
@@ -567,6 +588,6 @@ def get_base(lc,
     # calculating reciprocal lattice based on real lattice
     # ref: https://en.wikipedia.org/wiki/Reciprocal_lattice
     if reciprocal:
-        rst = 2*np.pi*np.linalg.pinv(rst)
+        rst = 2*np.pi*np.linalg.inv(rst)
         rst = rst.T
     return rst
