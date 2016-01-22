@@ -388,7 +388,8 @@ class VoxelStep(object):
                    ref='TSL',
                    method='nelder-mead',
                    xtor=1e-8,
-                   disp=True):
+                   disp=True,
+                   deviatoric=True):
         """
         DESCRIPTION
         -----------
@@ -405,7 +406,6 @@ class VoxelStep(object):
             Since the strain is approximated using the (a*,b*,c*), which are
             in the APS coordinate system.
         """
-        strain = np.empty((3,3))
         # check if voxel data is valid
         if not(self._valid):
             print "Corrupted voxel found!"
@@ -420,24 +420,30 @@ class VoxelStep(object):
             r = R_APS2XHF
         else:
             raise ValueError("Unknown reference configuration")
+        g = r.T  # orientation matrix is used to reference transformation
         ##
         # step 1: extract rotation (transformation).
         lc_std = self.lc
-        # rlvs_std: reciprocal lattice vectors from standard lattice constants
-        rlvs_std = get_base(lc_std)
-        # rlvs_xrd: reciprocal lattice vectors measured from DAXM(XRD)
-        rlvs_xrd = self.reciprocal_basis
-        # find the rotation matrix that converts a standard basis to the
-        # current reference configuration (this VoxelStep)
-        r_std2xrd = np.dot(rlvs_xrd, np.linalg.inv(rlvs_std))
+        # Bstar_0: strain free, rotation free reciprocal basis
+        # Bstar_1: stretched, rotation free reciprocal basis,
+        #          Bstar_1 = u_lattice * Bstar_0
+        # Bstar_2: stretch and rotated basis,
+        #          Bstar_2 = r_lattice * Bstar_1
+        # Bstar_3: strain free, rotated reciprocal lattice
+        #          forced u_lattice = I
+        Bstar_0 = get_base(lc_std)
+        BStar_3 = self.reciprocal_basis
+        # find the rotation matrix that converts a standard reciprocal basis
+        # to the APS configuration
+        r_lattice = np.dot(Bstar_3, np.linalg.inv(Bstar_0))
         ##
         # step 2: call scipy.optmize.minimize on the objective function
         #         self.get_qmismatch to find the ideal set of lattice
         #         constants that provide best match to measured Q vectors.
         lc_ini  = lc_std
-        lc_fin  = minimize(self.get_qmismatch,
+        lc_fin  = minimize(self.strain_refine,
                            lc_ini,
-                           args=tuple([r]),
+                           args=tuple([r_lattice]),
                            method=method,
                            options={'xtol': xtor, 'disp': disp})
         ##
@@ -446,30 +452,51 @@ class VoxelStep(object):
         #         space, however the deformation gradient is in real space.
         #         Based on the derivation in the reference, the
         # ref: cyxtal/documentation
-
+        Bstar_1 = get_base(lc_fin)
+        # Bstar_2 = np.dot(r_lattice, Bstar_1)
+        u_fin = np.dot(np.linalg.inv(Bstar_1.T), Bstar_0.T)
+        epsilon = 0.5*(np.dot(u_fin.T, u_fin) - np.eye(3))
+        # if no white beam energy provided, remove the hydrostatic component
+        # as it has no physical meaning
+        if deviatoric:
+            epsilon = epsilon - np.eye(3)*np.trace(epsilon)/3.0
         ##
         # step 4: transform strain tensor to requested configuration
-        pass
+        return np.dot(g, np.dot(epsilon, g.T))
 
-    def get_qmismatch(self, lc, r):
+    def strain_refine(self, lc, r):
         """
         DESCRIPTION
         -----------
-        qmismatch = self.strain_refine(new_lc)
+        rst = self.strain_refine(new_lc)
             Return the errors between calculated qs and measurements
         PARAMETERS
         ----------
         new_lc: lattice constant (perturbed)
         RETURNS
         -------
-        qmismatch:  float
+        rst:  float
             angular difference between calculated qs using new_lc and
-            measurements (self.qs).
+            measurements (self.qs). A penalty term (delta_V) is added
+            to ensure no large strain happens to the unit cell.
         NOTE
         ----
 
         """
-        pass
+        Bstar_1 = get_base(lc)
+        Bstar_2 = np.dot(r, Bstar_1)
+        # first calculate the changes in the unit cell volume
+        # use 20% of the change in volume as the penalty term
+        rst = 0.2*abs(np.linalg.det(Bstar_2) - np.linalg.det(reciprocal_basis))
+        # now add angular differences into the control
+        hkls = self.hkls
+        qs = self.qs
+        for i in range(qs.shape[0]):
+            # calculate new Q vector based on perturbed unit cell
+            q_tmp = np.dot(Bstar_2, hkls[i])
+            q_tmp = q_tmp/np.linalg.norm(q_tmp)
+            rst += abs(np.dot(q_tmp, qs[i]))
+        return rst
 
 ##################################
 # MODULE LEVEL FUNCTIONS/METHODS #
