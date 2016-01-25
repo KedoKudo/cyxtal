@@ -310,3 +310,68 @@ cdef inline void smart_seed(DTYPE_t[:,:] data,
             weights[j] /= norm
         seed_id[i] = choice(ndata, 1, p=weights)
 
+
+##
+# calculating von Mises stress based on given stress tensor
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cpdef get_vonMisesStress(DTYPE_t[:,:] tnsr):
+    """
+    DESCRIPTION
+    -----------
+    sigma_von = get_vonMisesStress(stress_tnsr)
+        calculate von Mises stress for given stress tensor
+    PARAMETERS
+    ----------
+    tnsr: DTYPE_t
+        stress tensor
+    RETURNS
+    -------
+    sigma_von: DTYPE_t
+        von Mises equivalent of stress tensor
+    NOTES
+    -----
+        Following DAMASK convention.
+    ----------
+    """
+    cdef np.ndarray sigma_dev = np.empty((3,3), dtype=DTYPE)
+    cdef np.ndarray         I = np.eye(3)
+    cdef DTYPE_t    sigma_von = 0.0
+
+    sigma_dev = tnsr - np.trace(tnsr)/3.0 * I
+    sigma_von = np.sqrt(3.0/2.0*np.sum(sigma_dev**2))
+
+    return sigma_von
+
+
+##
+# calculating von Mises strain based on given strain tensor
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cpdef get_vonMisesStrain(DTYPE_t[:,:] tnsr):
+    """
+    DESCRIPTION
+    -----------
+    epsilon_von = get_vonMisesStrain(strain_tnsr)
+        calculate von Mises strain for given strain tensor
+    PARAMETERS
+    ----------
+    tnsr: DTYPE_t
+        strain tensor
+    RETURNS
+    -------
+    epsilon_von: DTYPE_t
+        von Mises equivalent of strain tensor
+    NOTES
+    -----
+        Following DAMASK convention.
+    ----------
+    """
+    cdef np.ndarray epsilon_dev = np.empty((3,3), dtype=DTYPE)
+    cdef np.ndarray         I   = np.eye(3)
+    cdef DTYPE_t    epsilon_von = 0.0
+
+    epsilon_dev = tnsr - np.trace(tnsr)/3.0 * I
+    epsilon_von = np.sqrt(2.0/3.0*np.sum(epsilon_dev**2))
+
+    return epsilon_von

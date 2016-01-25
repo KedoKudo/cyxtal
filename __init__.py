@@ -34,6 +34,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 from cyxtal.cxtallite import symmetry
 from cyxtal.cxtallite import Quaternion
 from cyxtal.ctools    import kmeans
+from cyxtal.ctools    import get_vonMisesStress
+from cyxtal.ctools    import get_vonMisesStrain
 
 import ext_vtk
 import ext_damask

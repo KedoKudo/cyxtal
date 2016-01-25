@@ -496,16 +496,16 @@ class VoxelStep(object):
 
         """
         # only perturb the lattice parameter indicated by the mask
-        # 1 means keep ideal, 0 means perturb
+        # 0 means keep ideal, 1 means perturb
         for i in range(6):
-            if msk[i] == 1:
+            if msk[i] == 0:
                 lc[i] = self.lc[i]
         Bstar_1 = get_base(lc)
         Bstar_2 = np.dot(r, Bstar_1)
         # Penalty: delta_Vcell
         #   first calculate the changes in the unit cell volume
         #   use 20% of the change in volume as the penalty term
-        wgt = 0.0088
+        wgt = 0.1
         Vcell0 = np.linalg.det(self.reciprocal_basis)
         Vcell2 = np.linalg.det(Bstar_2)
         dVcell = abs(Vcell2 - Vcell0)

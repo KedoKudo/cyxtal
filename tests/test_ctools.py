@@ -39,7 +39,9 @@ DESCRIPTION
 
 import unittest
 import numpy as np
-from cyxtal.ctools import kmeans
+from cyxtal import kmeans
+from cyxtal import get_vonMisesStress
+from cyxtal import get_vonMisesStrain
 
 # void random seed for testing
 np.random.seed(1960)
@@ -89,6 +91,26 @@ class TestKmeans(unittest.TestCase):
         # assert find right number of clusters
         self.assertEqual(len(cnt), self.k)
 
+
+class TestGeneral(unittest.TestCase):
+
+    def setUp(self):
+        self.stress = np.array([[ 1, 2, 3],
+                                [ 2, 4, 5],
+                                [ 3, 5,-5]], dtype=np.float64)
+        self.strain = np.array([[ 1, 2,-1],
+                                [ 2, 0, 1],
+                                [-1, 1,-1]], dtype=np.float64)
+
+    def test_vonMisesStress(self):
+        target = 13.3041347
+        np.testing.assert_almost_equal(target,
+                                       get_vonMisesStress(self.stress))
+
+    def test_vonMisesStrain(self):
+        target = 3.055050463
+        np.testing.assert_almost_equal(target,
+                                       get_vonMisesStrain(self.strain))
 
 if __name__ == '__main__':
     unittest.main()
