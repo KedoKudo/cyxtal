@@ -40,6 +40,7 @@ import unittest
 import numpy as np
 from cyxtal import get_base
 from cyxtal import VoxelStep
+from cyxtal import get_vonMisesStrain
 
 # void random seed for testing
 np.random.seed(1960)
@@ -188,6 +189,7 @@ class TestStrainRefine(unittest.TestCase):
         self.data = tmp
 
     def test_strainRefine(self):
+        print "The strain refinement is still in experiment stage."
         # set target values
         epsilonAPS100111 = np.array([
                [ 0.00120322, -0.00592183, -0.0101301 ],
@@ -199,9 +201,14 @@ class TestStrainRefine(unittest.TestCase):
                [-0.00731337,  0.00756606,  -0.0373786]])
         # perform strain refine
         epsilon_aps = self.data.get_strain(ref='APS',
-                                           mask=(1,1,0,1,1,1))
-        np.testing.assert_almost_equal(epsilonAPS100111, epsilon_aps)
+                                           mask=(1,1,1,1,1,1))
+        print "von Mises Strain (Igor | Cyxtal)"
+        print get_vonMisesStrain(epsilonAPS110111),
+        print " | ",
+        print get_vonMisesStrain(epsilon_aps)
         np.testing.assert_almost_equal(epsilonAPS110111, epsilon_aps)
+        np.testing.assert_almost_equal(epsilonAPS100111, epsilon_aps)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -44,8 +44,9 @@ More information regarding the coordinate transformation can be found at:
 import h5py  as h5
 import numpy as np
 import xml.etree.cElementTree as ET
-from scipy.optimize import minimize
+from scipy.optimize   import minimize
 from cyxtal.cxtallite import OrientationMatrix
+from cyxtal           import get_vonMisesStrain
 
 ##
 # MODULE LEVEL CONSTANTS RELATING TO COORDINATE TRANSFORMATION
@@ -387,7 +388,7 @@ class VoxelStep(object):
     def get_strain(self,
                    ref='TSL',
                    method='nelder-mead',
-                   mask=(0,0,0,0,0,0),
+                   mask=(1,1,1,1,1,1),
                    xtor=1e-8,
                    disp=True,
                    deviatoric=True,
@@ -474,7 +475,8 @@ class VoxelStep(object):
             raise ValueError("Unknown reference configuration")
         # orientation matrix is used to reference transformation
         g = r.T
-        return np.dot(g, np.dot(epsilon, g.T))
+        epsilon = np.dot(g, np.dot(epsilon, g.T))
+        return epsilon
 
     def strain_refine(self, lc, r, msk):
         """
@@ -502,14 +504,29 @@ class VoxelStep(object):
                 lc[i] = self.lc[i]
         Bstar_1 = get_base(lc)
         Bstar_2 = np.dot(r, Bstar_1)
-        # Penalty: delta_Vcell
+        ##
+        # Penalty Type 1: delta_Vcell (relative)
         #   first calculate the changes in the unit cell volume
-        #   use 20% of the change in volume as the penalty term
-        wgt = 0.1
+        wgt = 100
         Vcell0 = np.linalg.det(self.reciprocal_basis)
         Vcell2 = np.linalg.det(Bstar_2)
-        dVcell = abs(Vcell2 - Vcell0)
-        rst = dVcell*wgt
+        dVcell = 0.5*(abs(Vcell2 - Vcell0)/Vcell0 + abs(Vcell2 - Vcell0)/Vcell2)
+        rst = wgt*dVcell
+        ##
+        # Penalty Type 2: force lattice constants
+        # lc0 = self.lc
+        # diff = np.absolute(lc - lc0)
+        # dilation = sum(diff[0:3]) * 1.0
+        # angular  = sum(diff[3:6]) * 1.0
+        # rst = dilation + angular
+        ##
+        # Penalty Type 3: separate volume change
+        # lc0 = self.lc
+        # diff = np.absolute(lc - lc0)
+        # v_dilation = diff[0]*diff[1]*diff[2]
+        # tmp = np.array(map(np.cos, map(np.radians,diff[3:6])))
+        # v_angular = np.sqrt(1 + 2*tmp[0]*tmp[1]*tmp[2] - sum(tmp**2))
+        # rst = 1.0*v_dilation + 10.0*v_angular
         # now add angular differences into the control
         hkls = self.hkls
         qs = self.qs
