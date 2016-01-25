@@ -209,6 +209,14 @@ class TestStrainRefine(unittest.TestCase):
         np.testing.assert_almost_equal(epsilonAPS110111, epsilon_aps)
         np.testing.assert_almost_equal(epsilonAPS100111, epsilon_aps)
 
+class TestXMLParsing(unittest.TestCase):
+
+    def setUp(self):
+        self.fname = "test.xml"
+
+    def test_parseXML(self):
+        pass
+
 
 if __name__ == '__main__':
     unittest.main()
