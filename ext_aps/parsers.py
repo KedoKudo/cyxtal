@@ -528,7 +528,7 @@ class VoxelStep(object):
         Bstar_2 = np.dot(r, Bstar_1)
         # Penalty: delta_Vcell (relative)
         #   first calculate the changes in the unit cell volume
-        wgt = 1e2
+        wgt = 2e2
         Vcell0 = 2.0*np.pi/np.linalg.det(self.reciprocal_basis)
         Vcell2 = 2.0*np.pi/np.linalg.det(Bstar_2)
         dVcell = abs(Vcell2 - Vcell0)/Vcell0
@@ -549,8 +549,6 @@ class VoxelStep(object):
 ##################################
 def parse_xml(xmlfile,
               namespace={'step':'http://sector34.xor.aps.anl.gov/34ide:indexResult'},
-              ref='TSL',
-              strain_refine=True,
               disp=True):
     """
     DESCRIPTION
@@ -647,18 +645,6 @@ def parse_xml(xmlfile,
         print "  Valid voxel for DAXM analysis:\t{}".format(len(voxels))
         print "  Dataset goodness:\t\t\t{:.2%}".format(float(len(voxels))/len(root))
         print sep_tail
-    # strain refinement
-    if strain_refine:
-        if disp:
-            print sep_head
-            print "Performing strain refinement for all"
-        for i in range(len(voxels)):
-            if disp:
-                state = float(i+1)/len(voxels)
-                bar = '[' + '#'*int(state*10) + ' '*(10-int(state*10)) + ']'
-                print '\r'+bar+'{:.2%}'.format(state),
-            voxels[i].strain = voxels[i].get_strain(ref=ref, disp=False)
-            voxels[i].strain_von = get_vonMisesStrain(voxels[i].strain)
 
     return voxels
 
