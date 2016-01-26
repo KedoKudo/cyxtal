@@ -41,6 +41,7 @@ import numpy as np
 from cyxtal import get_base
 from cyxtal import VoxelStep
 from cyxtal import get_vonMisesStrain
+from cyxtal import parse_xml
 
 # void random seed for testing
 np.random.seed(1960)
@@ -208,14 +209,6 @@ class TestStrainRefine(unittest.TestCase):
         print get_vonMisesStrain(epsilon_aps)
         np.testing.assert_almost_equal(epsilonAPS110111, epsilon_aps)
         np.testing.assert_almost_equal(epsilonAPS100111, epsilon_aps)
-
-class TestXMLParsing(unittest.TestCase):
-
-    def setUp(self):
-        self.fname = "test.xml"
-
-    def test_parseXML(self):
-        pass
 
 
 if __name__ == '__main__':

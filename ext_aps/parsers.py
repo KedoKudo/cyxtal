@@ -31,10 +31,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 DESCRIPTION
 -----------
 VoxelStep: class
-    Container class to store voxel information and perform strain refinement
+    Container class to store voxel information and perform strain refinement.
 parser_xml: function
-    Parsing xml output from APS and store them in different format
-    (with/without strain refinement)
+    Parsing xml output from APS (with/without strain refinement).
+get_base: function
+    Return [reciprocal] lattice basis according to given lattice constants.
 NOTE
 ----
 More information regarding the coordinate transformation can be found at:
@@ -280,6 +281,27 @@ class VoxelStep(object):
         self._valid = True
         return self._valid
 
+    def __str__(self):
+        if not(self._valid):
+            return "Not validated"
+        msg  = 'DAXM voxel:\n'
+        msg += ' Motor/wire position:\n'
+        msg += '  Xsample: {}\n'.format(self.Xsample)
+        msg += '  Ysample: {}\n'.format(self.Ysample)
+        msg += '  Zsample: {}\n'.format(self.Zsample)
+        msg += '    depth: {}\n'.format(self.depth)
+        msg += ' Q vectors(qx,qy,qz):\n'
+        msg += str(self.qs) + '\n'
+        msg += ' HKLs:\n'
+        msg += str(self.hkls) + '\n'
+        msg += ' Reciprocal lattice vectors:\n'
+        msg += '  a*:' + str(self.astar) + '\n'
+        msg += '  b*:' + str(self.bstar) + '\n'
+        msg += '  c*:' + str(self.cstar) + '\n'
+        msg += ' Lattice Constants for Indexation:\n'
+        msg += '  ' + str(self.lc)
+        return msg
+
     def get_coord(self, ref='TSL'):
         """
         DESCRIPTION
@@ -387,12 +409,11 @@ class VoxelStep(object):
 
     def get_strain(self,
                    ref='TSL',
-                   method='nelder-mead',
                    mask=(1,1,1,1,1,1),
                    xtor=1e-8,
                    disp=True,
                    deviatoric=True,
-                   maxiter=1e6,
+                   maxiter=1e4,
                    approximate=False):
         """
         DESCRIPTION
@@ -413,7 +434,7 @@ class VoxelStep(object):
         # check if voxel data is valid
         if not(self._valid):
             print "Corrupted voxel found!"
-            return strain.fill(np.nan)
+            raise ValueError('Validate data first before strain refinement!')
         ##
         # step 1: extract rotation (transformation).
         lc_std = self.lc
@@ -437,13 +458,14 @@ class VoxelStep(object):
         refine  = minimize(self.strain_refine,
                            lc_ini,
                            args=tuple([r_lattice, mask]),
-                           method=method,
+                           method='nelder-mead',
                            options={'xtol': xtor,
                                     'disp': disp,
                                     'maxiter': int(maxiter),
                                     'maxfev' : int(maxiter)})
-        print "ideal: ", self.lc
-        print refine
+        if disp:
+            print "ideal: ", self.lc
+            print refine
         lc_fin = refine.x
         ##
         # step 3: calculate the stretch tensor using the deformation gradient
@@ -504,29 +526,13 @@ class VoxelStep(object):
                 lc[i] = self.lc[i]
         Bstar_1 = get_base(lc)
         Bstar_2 = np.dot(r, Bstar_1)
-        ##
-        # Penalty Type 1: delta_Vcell (relative)
+        # Penalty: delta_Vcell (relative)
         #   first calculate the changes in the unit cell volume
-        wgt = 100
-        Vcell0 = np.linalg.det(self.reciprocal_basis)
-        Vcell2 = np.linalg.det(Bstar_2)
-        dVcell = 0.5*(abs(Vcell2 - Vcell0)/Vcell0 + abs(Vcell2 - Vcell0)/Vcell2)
+        wgt = 1e2
+        Vcell0 = 2.0*np.pi/np.linalg.det(self.reciprocal_basis)
+        Vcell2 = 2.0*np.pi/np.linalg.det(Bstar_2)
+        dVcell = abs(Vcell2 - Vcell0)/Vcell0
         rst = wgt*dVcell
-        ##
-        # Penalty Type 2: force lattice constants
-        # lc0 = self.lc
-        # diff = np.absolute(lc - lc0)
-        # dilation = sum(diff[0:3]) * 1.0
-        # angular  = sum(diff[3:6]) * 1.0
-        # rst = dilation + angular
-        ##
-        # Penalty Type 3: separate volume change
-        # lc0 = self.lc
-        # diff = np.absolute(lc - lc0)
-        # v_dilation = diff[0]*diff[1]*diff[2]
-        # tmp = np.array(map(np.cos, map(np.radians,diff[3:6])))
-        # v_angular = np.sqrt(1 + 2*tmp[0]*tmp[1]*tmp[2] - sum(tmp**2))
-        # rst = 1.0*v_dilation + 10.0*v_angular
         # now add angular differences into the control
         hkls = self.hkls
         qs = self.qs
@@ -537,24 +543,124 @@ class VoxelStep(object):
             rst += abs(np.dot(q_tmp, qs[i]))
         return rst
 
+
 ##################################
 # MODULE LEVEL FUNCTIONS/METHODS #
 ##################################
-def parser_xml(intput,
-               output_mode='txt',
-               ref_configuration='TSL',
-               strain_refine=True):
+def parse_xml(xmlfile,
+              namespace={'step':'http://sector34.xor.aps.anl.gov/34ide:indexResult'},
+              ref='TSL',
+              strain_refine=True,
+              disp=True):
     """
     DESCRIPTION
     -----------
-    parser_xml(DAXM_DATA.xml,
-               output='output.txt',
-               ref_configuration='aps',
-               strain_refine=True)
-        Parse the DAXM data from Beamline 34-I-DE to simple ASCII table
+    [VoxelStep(),...]= parse_xml(DAXM_DATA.xml,
+                                 namespace={$XML_NAMESPACE_DICT},
+                                 ref='aps',
+                                 strain_refine=True,
+                                 disp=True)
+        Parse the DAXM data from Beamline 34-I-DE to memory.
+    PARAMETERS
+    ----------
+    RETURNS
+    -------
+    NOTE
+    ----
     """
-    pass
+    # read in the xml file using cElementtree
+    tree    = ET.parse(xmlfile)
+    root    = tree.getroot()
+    voxels  = []                  # empty container
+    skipped = 0                   # keep track of how many voxel skipped
+    ns      = namespace
+    sep_head= '\n' + '*'*60
+    sep_tail= '*'*60 + "\n"
+    # walk through each step
+    if disp:
+        print sep_head
+        print 'Extract data from XML file'
+    for i in range(len(root)):
+        step = root[i]
+        # determine if voxel is indexed
+        astar = step.find('step:indexing/step:pattern/step:recip_lattice/step:astar', ns)
+        if astar is None:
+            skipped +=1
+            continue
+        # progress bar for parsing
+        if disp:
+            state = float(i+1)/len(root)
+            bar = '[' + '#'*int(state*10) + ' '*(10-int(state*10)) + ']'
+            print '\r'+bar+'{:.2%}'.format(state),
+        # STEP 1: EXTRACT TEXT STRING
+        # |->motor/wire position
+        xsample = step.find('step:Xsample', ns).text
+        ysample = step.find('step:Ysample', ns).text
+        zsample = step.find('step:Zsample', ns).text
+        depth   = step.find('step:depth'  , ns).text
+        # |->diffraction vectors
+        qx = step.find('step:detector/step:peaksXY/step:Qx', ns).text
+        qy = step.find('step:detector/step:peaksXY/step:Qy', ns).text
+        qz = step.find('step:detector/step:peaksXY/step:Qz', ns).text
+        # |->reciprocal lattice vectors
+        astar = step.find('step:indexing/step:pattern/step:recip_lattice/step:astar', ns).text
+        bstar = step.find('step:indexing/step:pattern/step:recip_lattice/step:bstar', ns).text
+        cstar = step.find('step:indexing/step:pattern/step:recip_lattice/step:cstar', ns).text
+        # |->index results (hkl)
+        h  = step.find('step:indexing/step:pattern/step:hkl_s/step:h', ns).text
+        k  = step.find('step:indexing/step:pattern/step:hkl_s/step:k', ns).text
+        l  = step.find('step:indexing/step:pattern/step:hkl_s/step:l', ns).text
+        # |->lattice constants (ideal)
+        lc = step.find('step:indexing/step:xtl/step:latticeParameters', ns).text
+        # STEP 2: PARSE DATA TO MEMORY
+        voxel = VoxelStep()
+        # |->motor/wire position
+        voxel.Xsample = float(xsample)
+        voxel.Ysample = float(ysample)
+        voxel.Zsample = float(zsample)
+        voxel.depth   = float(depth)
+        # |->diffraction vectors
+        qx = [float(item) for item in qx.split()]
+        qy = [float(item) for item in qy.split()]
+        qz = [float(item) for item in qz.split()]
+        voxel.qs = np.column_stack((qx,qy,qz))
+        # |->reciprocal lattice vectors
+        voxel.astar = [float(item) for item in astar.split()]
+        voxel.bstar = [float(item) for item in bstar.split()]
+        voxel.cstar = [float(item) for item in cstar.split()]
+        # |->index results (hkl)
+        h = [float(item) for item in h.split()]
+        k = [float(item) for item in k.split()]
+        l = [float(item) for item in l.split()]
+        voxel.hkls = np.column_stack((h,k,l))
+        # |->lattice constants (ideal)
+        voxel.lc = [float(item) for item in lc.split()]
+        voxel.validate()
+        # STEP 3: PUSH DATA TO CONAINER ARRAY/LIST
+        voxels.append(voxel)
+    if disp: print '\n', sep_tail
+    # SIMPLE STATISTICS
+    if disp:
+        print sep_head
+        print "XML FILE: {}".format(xmlfile)
+        print "  Total number of voxels:\t\t{}".format(len(root))
+        print "  Valid voxel for DAXM analysis:\t{}".format(len(voxels))
+        print "  Dataset goodness:\t\t\t{:.2%}".format(float(len(voxels))/len(root))
+        print sep_tail
+    # strain refinement
+    if strain_refine:
+        if disp:
+            print sep_head
+            print "Performing strain refinement for all"
+        for i in range(len(voxels)):
+            if disp:
+                state = float(i+1)/len(voxels)
+                bar = '[' + '#'*int(state*10) + ' '*(10-int(state*10)) + ']'
+                print '\r'+bar+'{:.2%}'.format(state),
+            voxels[i].strain = voxels[i].get_strain(ref=ref, disp=False)
+            voxels[i].strain_von = get_vonMisesStrain(voxels[i].strain)
 
+    return voxels
 
 def get_base(lc,
              reciprocal=True,
