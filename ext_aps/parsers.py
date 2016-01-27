@@ -530,10 +530,7 @@ class VoxelStep(object):
         #   first calculate the changes in the unit cell volume
         wgt = 8e2
         Vcell0 = 2.0*np.pi/np.linalg.det(self.reciprocal_basis)
-        # dl0    = Vcell0**(1/3.0)
         Vcell2 = 2.0*np.pi/np.linalg.det(Bstar_2)
-        # dl2    = Vcell2**(1/3.0)
-        # rst    = wgt * abs(dl2-dl0)/dl0
         dVcell = abs(Vcell2 - Vcell0)/Vcell0
         rst = wgt*dVcell
         # now add angular differences into the control
