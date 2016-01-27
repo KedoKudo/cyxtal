@@ -528,7 +528,7 @@ class VoxelStep(object):
         Bstar_2 = np.dot(r, Bstar_1)
         # Penalty: delta_Vcell (relative)
         #   first calculate the changes in the unit cell volume
-        wgt = 1e3
+        wgt = 8e2
         Vcell0 = 2.0*np.pi/np.linalg.det(self.reciprocal_basis)
         # dl0    = Vcell0**(1/3.0)
         Vcell2 = 2.0*np.pi/np.linalg.det(Bstar_2)
