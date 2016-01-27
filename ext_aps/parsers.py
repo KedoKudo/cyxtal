@@ -528,9 +528,12 @@ class VoxelStep(object):
         Bstar_2 = np.dot(r, Bstar_1)
         # Penalty: delta_Vcell (relative)
         #   first calculate the changes in the unit cell volume
-        wgt = 2e2
+        wgt = 1e3
         Vcell0 = 2.0*np.pi/np.linalg.det(self.reciprocal_basis)
+        # dl0    = Vcell0**(1/3.0)
         Vcell2 = 2.0*np.pi/np.linalg.det(Bstar_2)
+        # dl2    = Vcell2**(1/3.0)
+        # rst    = wgt * abs(dl2-dl0)/dl0
         dVcell = abs(Vcell2 - Vcell0)/Vcell0
         rst = wgt*dVcell
         # now add angular differences into the control
@@ -555,8 +558,6 @@ def parse_xml(xmlfile,
     -----------
     [VoxelStep(),...]= parse_xml(DAXM_DATA.xml,
                                  namespace={$XML_NAMESPACE_DICT},
-                                 ref='aps',
-                                 strain_refine=True,
                                  disp=True)
         Parse the DAXM data from Beamline 34-I-DE to memory.
     PARAMETERS
