@@ -302,7 +302,9 @@ class VoxelStep(object):
         msg += '  ' + str(self.lc)
         return msg
 
-    def get_coord(self, ref='TSL'):
+    def get_coord(self,
+                  ref='TSL',
+                  translate=(0,0,0)):
         """
         DESCRIPTION
         -----------
@@ -313,6 +315,9 @@ class VoxelStep(object):
         ----------
         ref: string(case insensitive)
             Name for reference configuration ['TSL'|'APS'|'XHF']
+        translate: array
+            Translate voxel with given translation vector after
+            rotating to the desired reference system.
         NOTE
         ----
         The rotation matrix and orientation matrix are a very confusing
@@ -348,6 +353,7 @@ class VoxelStep(object):
         # since we are changing coordinate system, use orientation matrix
         # or rotation_matrix.transposed
         rst = np.dot(r.T, coord)
+        rst = rst + np.array(translate)
         return rst
 
     def get_eulers(self, ref='TSL'):
