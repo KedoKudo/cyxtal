@@ -343,17 +343,16 @@ class VoxelStep(object):
         # matrix accordingly
         ref = ref.upper()
         if ref ==  'TSL':
-            r = R_XHF2TSL
+            r = R_APS2TSL
         elif ref == 'APS':
-            r = R_XHF2APS
+            r = R_APS2APS
         elif ref == 'XHF':
-            r = R_XHF2XHF
+            r = R_APS2XHF
         else:
             raise ValueError("unknown configuration")
         # since we are changing coordinate system, use orientation matrix
         # or rotation_matrix.transposed
-        rst = np.dot(r.T, coord)
-        rst = rst + np.array(translate)
+        rst = np.dot(r.T, coord) + np.array(translate)
         return rst
 
     def get_eulers(self, ref='TSL'):

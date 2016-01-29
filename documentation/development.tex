@@ -225,13 +225,15 @@ Thus, there is no reason to consider this European convention anymore.
 Due to experiment setup of DAXM characterization, there are three different coordinate systems related to our data processing (\cref{fig:daxmcoord}):
 \begin{itemize}
 \item \textcolor{blue}{\textbf{XHF}} \\
-This is the configuration closely tied to the sample stage motor, which records sample movement during the scan.
-The spatial position for each voxel in the DAXM data can be directly calculated from the recording of the motor position (Xsample/Ysample/Zsample) and the wire position(depth).
+This is the configuration closely tied to the sample.
+During the scan, this configuration is used to control the sample stage for scanning. 
+\footnote{The Beamline system has a internal conversion system converts the XHF to APS, which is then recorded in the XML output}
 
 \item \textcolor{red}{\textbf{APS}} \\
 This is the official coordinate system at APS, where the beam direction is the z-axis.
 At beamline 34-ID-E, the indexation results is computed in this coordinate system.
 In other words, the indexation results, including the reciprocal lattice and diffraction vectors (\tnsr q) are all in this coordinate system.
+For some reason, the sample stage movement is also recorded in this coordinate system, which means all the data from the Beamline is in the APS configuration.
 
 \item \textcolor{black}{\textbf{TSL}} \\
 This coordinate system is closely tied to the sample where the sample surface normal is usually consider to be z-axis.
