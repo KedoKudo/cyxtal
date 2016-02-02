@@ -419,6 +419,7 @@ class VoxelStep(object):
                    disp=True,
                    deviatoric=True,
                    maxiter=1e4,
+                   weight=8e2,
                    approximate=False):
         """
         DESCRIPTION
@@ -462,7 +463,7 @@ class VoxelStep(object):
         lc_ini  = lc_std
         refine  = minimize(self.strain_refine,
                            lc_ini,
-                           args=tuple([r_lattice, mask]),
+                           args=tuple([r_lattice, mask, weight]),
                            method='nelder-mead',
                            options={'xtol': xtor,
                                     'disp': disp,
@@ -505,7 +506,7 @@ class VoxelStep(object):
         epsilon = np.dot(g, np.dot(epsilon, g.T))
         return epsilon
 
-    def strain_refine(self, lc, r, msk):
+    def strain_refine(self, lc, r, msk, weight):
         """
         DESCRIPTION
         -----------
@@ -533,7 +534,7 @@ class VoxelStep(object):
         Bstar_2 = np.dot(r, Bstar_1)
         # Penalty: delta_Vcell (relative)
         #   first calculate the changes in the unit cell volume
-        wgt = 8e2
+        wgt = weight
         Vcell0 = 2.0*np.pi/np.linalg.det(self.reciprocal_basis)
         Vcell2 = 2.0*np.pi/np.linalg.det(Bstar_2)
         dVcell = abs(Vcell2 - Vcell0)/Vcell0
