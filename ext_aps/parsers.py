@@ -5,7 +5,7 @@
 / /___    / //   | / / / ___ |/ /___
 \____/   /_//_/|_|/_/ /_/  |_/_____/
 
-Copyright (c) 2015, C. Zhang.
+Copyright (c) 2016, C. Zhang.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -94,6 +94,7 @@ class VoxelStep(object):
     a|b|cstar:      strain free reciprocal lattice identified
     lc:             lattice constants used in indexation
     lattice:        lattice structure
+    _valid:         validation state of the voxel
     """
 
     def __init__(self):
@@ -430,8 +431,38 @@ class VoxelStep(object):
             tensor is transformed into designated coordinate system.
         PARAMETERS
         ----------
+        ref:  str ['APS', 'TSL', XHF]
+            The coordinate system in which the refined strain tensor
+            will be returned.
+        mask: tuple
+            Binary mask used to specify which lattice constant should
+            remain unchanged during the process.
+            (1,1,1,1,1,1): all lattice constants can be changed
+            (1,0,1,1,1,1): b should remain constant
+            (0,0,0,1,1,1): only angles can be changed
+        xtor: float
+            Tolerance used in the optimization of finding strained unit
+            cell
+        disp: boolean
+            Toggle the display of optimization process results
+        deviatoric: boolean
+            Whether only returning the deviatoric strain components or
+            full strain tensor
+            !!!NOTE:
+                Full strain tensor requires energy beam scan data,
+                this particular feature has not implement yet.
+        maxiter: float
+            Maximum iterations/calls allowed during the optimization
+        weight: float
+            Fudge factor used to control the penalty term in the objective
+            function of the optimization step (constrains on unit cell).
+        approximate: boolean
+            Perform full calculation of the residual strain tensor or using
+            simple approximation E = U - I
         RETURNS
         -------
+        epsilon: np.array (3,3)
+            Strain tensor in given reference configuration
         NOTE
         ----
             Since the strain is approximated using the (a*,b*,c*), which are
@@ -510,11 +541,21 @@ class VoxelStep(object):
         """
         DESCRIPTION
         -----------
-        rst = self.strain_refine(new_lc)
-            Return the errors between calculated qs and measurements
+        rst = self.strain_refine(lc, r, msk, weight)
+            This is the objective function for the strain refinement.
         PARAMETERS
         ----------
-        new_lc: lattice constant (perturbed)
+        lc: np.array
+            lattice constant
+        r: np.array (3,3)
+            transformation matrix (orientation matrix) that converts standard
+            unit cell system to APS coordinate system
+        msk: tuple
+            mask used to determine which lattice constant are allowed to
+            change
+        weight: float
+            fudge factor in the penalty term that scales the effect of
+            unit cell volume change
         RETURNS
         -------
         rst:  float
@@ -523,7 +564,8 @@ class VoxelStep(object):
             to ensure no large strain happens to the unit cell.
         NOTE
         ----
-
+            This approach is still under construction. Further change of
+            the objective function is possible
         """
         # only perturb the lattice parameter indicated by the mask
         # 0 means keep ideal, 1 means perturb
@@ -565,8 +607,25 @@ def parse_xml(xmlfile,
         Parse the DAXM data from Beamline 34-I-DE to memory.
     PARAMETERS
     ----------
+    xmlfile: str
+        Path to the xml file requires data processing
+    namespace: dictionary
+        Containing dictionary of the namespace used in the xml file.
+        For data from beamline 34-ID-E, use the default setting should
+        work.
+        NOTE:
+            If the beamline changes there namespace, it is necessary to
+            extract those namespace and update them with this argument.
+    disp: boolean
+        Toggle output of parsing progress (terminal only)
     RETURNS
     -------
+    voxels: list of VoxelStep
+        List of instances of VoxelStep, each one representing indexed voxel
+        in the xml data.
+        NOTE:
+            Not indexed file is screened out by checking the presence of a*
+            for each voxel.
     NOTE
     ----
     """
