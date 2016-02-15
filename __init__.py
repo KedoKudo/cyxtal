@@ -44,3 +44,4 @@ import ext_damask
 from cyxtal.ext_aps.parsers import VoxelStep
 from cyxtal.ext_aps.parsers import parse_xml
 from cyxtal.ext_aps.parsers import get_base
+from cyxtal.ext_aps.parsers import get_reciprocal_base

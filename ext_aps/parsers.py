@@ -34,8 +34,10 @@ VoxelStep: class
     Container class to store voxel information and perform strain refinement.
 parser_xml: function
     Parsing xml output from APS (with/without strain refinement).
+get_reciprocal_base:
+    Return reciprocal basis according to given lattice constants.
 get_base: function
-    Return [reciprocal] lattice basis according to given lattice constants.
+    Return lattice basis according to given lattice constants.
 NOTE
 ----
 More information regarding the coordinate transformation can be found at:
@@ -421,7 +423,8 @@ class VoxelStep(object):
                    deviatoric=True,
                    maxiter=1e4,
                    weight=8e2,
-                   approximate=False):
+                   approximate=False,
+                   keep_volume=False):
         """
         DESCRIPTION
         -----------
@@ -459,6 +462,9 @@ class VoxelStep(object):
         approximate: boolean
             Perform full calculation of the residual strain tensor or using
             simple approximation E = U - I
+        keep_volume: boolean
+            Keep the volume to be constant throughout the strain refinement,
+            which is suggested by Dr. Tischler at APS.
         RETURNS
         -------
         epsilon: np.array (3,3)
@@ -482,7 +488,7 @@ class VoxelStep(object):
         #          Bstar_2 = r_lattice * Bstar_1
         # Bstar_3: strain free, rotated reciprocal lattice
         #          forced u_lattice = I
-        Bstar_0 = get_base(lc_std)
+        Bstar_0 = get_reciprocal_base(lc_std)
         Bstar_3 = self.reciprocal_basis
         # find the rotation matrix that converts a standard reciprocal basis
         # to the APS configuration
@@ -491,26 +497,50 @@ class VoxelStep(object):
         # step 2: call scipy.optmize.minimize on the objective function
         #         self.get_qmismatch to find the ideal set of lattice
         #         constants that provide best match to measured Q vectors.
+        #         Since Dr.Tischler suggested a different approach, additional
+        #         implementation is provided for this case.
         lc_ini  = lc_std
-        refine  = minimize(self.strain_refine,
-                           lc_ini,
-                           args=tuple([r_lattice, mask, weight]),
-                           method='nelder-mead',
-                           options={'xtol': xtor,
-                                    'disp': disp,
-                                    'maxiter': int(maxiter),
-                                    'maxfev' : int(maxiter)})
+        if keep_volume:
+            if sum(mask) > 5:
+                mask   = (1,1,0,1,1,1)
+            refine = minimize(self.strain_refine_tischler,
+                              lc_ini,
+                              args=tuple([r_lattice, mask]),
+                              method='nelder-mead',
+                              options={'xtol': xtor,
+                                       'disp': disp,
+                                       'maxiter': int(maxiter),
+                                       'maxfev' : int(maxiter)})
+        else:
+            refine = minimize(self.strain_refine,
+                              lc_ini,
+                              args=tuple([r_lattice, mask, weight]),
+                              method='nelder-mead',
+                              options={'xtol': xtor,
+                                       'disp': disp,
+                                       'maxiter': int(maxiter),
+                                       'maxfev' : int(maxiter)})
         if disp:
             print "ideal: ", self.lc
             print refine
         lc_fin = refine.x
+        if keep_volume:
+            # find scale factor based on unit cell volume
+            # change (cube root required here)
+            v_before   = 1.0/np.linalg.det(Bstar_3)
+            v_after    = np.linalg.det(get_base(lc_fin))
+            scale      = (v_after/v_before)**(1.0/3.0)
+            # rescale a,b,c based on volume change
+            lc_fin[0] *=  scale
+            lc_fin[1] *=  scale
+            lc_fin[2] *=  scale
         ##
         # step 3: calculate the stretch tensor using the deformation gradient
         #         Dr. Tischler is doing all the calculation in the reciprocal
         #         space, however the deformation gradient is in real space.
         #         Based on the derivation in the reference, the
         # ref: cyxtal/documentation
-        Bstar_1 = get_base(lc_fin)
+        Bstar_1 = get_reciprocal_base(lc_fin)
         # Bstar_2 = np.dot(r_lattice, Bstar_1)
         u_fin = np.dot(np.linalg.inv(Bstar_1.T), Bstar_0.T)
         epsilon = 0.5*(np.dot(u_fin.T, u_fin) - np.eye(3))
@@ -572,15 +602,38 @@ class VoxelStep(object):
         for i in range(6):
             if msk[i] == 0:
                 lc[i] = self.lc[i]
-        Bstar_1 = get_base(lc)
+        Bstar_1 = get_reciprocal_base(lc)
         Bstar_2 = np.dot(r, Bstar_1)
         # Penalty: delta_Vcell (relative)
         #   first calculate the changes in the unit cell volume
         wgt = weight
-        Vcell0 = 2.0*np.pi/np.linalg.det(self.reciprocal_basis)
-        Vcell2 = 2.0*np.pi/np.linalg.det(Bstar_2)
+        Vcell0 = 2*np.pi/np.linalg.det(self.reciprocal_basis)
+        Vcell2 = 2*np.pi/np.linalg.det(Bstar_2)
         dVcell = abs(Vcell2 - Vcell0)/Vcell0
         rst = wgt*dVcell
+        # now add angular differences into the control
+        hkls = self.hkls
+        qs = self.qs
+        for i in range(qs.shape[0]):
+            # calculate new Q vector based on perturbed unit cell
+            q_tmp = np.dot(Bstar_2, hkls[i])
+            q_tmp = q_tmp/np.linalg.norm(q_tmp)
+            rst += abs(np.dot(q_tmp, qs[i]))
+        return rst
+
+
+    def strain_refine_tischler(self, lc, r, msk):
+        """
+        Dr. Tischler implementation of strain refinement
+        """
+        # only perturb the lattice parameter indicated by the mask
+        # 0 means keep ideal, 1 means perturb
+        for i in range(6):
+            if msk[i] == 0:
+                lc[i] = self.lc[i]
+        Bstar_1 = get_reciprocal_base(lc)
+        Bstar_2 = np.dot(r, Bstar_1)
+        rst = 0.0
         # now add angular differences into the control
         hkls = self.hkls
         qs = self.qs
@@ -711,8 +764,31 @@ def parse_xml(xmlfile,
 
     return voxels
 
+def get_reciprocal_base(lc, degrees=True):
+    """
+    DESCRIPTION
+    -----------
+    reciprocal_basis = get_reciprocal_base(lc)
+        wrapper function to return the reciprocal basis rather
+        than standard basis
+    PARAMETERS
+    ----------
+    lc: numpy.array/list/tuple [a,b,c,alpha,beta,gamma]
+        Should contain necessary lattice constants that defines
+        crystal structure.
+    degree: boolean
+        The angular lattice parameter are in degrees or radians.
+    RETURNS
+    -------
+    rst: numpy.array
+        A 3x3 numpy array formed by the reciprocal base vectors of
+        given lattice constant. The base vectors are stack by column.
+    """
+    return get_base(lc, reciprocal=True, degrees=degrees)
+
+
 def get_base(lc,
-             reciprocal=True,
+             reciprocal=False,
              degrees=True):
     """
     DESCRIPTION
@@ -727,9 +803,6 @@ def get_base(lc,
     reciprocal: boolean
         Whether the returned basis vectors in real reciprocal space
         or real space.
-    va: basis vector construct convention ['x'/'y']
-        The a vector should either lies along x-axis or y-axis. Default
-        set to x-axis as this is what has been used in APS@ANL.
     degree: boolean
         The angular lattice parameter are in degrees or radians.
     RETURNS

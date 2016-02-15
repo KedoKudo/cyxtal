@@ -39,6 +39,7 @@ DESCRIPTION
 import unittest
 import numpy as np
 from cyxtal import get_base
+from cyxtal import get_reciprocal_base
 from cyxtal import VoxelStep
 from cyxtal import get_vonMisesStrain
 from cyxtal import parse_xml
@@ -56,14 +57,15 @@ class TestBase(unittest.TestCase):
 
     def test_bcc(self):
         lvs = get_base(self.lc2)
-        target = np.eye(3)*2*np.pi
+        target = np.eye(3)
         np.testing.assert_almost_equal(lvs, target)
-        rlvs = get_base(self.lc2, reciprocal=True)
+        target = np.eye(3)*2*np.pi
+        rlvs = get_reciprocal_base(self.lc2)
         np.testing.assert_almost_equal(rlvs, target)
 
     def test_hcp(self):
-        lvs = get_base(self.lc1, reciprocal=False)
-        rlvs = get_base(self.lc1)
+        lvs = get_base(self.lc1)
+        rlvs = get_reciprocal_base(self.lc1)
         target_v = np.array([
                              [+0.2950800,  -0.1475400,  +0.0000000],
                              [+0.0000000,  +0.2555468,  +0.0000000],
@@ -200,9 +202,10 @@ class TestStrainRefine(unittest.TestCase):
                [ 0.0013487 , -0.0130564 ,  -0.00731337],
                [-0.0130564 ,  0.0360299 ,   0.00756606],
                [-0.00731337,  0.00756606,  -0.0373786]])
-        # perform strain refine
+        # perform strain refine using Dr. Tischler method
         epsilon_aps = self.data.get_strain(ref='APS',
-                                           mask=(1,1,1,1,1,1))
+                                           mask=(1,1,1,1,1,1),
+                                           keep_volume=True)
         print "von Mises Strain (Igor | Cyxtal)"
         print get_vonMisesStrain(epsilonAPS110111),
         print " | ",
