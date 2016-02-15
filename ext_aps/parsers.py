@@ -625,6 +625,9 @@ class VoxelStep(object):
     def strain_refine_tischler(self, lc, r, msk):
         """
         Dr. Tischler implementation of strain refinement
+        NOTE:
+            This method currently leads to unstable results
+            (singular matrix)
         """
         # only perturb the lattice parameter indicated by the mask
         # 0 means keep ideal, 1 means perturb
