@@ -492,7 +492,7 @@ class VoxelStep(object):
         Bstar_3 = self.reciprocal_basis
         # find the rotation matrix that converts a standard reciprocal basis
         # to the APS configuration
-        r_lattice = np.dot(Bstar_3, np.linalg.inv(Bstar_0))
+        r_lattice = np.dot(Bstar_3, np.linalg.pinv(Bstar_0))
         ##
         # step 2: call scipy.optmize.minimize on the objective function
         #         self.get_qmismatch to find the ideal set of lattice
@@ -542,7 +542,7 @@ class VoxelStep(object):
         # ref: cyxtal/documentation
         Bstar_1 = get_reciprocal_base(lc_fin)
         # Bstar_2 = np.dot(r_lattice, Bstar_1)
-        u_fin = np.dot(np.linalg.inv(Bstar_1.T), Bstar_0.T)
+        u_fin = np.dot(np.linalg.pinv(Bstar_1.T), Bstar_0.T)
         epsilon = 0.5*(np.dot(u_fin.T, u_fin) - np.eye(3))
         if approximate:
             epsilon = u_fin - np.eye(3)  # approximation
@@ -834,6 +834,7 @@ def get_base(lc,
     # calculating reciprocal lattice based on real lattice
     # ref: https://en.wikipedia.org/wiki/Reciprocal_lattice
     if reciprocal:
-        rst = 2*np.pi*np.linalg.inv(rst)
+        # use pinv to avoid singluar matrix situation.
+        rst = 2*np.pi*np.linalg.pinv(rst)
         rst = rst.T
     return rst
