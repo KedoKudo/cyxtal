@@ -417,7 +417,6 @@ class VoxelStep(object):
 
     def get_strain(self,
                    ref='TSL',
-                   mask=(1,1,1,1,1,1),
                    xtor=1e-8,
                    disp=True,
                    deviatoric=True,
@@ -437,12 +436,6 @@ class VoxelStep(object):
         ref:  str ['APS', 'TSL', XHF]
             The coordinate system in which the refined strain tensor
             will be returned.
-        mask: tuple
-            Binary mask used to specify which lattice constant should
-            remain unchanged during the process.
-            (1,1,1,1,1,1): all lattice constants can be changed
-            (1,0,1,1,1,1): b should remain constant
-            (0,0,0,1,1,1): only angles can be changed
         xtor: float
             Tolerance used in the optimization of finding strained unit
             cell
@@ -501,11 +494,12 @@ class VoxelStep(object):
         #         implementation is provided for this case.
         lc_ini  = lc_std
         if keep_volume:
-            if sum(mask) > 5:
-                mask   = (1,1,0,1,1,1)
+            # keep c, alter a,b,alpha,beta,gamma
+            lc = [lc_std[0], lc_std[1], lc_std[3], lc_std[4], lc_std[5]]
+            lc_c = lc_std[2]
             refine = minimize(self.strain_refine_tischler,
-                              lc_ini,
-                              args=tuple([r_lattice, mask]),
+                              lc,
+                              args=tuple([r_lattice, lc_c]),
                               method='nelder-mead',
                               options={'xtol': xtor,
                                        'disp': disp,
@@ -514,7 +508,7 @@ class VoxelStep(object):
         else:
             refine = minimize(self.strain_refine,
                               lc_ini,
-                              args=tuple([r_lattice, mask, weight]),
+                              args=tuple([r_lattice, weight]),
                               method='nelder-mead',
                               options={'xtol': xtor,
                                        'disp': disp,
@@ -523,8 +517,9 @@ class VoxelStep(object):
         if disp:
             print "ideal: ", self.lc
             print refine
-        lc_fin = refine.x
         if keep_volume:
+            tmp_lc = refine.x
+            lc_fin = [tmp_lc[0],tmp_lc[1],lc_c,tmp_lc[2],tmp_lc[3],tmp_lc[4]]
             # find scale factor based on unit cell volume
             # change (cube root required here)
             v_before   = 1.0/np.linalg.det(Bstar_3)
@@ -534,6 +529,8 @@ class VoxelStep(object):
             lc_fin[0] *=  scale
             lc_fin[1] *=  scale
             lc_fin[2] *=  scale
+        else:
+            lc_fin = refine.x
         ##
         # step 3: calculate the stretch tensor using the deformation gradient
         #         Dr. Tischler is doing all the calculation in the reciprocal
@@ -567,11 +564,11 @@ class VoxelStep(object):
         epsilon = np.dot(g, np.dot(epsilon, g.T))
         return epsilon
 
-    def strain_refine(self, lc, r, msk, weight):
+    def strain_refine(self, lc, r, weight):
         """
         DESCRIPTION
         -----------
-        rst = self.strain_refine(lc, r, msk, weight)
+        rst = self.strain_refine(lc, r, weight)
             This is the objective function for the strain refinement.
         PARAMETERS
         ----------
@@ -580,9 +577,6 @@ class VoxelStep(object):
         r: np.array (3,3)
             transformation matrix (orientation matrix) that converts standard
             unit cell system to APS coordinate system
-        msk: tuple
-            mask used to determine which lattice constant are allowed to
-            change
         weight: float
             fudge factor in the penalty term that scales the effect of
             unit cell volume change
@@ -597,11 +591,6 @@ class VoxelStep(object):
             This approach is still under construction. Further change of
             the objective function is possible
         """
-        # only perturb the lattice parameter indicated by the mask
-        # 0 means keep ideal, 1 means perturb
-        for i in range(6):
-            if msk[i] == 0:
-                lc[i] = self.lc[i]
         Bstar_1 = get_reciprocal_base(lc)
         Bstar_2 = np.dot(r, Bstar_1)
         # Penalty: delta_Vcell (relative)
@@ -622,18 +611,16 @@ class VoxelStep(object):
         return rst
 
 
-    def strain_refine_tischler(self, lc, r, msk):
+    def strain_refine_tischler(self, lc, r, lattice_c):
         """
         Dr. Tischler implementation of strain refinement
         NOTE:
             This method currently leads to unstable results
             (singular matrix)
         """
-        # only perturb the lattice parameter indicated by the mask
-        # 0 means keep ideal, 1 means perturb
-        for i in range(6):
-            if msk[i] == 0:
-                lc[i] = self.lc[i]
+        # insert c back
+        lc = [lc[0], lc[1], lattice_c, lc[2], lc[3], lc[4]]
+        print lc
         Bstar_1 = get_reciprocal_base(lc)
         Bstar_2 = np.dot(r, Bstar_1)
         rst = 0.0
