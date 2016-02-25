@@ -41,5 +41,9 @@ all:
 test:
 	nosetests -v tests
 
+doc:
+	doxygen doxygen.config
+	make -C documentation
+
 clean:
 	rm -rvf build *.so
