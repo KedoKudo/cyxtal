@@ -423,7 +423,7 @@ class VoxelStep(object):
                    maxiter=1e4,
                    weight=8e2,
                    approximate=False,
-                   keep_volume=False):
+                   keep_volume=True):
         """
         DESCRIPTION
         -----------
@@ -631,7 +631,7 @@ class VoxelStep(object):
             # calculate new Q vector based on perturbed unit cell
             q_tmp = np.dot(Bstar_2, hkls[i])
             q_tmp = q_tmp/np.linalg.norm(q_tmp)
-            rst += abs(np.dot(q_tmp, qs[i]))
+            rst += 1.0 - abs(np.dot(q_tmp, qs[i]))
         return rst
 
 
