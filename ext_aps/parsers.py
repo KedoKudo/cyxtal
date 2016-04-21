@@ -418,7 +418,7 @@ class VoxelStep(object):
     def get_strain(self,
                    ref='TSL',
                    xtor=1e-8,
-                   disp=True,
+                   disp=False,
                    deviatoric=True,
                    maxiter=1e4,
                    weight=8e2,
@@ -607,7 +607,7 @@ class VoxelStep(object):
             # calculate new Q vector based on perturbed unit cell
             q_tmp = np.dot(Bstar_2, hkls[i])
             q_tmp = q_tmp/np.linalg.norm(q_tmp)
-            rst += abs(np.dot(q_tmp, qs[i]))
+            rst += 1.0 - abs(np.dot(q_tmp, qs[i]))
         return rst
 
 
@@ -620,7 +620,6 @@ class VoxelStep(object):
         """
         # insert c back
         lc = [lc[0], lc[1], lattice_c, lc[2], lc[3], lc[4]]
-        print lc
         Bstar_1 = get_reciprocal_base(lc)
         Bstar_2 = np.dot(r, Bstar_1)
         rst = 0.0
