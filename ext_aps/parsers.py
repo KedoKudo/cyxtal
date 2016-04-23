@@ -44,12 +44,12 @@ More information regarding the coordinate transformation can be found at:
     http://www.aps.anl.gov/Sectors/33_34/microdiff/Instrument/coordinates-PE-system.pdf
 """
 
-import h5py  as h5
+import h5py as h5
 import numpy as np
 import xml.etree.cElementTree as ET
-from scipy.optimize   import minimize
+from scipy.optimize import minimize
 from cyxtal.cxtallite import OrientationMatrix
-from cyxtal           import get_vonMisesStrain
+from cyxtal import get_vonMisesStrain
 
 ##
 # MODULE LEVEL CONSTANTS RELATING TO COORDINATE TRANSFORMATION
@@ -421,9 +421,7 @@ class VoxelStep(object):
                    disp=False,
                    deviatoric=True,
                    maxiter=1e4,
-                   weight=8e2,
-                   approximate=False,
-                   keep_volume=True):
+                   approximate=False):
         """
         DESCRIPTION
         -----------
@@ -449,15 +447,9 @@ class VoxelStep(object):
                 this particular feature has not implement yet.
         maxiter: float
             Maximum iterations/calls allowed during the optimization
-        weight: float
-            Fudge factor used to control the penalty term in the objective
-            function of the optimization step (constrains on unit cell).
         approximate: boolean
             Perform full calculation of the residual strain tensor or using
             simple approximation E = U - I
-        keep_volume: boolean
-            Keep the volume to be constant throughout the strain refinement,
-            which is suggested by Dr. Tischler at APS.
         RETURNS
         -------
         epsilon: np.array (3,3)
@@ -471,76 +463,31 @@ class VoxelStep(object):
         if not(self._valid):
             print "Corrupted voxel found!"
             raise ValueError('Validate data first before strain refinement!')
-        ##
-        # step 1: extract rotation (transformation).
-        lc_std = self.lc
-        # Bstar_0: strain free, rotation free reciprocal basis
-        # Bstar_1: stretched, rotation free reciprocal basis,
-        #          Bstar_1 = u_lattice * Bstar_0
-        # Bstar_2: stretch and rotated basis,
-        #          Bstar_2 = r_lattice * Bstar_1
-        # Bstar_3: strain free, rotated reciprocal lattice
-        #          forced u_lattice = I
-        Bstar_0 = get_reciprocal_base(lc_std)
-        Bstar_3 = self.reciprocal_basis
-        # find the rotation matrix that converts a standard reciprocal basis
-        # to the APS configuration
-        r_lattice = np.dot(Bstar_3, np.linalg.pinv(Bstar_0))
-        ##
-        # step 2: call scipy.optmize.minimize on the objective function
-        #         self.get_qmismatch to find the ideal set of lattice
-        #         constants that provide best match to measured Q vectors.
-        #         Since Dr.Tischler suggested a different approach, additional
-        #         implementation is provided for this case.
-        lc_ini  = lc_std
-        if keep_volume:
-            # keep c, alter a,b,alpha,beta,gamma
-            lc = [lc_std[0], lc_std[1], lc_std[3], lc_std[4], lc_std[5]]
-            lc_c = lc_std[2]
-            refine = minimize(self.strain_refine_tischler,
-                              lc,
-                              args=tuple([r_lattice, lc_c]),
-                              method='nelder-mead',
-                              options={'xtol': xtor,
-                                       'disp': disp,
-                                       'maxiter': int(maxiter),
-                                       'maxfev' : int(maxiter)})
-        else:
-            refine = minimize(self.strain_refine,
-                              lc_ini,
-                              args=tuple([r_lattice, weight]),
-                              method='nelder-mead',
-                              options={'xtol': xtor,
-                                       'disp': disp,
-                                       'maxiter': int(maxiter),
-                                       'maxfev' : int(maxiter)})
+        # feature vectors:
+        #   [a*_1, a*_2, a*_3, b*_1, b*_2, b*_3, c*_1, c*_2, c*_3]
+        v_features = np.reshape(self.reciprocal_basis, 9, order='F')
+        # c*3 will be calculated in strain_refine()
+        v_features = v_features[0:8]
+        # use scipy minimization module for optimization
+        refine = minimize(self.strain_refine,
+                          v_features,
+                          method='nelder-mead',
+                          options={'xtol': xtor,
+                                   'disp': disp,
+                                   'maxiter': int(maxiter),
+                                   'maxfev': int(maxiter)})
+        # display
         if disp:
             print "ideal: ", self.lc
             print refine
-        if keep_volume:
-            tmp_lc = refine.x
-            lc_fin = [tmp_lc[0],tmp_lc[1],lc_c,tmp_lc[2],tmp_lc[3],tmp_lc[4]]
-            # find scale factor based on unit cell volume
-            # change (cube root required here)
-            v_before   = 1.0/np.linalg.det(Bstar_3)
-            v_after    = np.linalg.det(get_base(lc_fin))
-            scale      = (v_after/v_before)**(1.0/3.0)
-            # rescale a,b,c based on volume change
-            lc_fin[0] *=  scale
-            lc_fin[1] *=  scale
-            lc_fin[2] *=  scale
-        else:
-            lc_fin = refine.x
-        ##
-        # step 3: calculate the stretch tensor using the deformation gradient
-        #         Dr. Tischler is doing all the calculation in the reciprocal
-        #         space, however the deformation gradient is in real space.
-        #         Based on the derivation in the reference, the
-        # ref: cyxtal/documentation
-        Bstar_1 = get_reciprocal_base(lc_fin)
-        # Bstar_2 = np.dot(r_lattice, Bstar_1)
-        u_fin = np.dot(np.linalg.pinv(Bstar_1.T), Bstar_0.T)
+        # extract refined reciprocal basis
+        vf_tmp = list(refine.x)
+        cstar_3 = np.sqrt(1.0 - vf_tmp[-2]**2 - vf_tmp[-1]**2)
+        vf_tmp = np.array(vf_tmp.append(cstar_3))
+        B_fin = np.reshape(vf_tmp, (3,3), order='F')
+        u_fin = np.dot(np.linalg.pinv(B_fin.T), self.reciprocal_basis.T)
         epsilon = 0.5*(np.dot(u_fin.T, u_fin) - np.eye(3))
+        # use small strain approximation?
         if approximate:
             epsilon = u_fin - np.eye(3)  # approximation
         # if no white beam energy provided, remove the hydrostatic component
@@ -564,71 +511,39 @@ class VoxelStep(object):
         epsilon = np.dot(g, np.dot(epsilon, g.T))
         return epsilon
 
-    def strain_refine(self, lc, r, weight):
+    def strain_refine(self, v_features):
         """
         DESCRIPTION
         -----------
-        rst = self.strain_refine(lc, r, weight)
+        rst = self.strain_refine(v_features)
             This is the objective function for the strain refinement.
         PARAMETERS
         ----------
-        lc: np.array
-            lattice constant
-        r: np.array (3,3)
-            transformation matrix (orientation matrix) that converts standard
-            unit cell system to APS coordinate system
-        weight: float
-            fudge factor in the penalty term that scales the effect of
-            unit cell volume change
+        v_features: np.array
+            feature vectors
+            (a*_1, a*_2, a*_3, b*_1, b*_2, b*_3, c*_1, c*_2)
         RETURNS
         -------
-        rst:  float
-            angular difference between calculated qs using new_lc and
-            measurements (self.qs). A penalty term (delta_V) is added
-            to ensure no large strain happens to the unit cell.
+        rst: float
+            1-cos(q_calc, q_meas).
         NOTE
         ----
             This approach is still under construction. Further change of
             the objective function is possible
         """
-        Bstar_1 = get_reciprocal_base(lc)
-        Bstar_2 = np.dot(r, Bstar_1)
-        # Penalty: delta_Vcell (relative)
-        #   first calculate the changes in the unit cell volume
-        wgt = weight
-        Vcell0 = 2*np.pi/np.linalg.det(self.reciprocal_basis)
-        Vcell2 = 2*np.pi/np.linalg.det(Bstar_2)
-        dVcell = abs(Vcell2 - Vcell0)/Vcell0
-        rst = wgt*dVcell
+        # calculate c*_3 assuming unit vector for c*
+        tmp_v = list(v_features)
+        cstar_3 = np.sqrt(1.0 - tmp_v[-2]**2 - tmp_v[-1]**2)
+        tmp_v = np.array(tmp_v.append(cstar_3))
+        # convert to reciprocal basis
+        B_new = np.reshape(tmp_v, (3, 3), order='F')
         # now add angular differences into the control
         hkls = self.hkls
         qs = self.qs
-        for i in range(qs.shape[0]):
-            # calculate new Q vector based on perturbed unit cell
-            q_tmp = np.dot(Bstar_2, hkls[i])
-            q_tmp = q_tmp/np.linalg.norm(q_tmp)
-            rst += 1.0 - abs(np.dot(q_tmp, qs[i]))
-        return rst
-
-
-    def strain_refine_tischler(self, lc, r, lattice_c):
-        """
-        Dr. Tischler implementation of strain refinement
-        NOTE:
-            This method currently leads to unstable results
-            (singular matrix)
-        """
-        # insert c back
-        lc = [lc[0], lc[1], lattice_c, lc[2], lc[3], lc[4]]
-        Bstar_1 = get_reciprocal_base(lc)
-        Bstar_2 = np.dot(r, Bstar_1)
         rst = 0.0
-        # now add angular differences into the control
-        hkls = self.hkls
-        qs = self.qs
         for i in range(qs.shape[0]):
             # calculate new Q vector based on perturbed unit cell
-            q_tmp = np.dot(Bstar_2, hkls[i])
+            q_tmp = np.dot(B_new, hkls[i])
             q_tmp = q_tmp/np.linalg.norm(q_tmp)
             rst += 1.0 - abs(np.dot(q_tmp, qs[i]))
         return rst
