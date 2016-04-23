@@ -466,8 +466,6 @@ class VoxelStep(object):
         # feature vectors:
         #   [a*_1, a*_2, a*_3, b*_1, b*_2, b*_3, c*_1, c*_2, c*_3]
         v_features = np.reshape(self.reciprocal_basis, 9, order='F')
-        # c*3 will be calculated in strain_refine()
-        v_features = v_features[0:8]
         # use scipy minimization module for optimization
         refine = minimize(self.strain_refine,
                           v_features,
@@ -481,10 +479,7 @@ class VoxelStep(object):
             print "ideal: ", self.lc
             print refine
         # extract refined reciprocal basis
-        vf_tmp = list(refine.x)
-        cstar_3 = np.sqrt(1.0 - vf_tmp[-2]**2 - vf_tmp[-1]**2)
-        vf_tmp = np.array(vf_tmp.append(cstar_3))
-        B_fin = np.reshape(vf_tmp, (3,3), order='F')
+        B_fin = np.reshape(refine.x, (3, 3), order='F')
         u_fin = np.dot(np.linalg.pinv(B_fin.T), self.reciprocal_basis.T)
         epsilon = 0.5*(np.dot(u_fin.T, u_fin) - np.eye(3))
         # use small strain approximation?
@@ -521,7 +516,7 @@ class VoxelStep(object):
         ----------
         v_features: np.array
             feature vectors
-            (a*_1, a*_2, a*_3, b*_1, b*_2, b*_3, c*_1, c*_2)
+            (a*_1, a*_2, a*_3, b*_1, b*_2, b*_3, c*_1, c*_2, c*_3)
         RETURNS
         -------
         rst: float
@@ -531,16 +526,12 @@ class VoxelStep(object):
             This approach is still under construction. Further change of
             the objective function is possible
         """
-        # calculate c*_3 assuming unit vector for c*
-        tmp_v = list(v_features)
-        cstar_3 = np.sqrt(1.0 - tmp_v[-2]**2 - tmp_v[-1]**2)
-        tmp_v = np.array(tmp_v.append(cstar_3))
         # convert to reciprocal basis
-        B_new = np.reshape(tmp_v, (3, 3), order='F')
-        # now add angular differences into the control
+        B_new = np.reshape(v_features, (3, 3), order='F')
+        rst = 0.0
+        # now add q vector differences into the control
         hkls = self.hkls
         qs = self.qs
-        rst = 0.0
         for i in range(qs.shape[0]):
             # calculate new Q vector based on perturbed unit cell
             q_tmp = np.dot(B_new, hkls[i])

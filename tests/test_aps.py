@@ -203,9 +203,7 @@ class TestStrainRefine(unittest.TestCase):
                [-0.0130564 ,  0.0360299 ,   0.00756606],
                [-0.00731337,  0.00756606,  -0.0373786]])
         # perform strain refine using Dr. Tischler method
-        epsilon_aps = self.data.get_strain(ref='APS',
-                                           mask=(1,1,1,1,1,1),
-                                           keep_volume=True)
+        epsilon_aps = self.data.get_strain(ref='APS')
         print "von Mises Strain (Igor | Cyxtal)"
         print get_vonMisesStrain(epsilonAPS110111),
         print " | ",
