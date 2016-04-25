@@ -59,19 +59,19 @@ from cyxtal import get_vonMisesStrain
 #   simple rotation around x-axis (see cyxtal/documentation)
 #
 #** XHF <-> TSL
-theta_1   = -np.pi
+theta_1 = -np.pi
 R_XHF2TSL = np.array([[1.0,              0.0,              0.0],
                       [0.0,  np.cos(theta_1), -np.sin(theta_1)],
                       [0.0,  np.sin(theta_1),  np.cos(theta_1)]])
 R_TSL2XHF = R_XHF2TSL.T
 #** XHF <-> APS
-theta_2   = -0.25*np.pi
+theta_2 = -0.25*np.pi
 R_XHF2APS = np.array([[1.0,              0.0,              0.0],
                       [0.0,  np.cos(theta_2), -np.sin(theta_2)],
                       [0.0,  np.sin(theta_2),  np.cos(theta_2)]])
 R_APS2XHF = R_XHF2APS.T
 #** APS <-> TSL
-theta_3   = -0.75*np.pi
+theta_3 = -0.75*np.pi
 R_APS2TSL = np.array([[1.0,              0.0,              0.0],
                       [0.0,  np.cos(theta_3), -np.sin(theta_3)],
                       [0.0,  np.sin(theta_3),  np.cos(theta_3)]])
@@ -104,19 +104,19 @@ class VoxelStep(object):
         self._Xsample = None
         self._Ysample = None
         self._Zsample = None
-        self._depth   = None
+        self._depth = None
         # indexing (shape unknown)
-        self._qs      = None
-        self._hkls    = None
+        self._qs = None
+        self._hkls = None
         # strain free reciprocal lattice
-        self._astar   = None
-        self._bstar   = None
-        self._cstar   = None
+        self._astar = None
+        self._bstar = None
+        self._cstar = None
         # lattice constant
-        self._lc      = None
+        self._lc = None
         self._lattice = None
         # validation
-        self._valid  = False
+        self._valid = False
 
     # Not the best way to handle data access constrain, but
     # we have to settle with this for now. No specific doc
@@ -218,7 +218,7 @@ class VoxelStep(object):
     @property
     def reciprocal_basis(self):
         # base vectors (matrix) of reciprocal lattice
-        return np.column_stack((self.astar,self.bstar,self.cstar))
+        return np.column_stack((self.astar, self.bstar, self.cstar))
 
     # Validate data to make sure we got all the fields
     # we need from the DAXM data file. Sometime the results file
@@ -256,7 +256,7 @@ class VoxelStep(object):
             assert self.Xsample is not None
             assert self.Ysample is not None
             assert self.Zsample is not None
-            assert self.depth   is not None
+            assert self.depth is not None
             # prune through qs to remove non-indexed peaks
             rl = self.reciprocal_basis
             n_peaks = self.hkls.shape[0]
@@ -268,15 +268,15 @@ class VoxelStep(object):
             #   The searching here should be optimized at some point
             for i in range(n_peaks):
                 threshold = tor
-                hkl = self.hkls[i,:]
+                hkl = self.hkls[i, :]
                 q_calc = np.dot(rl, hkl)
                 q_calc = q_calc/np.linalg.norm(q_calc)
                 for j in range(self.qs.shape[0]):
-                    tmp = 1.0 - abs(np.dot(q_calc, self.qs[j,:]))
+                    tmp = 1.0 - abs(np.dot(q_calc, self.qs[j, :]))
                     if tmp < threshold:
                         # try to located the closet match
                         threshold = tmp
-                        new_qs[i,:] = self.qs[j,:]
+                        new_qs[i, :] = self.qs[j, :]
             #**END:PRUNING_Q
             # save pruning results
             self.qs = new_qs
@@ -307,7 +307,7 @@ class VoxelStep(object):
 
     def get_coord(self,
                   ref='TSL',
-                  translate=(0,0,0)):
+                  translate=(0, 0, 0)):
         """
         DESCRIPTION
         -----------
@@ -345,7 +345,7 @@ class VoxelStep(object):
         # depends on the desired configuration, change the rotation
         # matrix accordingly
         ref = ref.upper()
-        if ref ==  'TSL':
+        if ref == 'TSL':
             r = R_APS2TSL
         elif ref == 'APS':
             r = R_APS2APS
@@ -386,7 +386,7 @@ class VoxelStep(object):
             raise ValueError("Invalid data, ABORT!")
         # get the rotation matrix first
         ref = ref.upper()
-        if ref ==  'TSL':
+        if ref == 'TSL':
             r = R_APS2TSL
         elif ref == 'APS':
             r = R_APS2APS
