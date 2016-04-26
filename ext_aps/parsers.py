@@ -421,7 +421,8 @@ class VoxelStep(object):
                    disp=False,
                    deviatoric=True,
                    maxiter=1e4,
-                   approximate=False):
+                   approximate=False,
+                   opt_method='nelder-mead'):
         """
         DESCRIPTION
         -----------
@@ -469,7 +470,7 @@ class VoxelStep(object):
         # use scipy minimization module for optimization
         refine = minimize(self.strain_refine,
                           v_features,
-                          method='nelder-mead',
+                          method=opt_method,
                           options={'xtol': xtor,
                                    'disp': disp,
                                    'maxiter': int(maxiter),
