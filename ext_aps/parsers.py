@@ -421,7 +421,6 @@ class VoxelStep(object):
                    disp=False,
                    deviatoric=True,
                    maxiter=1e4,
-                   approximate=False,
                    opt_method='nelder-mead'):
         """
         DESCRIPTION
@@ -448,16 +447,13 @@ class VoxelStep(object):
                 this particular feature has not implement yet.
         maxiter: float
             Maximum iterations/calls allowed during the optimization
-        approximate: boolean
-            Perform full calculation of the residual strain tensor or using
-            simple approximation E = U - I
         RETURNS
         -------
         epsilon: np.array (3,3)
-            Strain tensor in given reference configuration
+            Green--Lagrange strain tensor in given reference configuration
         NOTE
         ----
-            Since the strain is approximated using the (a*,b*,c*), which are
+            The strain is approximated using the (a*,b*,c*), which are
             in the APS coordinate system.
         """
         # check if voxel data is valid
@@ -481,15 +477,12 @@ class VoxelStep(object):
             print refine
         # extract refined reciprocal basis
         B_fin = np.reshape(refine.x, (3, 3), order='F')
-        u_fin = np.dot(np.linalg.pinv(B_fin.T), self.reciprocal_basis.T)
-        epsilon = 0.5*(np.dot(u_fin.T, u_fin) - np.eye(3))
-        # use small strain approximation?
-        if approximate:
-            epsilon = u_fin - np.eye(3)  # approximation
+        F_fin = np.dot(self.reciprocal_basis, np.linalg.inv(B_fin)).T
+        epsilon = 0.5*(np.dot(F_fin.T, F_fin) - np.eye(3))
         # if no white beam energy provided, remove the hydrostatic component
         # as it has no physical meaning
         if deviatoric:
-            epsilon = epsilon - np.eye(3)*np.trace(epsilon)/3.0
+            epsilon -= np.eye(3)*np.trace(epsilon)/3.0
         ##
         # step 4: transform strain tensor to requested configuration
         # some preparation before hard computing
@@ -537,7 +530,7 @@ class VoxelStep(object):
             # calculate new Q vector based on perturbed unit cell
             q_tmp = np.dot(B_new, hkls[i])
             q_tmp = q_tmp/np.linalg.norm(q_tmp)
-            rst += 1.0 - abs(np.dot(q_tmp, qs[i]))
+            rst += 1.0 - np.dot(q_tmp, qs[i])
         return rst
 
 
