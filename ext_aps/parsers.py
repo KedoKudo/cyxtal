@@ -89,14 +89,15 @@ class VoxelStep(object):
     various other purposes.
     PARAMETERS
     ----------
-    X|Y|Zsample:    sample motor position during scan (X|Y|Z)
-    depth:          wire position
-    qs:             identified diffraction vectors
-    hkls:           hkl indices identified
-    a|b|cstar:      strain free reciprocal lattice identified
-    lc:             lattice constants used in indexation
-    lattice:        lattice structure
-    _valid:         validation state of the voxel
+    X|Y|Zsample: sample motor position during scan (X|Y|Z)
+    depth:       wire position
+    qs:          identified diffraction vectors
+    hkls:        hkl indices identified
+    a|b|cstar:   strain free reciprocal lattice identified
+    lc:          lattice constants used in indexation
+    lattice:     lattice structure
+    goodness:    the indexation goodness of first pattern (highest confidence)
+    _valid:      validation state of the voxel
     """
 
     def __init__(self):
@@ -115,6 +116,8 @@ class VoxelStep(object):
         # lattice constant
         self._lc = None
         self._lattice = None
+        # pattern goodness
+        self._goodness = None
         # validation
         self._valid = False
 
@@ -152,6 +155,14 @@ class VoxelStep(object):
     @depth.setter
     def depth(self, data):
         self._depth = float(data)
+
+    @property
+    def goodness(self):
+        return self._goodness
+
+    @goodness.setter
+    def goodness(self, data):
+        self._goodness = float(data)
 
     @property
     def qs(self):
@@ -295,14 +306,16 @@ class VoxelStep(object):
         msg += '    depth: {}\n'.format(self.depth)
         msg += ' Q vectors(qx,qy,qz):\n'
         msg += str(self.qs) + '\n'
-        msg += ' HKLs:\n'
+        msg += ' HKLs (h,k,l):\n'
         msg += str(self.hkls) + '\n'
         msg += ' Reciprocal lattice vectors:\n'
         msg += '  a*:' + str(self.astar) + '\n'
         msg += '  b*:' + str(self.bstar) + '\n'
         msg += '  c*:' + str(self.cstar) + '\n'
+        msg += ' Pattern Goodness:\n'
+        msg += '  ' + str(self.goodness) + '\n'
         msg += ' Lattice Constants for Indexation:\n'
-        msg += '  ' + str(self.lc)
+        msg += '  ' + str(self.lc) + '\n'
         return msg
 
     def get_coord(self,
@@ -613,6 +626,8 @@ def parse_xml(xmlfile,
         h  = step.find('step:indexing/step:pattern/step:hkl_s/step:h', ns).text
         k  = step.find('step:indexing/step:pattern/step:hkl_s/step:k', ns).text
         l  = step.find('step:indexing/step:pattern/step:hkl_s/step:l', ns).text
+        # |->indexation goodess for the first set of patterns
+        goodness = step.find('step:indexing/step:pattern', ns).attrib['goodness']
         # |->lattice constants (ideal)
         lc = step.find('step:indexing/step:xtl/step:latticeParameters', ns).text
         # STEP 2: PARSE DATA TO MEMORY
@@ -627,6 +642,8 @@ def parse_xml(xmlfile,
         qy = [float(item) for item in qy.split()]
         qz = [float(item) for item in qz.split()]
         voxel.qs = np.column_stack((qx,qy,qz))
+        # |->diffraction pattern goodness
+        voxel.goodness = goodness
         # |->reciprocal lattice vectors
         voxel.astar = [float(item) for item in astar.split()]
         voxel.bstar = [float(item) for item in bstar.split()]
