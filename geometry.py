@@ -446,6 +446,103 @@ class Point2D(Point):
     def __str__(self):
         return "({}, {})".format(self.x, self.y)
 
+
+class Line2D(Line):
+    """
+    DESCRIPTION
+    -----------
+    Line2D(Point2D pt_start, Point2D pt_end)
+        A 2D line (derived from the 3D Line class).
+    PARAMETERS
+    ----------
+    METHODS
+    -------
+    get_discrete_pts(step=5)
+        Return a numpy.array of coordinates discretize the 2D line.
+    get_segments(step=5)
+        Return a numpy.array of segments.
+    CLASSMETHOD
+    -----------
+    """
+    def __init__(self, pt_start, pt_end):
+        """Using two 2D point to define a 2D line"""
+        assert isinstance(pt_start, Point2D)
+        assert isinstance(pt_end, Point2D)
+        super(Line2D, self).__init__(pt_start, pt_end)
+
+    def __str__(self):
+        out_string = "(" + str(self.start_pt.x) + ", " + str(self.start_pt.y)
+        out_string += ") --> ("
+        out_string += str(self.end_pt.x) + ", " + str(self.end_pt.y) + ")"
+        return out_string
+
+    @property
+    def direction(self):
+        temp_vector = [self.end_pt.x - self.start_pt.x,
+                       self.end_pt.y - self.start_pt.y]
+        temp_vector = [item/np.linalg.norm(temp_vector)
+                       for item in temp_vector]
+        return temp_vector
+
+    def parallel_to(self, other):
+        vec_1 = self.direction
+        vec_2 = other.direction
+        if 1 - np.absolute(np.dot(vec_1, vec_2)) < 1e-4:
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def skewed_from(self, other):
+        """2D lines do not skew from each other"""
+        raise TypeError("2D line do not skew from each other")
+
+    def get_intercept(self, other):
+        """Return the intercept of two lines"""
+        if self.parallel_to(other):
+            return None
+        elif self.contain_point(other.start_pt):
+            return other.start_pt
+        elif self.contain_point(other.end_pt):
+            return other.end_pt
+        else:
+            pt_a = self.start_pt
+            pt_b = self.end_pt
+            pt_c = other.start_pt
+            pt_d = other.end_pt
+            matrix = np.array([[pt_a.y - pt_b.y, pt_b.x - pt_a.x],
+                               [pt_c.y - pt_d.y, pt_d.x - pt_c.x]])
+            vector = np.array([pt_b.x * pt_a.y - pt_a.x * pt_b.y,
+                               pt_d.x * pt_c.y - pt_c.x * pt_d.y])
+            results = np.linalg.solve(matrix, vector)
+            temp_pt = Point2D(results[0], results[1])
+            if self.contain_point(temp_pt) and other.contain_point(temp_pt):
+                return temp_pt
+            else:
+                return None
+
+    def get_discrete_pts(self, step=5):
+        """ return a list of coordinates discretize the line """
+        # get number of segments for current line
+        step_size = int(self.length / float(step)) + 2
+        t = np.linspace(0, 1, step_size)
+        pts = []
+        # chop, chop
+        for item in t:
+            x = self.start_pt.x + (self.end_pt.x - self.start_pt.x) * item
+            y = self.start_pt.y + (self.end_pt.y - self.start_pt.y) * item
+            pts.append((x, y))
+        return np.array(pts)
+
+    def get_segments(self, step=5):
+        """ return a list of segments"""
+        # This can be directly used by matplitlib
+        pt_list = self.get_discrete_pts(step=step)
+        segments = []
+        for i in range(len(pt_list) - 1):
+            segments.append([pt_list[i], pt_list[i+1]])
+        return np.array(segments)
+
 # ----------- #
 # END OF FILE #
 # ----------- #
