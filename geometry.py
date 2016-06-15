@@ -177,7 +177,6 @@ class Line(object):
     CLASSMETHOD
     -----------
     """
-
     def __init__(self, pt_start, pt_end):
         if pt_start == pt_end:
             raise ValueError("0 length line.")
@@ -346,6 +345,83 @@ class Line(object):
         if inDegree:
             angle = np.rad2deg(angle)
         return angle
+
+
+class Plane(object):
+    """
+    DESCRIPTION
+    -----------
+    Plane(Point pt_1, Point pt_2, Point pt_3)
+        A plane in 3D space defined with 3 points.
+    PARAMETERS
+    ----------
+    pt_0, pt_1, pt_2: Point
+        Three non collinear points defines the flat plane (self).
+    normal: numpy.array
+        Plane normal
+    METHODS
+    -------
+    contain_point(Point point)
+        Test if self contains pt.
+    contain_line(Line l)
+        Test if self contains l.
+    parallel_to(Plane other)
+        Test if self and other are parallel to each other.
+    CLASSMETHOD
+    -----------
+    """
+    def __init__(self, point1, point2, point3):
+        # test if 3 points are on the same line
+        if Line(point1, point2).parallel_to(Line(point2, point3)):
+            raise ValueError("3 points are collinear ")
+        self._point = [point1, point2, point3]
+
+    @property
+    def normal(self):
+        """Plane normal"""
+        normal = np.cross(Line(self._point[0], self._point[1]).direction,
+                          Line(self._point[1], self._point[2]).direction)
+        normal = [item/np.linalg.norm(normal) for item in normal]
+        return np.array(normal)
+
+    def __str__(self):
+        out_string = "{}(x-{})+{}(y-{})+{}(z-{})=0".format(self.normal[0],
+                                                           self._point[0].x,
+                                                           self.normal[1],
+                                                           self._point[0].y,
+                                                           self.normal[2],
+                                                           self._point[0].z)
+        return out_string
+
+    def __eq__(self, other):
+        if 1 - np.absolute(np.dot(self.normal, other.normal)) < 1e-4:
+            return other.contain_point(self._point[0])
+        else:
+            return False
+
+    def contain_point(self, point):
+        """Quick test to see if a point is in plane"""
+        test_val = [point.x - self._point[0].x,
+                    point.y - self._point[0].y,
+                    point.z - self._point[0].z]
+        if np.absolute(np.dot(test_val, self.normal)) < 1e-4:
+            return True
+        else:
+            return False
+
+    def contain_line(self, line):
+        """Quick test to see if a line lies in a plane"""
+        if self.contain_point(line.start_pt):
+            if self.contain_point(line.end_pt):
+                return True
+        return False
+
+    def parallel_to(self, other):
+        """Quick test if two planes are parallel to each other"""
+        if 1 - np.absolute(np.dot(self.normal, other.normal)) < 1e-4:
+            return True
+        else:
+            return False
 
 # ----------- #
 # END OF FILE #
