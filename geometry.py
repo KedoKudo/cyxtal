@@ -423,6 +423,29 @@ class Plane(object):
         else:
             return False
 
+
+class Point2D(Point):
+    """
+    DESCRIPTION
+    -----------
+    Point2D(x,y)
+        A 2D point (derived from the 3D Point class).
+    PARAMETERS
+    ----------
+    METHODS
+    -------
+    CLASSMETHOD
+    -----------
+    """
+    def __init__(self, x, y):
+        super(Point2D, self).__init__(x, y, 0)
+
+    def __len__(self):
+        return 2
+
+    def __str__(self):
+        return "({}, {})".format(self.x, self.y)
+
 # ----------- #
 # END OF FILE #
 # ----------- #
