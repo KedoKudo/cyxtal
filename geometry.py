@@ -50,6 +50,8 @@ class Point(object):
     ----------
     x,y,z: float
         Standard Cartesian coordinates for location description.
+    coord: array
+        Vector of the Cartesian coordinates.
     METHODS
     -------
     dist2point(Point other)
@@ -137,3 +139,214 @@ class Point(object):
         return plane.contain_point(self)
 
 
+class Line(object):
+    """
+    DESCRIPTION
+    -----------
+    Line(Point pt_0, Point pt_1)
+        A line(segment) in 3D space defined with 2 Point instances.
+    PARAMETERS
+    ----------
+    start_pt: Point
+        Start point of the line instance.
+    end_pt: Point
+        End point of the line instance.
+    length: float
+        Return the length of the line segment.
+    direction: numpy.array
+        Return the direction vector of the line segment.
+        [start_pt->end_pt]
+    METHODS
+    -------
+    contain_point(Point pt)
+        Test if self contains pt.
+    parallel_to(Line other)
+        Test if self is parallel to other.
+    skewed_from(Line other)
+        Test if self is skewed from other.
+    intercepted_by(Line other)
+        Test if self is intercepted by other.
+    get_intercept(Line other)
+        Return the intercept point.
+    dist2point(Point pt)
+        Return the distance between self and pt (shortest).
+    dist2line(Line other)
+        Return the distance between self and other (shortest).
+    angle2line(Line other, inDegree=True)
+        Return the angle between self and other.
+    CLASSMETHOD
+    -----------
+    """
+
+    def __init__(self, pt_start, pt_end):
+        if pt_start == pt_end:
+            raise ValueError("0 length line.")
+        else:
+            self._start = pt_start
+            self._end = pt_end
+
+    @property
+    def start_pt(self):
+        return self._start
+
+    @start_pt.setter
+    def start_pt(self, new_start):
+        self._start = new_start
+
+    @property
+    def end_pt(self):
+        return self._end
+
+    @end_pt.setter
+    def end_pt(self, new_end):
+        self._end = new_end
+
+    @property
+    def length(self):
+        temp = [self.start_pt.x - self.end_pt.x,
+                self.start_pt.y - self.end_pt.y,
+                self.start_pt.z - self.end_pt.z]
+        result = temp[0]**2 + temp[1]**2 + temp[2]**2
+        return np.sqrt(result)
+
+    @property
+    def direction(self):
+        temp = [self.end_pt.x - self.start_pt.x,
+                self.end_pt.y - self.start_pt.y,
+                self.end_pt.z - self.start_pt.z]
+        result = [float(item/self.length) for item in temp]
+        return np.array(result)
+
+    def __str__(self):
+        return str(self.start_pt) + "-->" + str(self.end_pt)
+
+    def __neg__(self):
+        return Line(self.end_pt, self.start_pt)
+
+    def __eq__(self, other):
+        if self.start_pt == other.start_pt:
+            if self.end_pt == other.end_pt:
+                return True
+        return False
+
+    def __ne__(self, other):
+        return not self == other
+
+    def contain_point(self, point):
+        """Test if self contains point"""
+        if point == self.start_pt:
+            return True  # special case of start point
+        elif point == self.end_pt:
+            return True  # special case of end point
+        else:
+            line1 = Line(point, self.start_pt)
+            line2 = Line(point, self.end_pt)
+            # when point online, the angle between
+            # line1 and line2 should be 180 degree
+            if np.dot(line1.direction, line2.direction) + 1 < 1e-4:
+                return True
+        return False
+
+    def parallel_to(self, other):
+        """Test if two Line are parallel to each other"""
+        if 1 - np.absolute(np.dot(self.direction, other.direction)) < 1e-4:
+            return True
+        return False
+
+    def skewed_from(self, other):
+        """Quick test if one line is skewed from the other"""
+        if self.parallel_to(other):
+            return False
+        elif self.contain_point(other.start_pt):
+            return False  # intercepted at the end point
+        elif self.contain_point(other.end_pt):
+            return False  # intercepted at the end point
+        else:
+            normal = np.cross(self.direction, other.direction)
+            normal = [item/np.linalg.norm(normal) for item in normal]
+            test_line = Line(self.start_pt, other.start_pt)
+            # test if two lines are coplanar --> intercept
+            if np.absolute(np.dot(normal, test_line.direction)) < 1e-4:
+                return False
+            else:
+                return True
+
+    def intercepted_by(self, other):
+        """Quick test if one line is intercepted by another"""
+        return not self.get_intercept(other) is None
+
+    def get_intercept(self, other):
+        """Return the intercept point is exist, or return None"""
+        if self.parallel_to(other) or self.skewed_from(other):
+            return None
+        elif self.contain_point(other.start_pt):
+            return other.start_pt
+        elif self.contain_point(other.end_pt):
+            return other.end_pt
+        else:
+            pt_a = self.start_pt
+            pt_b = self.end_pt
+            pt_c = other.start_pt
+            pt_d = other.end_pt
+            matrix = np.array([[pt_b.x - pt_a.x, pt_c.x - pt_d.x],
+                               [pt_b.y - pt_a.y, pt_c.y - pt_d.y],
+                               [pt_b.z - pt_a.z, pt_c.z - pt_d.z]])
+            vector = np.array([pt_c.x - pt_a.x,
+                               pt_c.y - pt_a.y,
+                               pt_c.z - pt_a.z])
+            co_vector = np.dot(matrix.T, vector)
+            co_matrix = np.dot(matrix.T, matrix)
+            # use least-square to solve a overdetermined situation
+            results = np.linalg.solve(co_matrix, co_vector)
+            temp_pt = Point(pt_a.x + (pt_b.x - pt_a.x)*results[0],
+                            pt_a.y + (pt_b.y - pt_a.y)*results[0],
+                            pt_a.z + (pt_b.z - pt_a.z)*results[0])
+            if self.contain_point(temp_pt) and other.contain_point(temp_pt):
+                return temp_pt
+            else:
+                return None
+
+    def dist2point(self, point):
+        """Return the distance to a given point"""
+        if self.contain_point(point):
+            return 0.0
+        else:
+            temp_line = Line(point, self.start_pt)
+            # find the normal of the plane defined by the point and line
+            plane_normal = np.cross(temp_line.direction, self.direction)
+            plane_normal = [item/np.linalg.norm(plane_normal)
+                            for item in plane_normal]
+            direction = np.cross(self.direction, plane_normal)
+            direction = [item/np.linalg.norm(direction) for item in direction]
+            result = temp_line.length * np.dot(temp_line.direction, direction)
+            return np.absolute(result)
+
+    def dist2line(self, other):
+        """Return the distance between two skewed or parallel lines"""
+        if self.parallel_to(other):
+            if self.contain_point(other.start_pt):
+                return 0.0  # two line intercept at start_pt
+            elif self.contain_point(other.end_pt):
+                return 0.0  # two line intercept at end_pt
+            else:
+                return self.dist2point(other.start_pt)
+        elif self.skewed_from(other):
+            normal = np.cross(self.direction, other.direction)
+            normal = [item/np.linalg.norm(normal) for item in normal]
+            test_line = Line(self.start_pt, other.start_pt)
+            result = test_line.length * np.dot(test_line.direction, normal)
+            return np.absolute(result)
+        else:
+            # self intercepts with other
+            return 0.0
+
+    def angle2line(self, other, inDegree=True):
+        """Return angle between self and other"""
+        angle = np.arccos(np.dot(self.direction, other.direction))
+        if inDegree:
+            angle = np.rad2deg(angle)
+        return angle
+
+# ----------- #
+# END OF FILE #
+# ----------- #
