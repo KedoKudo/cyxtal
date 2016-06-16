@@ -64,6 +64,7 @@ class test3DGeo(unittest.TestCase):
         self.line13 = Line(self.pt1, self.pt3)
         self.line14 = Line(self.pt1, self.pt4)
         self.line25 = Line(self.pt2, self.pt5)
+        self.line35 = Line(self.pt3, self.pt5)
 
         self.plane123 = Plane(self.pt1, self.pt2, self.pt3)
         self.plane134 = Plane(self.pt1, self.pt3, self.pt4)
@@ -105,6 +106,39 @@ class test3DGeo(unittest.TestCase):
                                        True)
         tmpLine = Line(self.pt1, Point(0, 3, 4))
         np.testing.assert_almost_equal(tmpLine.skewed_from(self.line25),
+                                       False)
+
+    def test_line_intercept(self):
+        l1 = Line(Point(0, 0, 0), Point(2, 2, 0))
+        l2 = Line(Point(2, 0, 0), Point(0, 2, 0))
+        np.testing.assert_almost_equal(l1.intercepted_by(l2),
+                                       True)
+        np.testing.assert_almost_equal(l1.get_intercept(l2) == Point(1, 1, 0),
+                                       True)
+
+    def test_dist_line2line(self):
+        tmpLine = Line(Point(0, 3, 4), self.pt5)
+        np.testing.assert_almost_equal(self.line12.dist2line(self.line13),
+                                       0.0)
+        np.testing.assert_almost_equal(tmpLine.dist2line(self.line12),
+                                       5.0)
+
+    def test_angle_line2line(self):
+        tmpLine = Line(self.pt3, Point(3, 3, 3))
+        np.testing.assert_almost_equal(self.line12.angle2line(self.line14),
+                                       90.0)
+        np.testing.assert_almost_equal(tmpLine.angle2line(self.line12),
+                                       45.0)
+
+    def test_line_in_plane(self):
+        np.testing.assert_almost_equal(self.plane123.contain_line(self.line35),
+                                       False)
+        np.testing.assert_almost_equal(self.plane123.contain_line(self.line13),
+                                       True)
+
+    def test_plane_parallel(self):
+        tmp = self.plane234
+        np.testing.assert_almost_equal(self.plane123.parallel_to(tmp),
                                        False)
 
 
