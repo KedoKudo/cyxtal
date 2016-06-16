@@ -38,6 +38,11 @@ python geom_fromRCB.py reconstrcuted_boundary_file.rcb.
     boundary file from TSL software.
 """
 
+import sys
+import argparse
+import numpy as np
+from cyxtal import Point2D
+from cyxtal import Polygon2D
 
 # import os, sys, argparse
 # import h5py
