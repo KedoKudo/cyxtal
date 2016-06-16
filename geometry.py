@@ -543,6 +543,176 @@ class Line2D(Line):
             segments.append([pt_list[i], pt_list[i+1]])
         return np.array(segments)
 
+
+class Polygon2D(object):
+    """
+    DESCRIPTION
+    -----------
+    Polygon2D()
+        A 2D polygon class.
+    PARAMETERS
+    ----------
+    edges: list
+        List of segments/edges of the 2D polygon.
+    vertices: list
+        List of 2D points serve as the vertices of the 2D polygon.
+    center: Point2D
+        Gravity center of the polygon.
+    METHODS
+    -------
+    add_vertex(Point new_vtx)
+        Add new vertex to self.
+    get_shortest()
+        Return the shortest distance between the center and vertices.
+    contains_point(Point point, ray_origin=None)
+        Test if given point lies inside self.
+    CLASSMETHOD
+    -----------
+    """
+    def __init__(self):
+        """Initialize a 2D polygon with empty vertices list"""
+        self.__vertices = []
+        self.__ordered = False
+
+    def __str__(self):
+        """Formatted output for 2D polygon"""
+        return "2D {}-Polygon".format(len(self.__vertices))
+
+    @property
+    def edges(self):
+        if not self.__ordered:
+            self.__update()  # use lazy-evaluation, only update when needed
+        # compute edge list
+        edge_list = []
+        for i in range(len(self.__vertices) - 1):
+            edge_list.append(Line2D(self.__vertices[i], self.__vertices[i+1]))
+        edge_list.append(Line2D(self.__vertices[-1], self.__vertices[0]))
+        return edge_list
+
+    @property
+    def vertices(self):
+        if not self.__ordered:
+            # use lazy-evaluation, only update when needed
+            self.__update()
+        return self.__vertices
+
+    @property
+    def center(self):
+        """return the gravity center"""
+        center_x = 0.0
+        center_y = 0.0
+        for vertex in self.__vertices:
+            center_x += float(vertex.x)
+            center_y += float(vertex.y)
+        center_x /= len(self.__vertices)
+        center_y /= len(self.__vertices)
+        return Point2D(center_x, center_y)
+
+    def add_vertex(self, point):
+        """Add one more vertex to the current Polygon"""
+        self.__vertices.append(point)
+        self.__ordered = False
+
+    def __update(self):
+        point_list = []
+        for vertex in self.__vertices:
+            point_list.append((vertex.x, vertex.y))
+        # build an ordered vertices list use convex_hull method
+        self.__vertices = []
+        for point in convex_hull(point_list):
+            self.__vertices.append(Point2D(point[0], point[1]))
+        self.__ordered = True
+
+    def get_shortest(self):
+        """return the shortest distance between the center and vertices"""
+        center = self.center
+        dist = Line2D(center, self.__vertices[-1]).length
+        for vertex in self.__vertices[:-1]:
+            temp = Line2D(center, vertex).length
+            if temp < dist:
+                dist = temp
+        return dist
+
+    def contains_point(self, point, ray_origin=None):
+        """quick test if a Point2D instance is inside the polygon."""
+        assert isinstance(point, Point2D)
+        # First test if the point happens to be on the edges
+        for edge in self.edges:
+            if edge.contain_point(point):
+                return True
+        # now start with other settings
+        if ray_origin is None:
+            center = self.center
+            temp_x = center.x + 10 * (self.__vertices[-1].x - center.x)
+            temp_y = center.y + 10 * (self.__vertices[-1].y - center.y)
+            test_point = Point2D(temp_x, temp_y)
+            test_line = Line2D(test_point, point)
+        else:
+            assert isinstance(ray_origin, Point2D)
+            test_line = Line2D(ray_origin, point)
+        count = 0
+        for edge in self.edges:
+            if edge.intercepted_by(test_line):
+                count += 1
+        if count % 2 == 0:
+            return False
+        else:
+            return True
+
+
+def convex_hull(point_list):
+    """
+    DESCRIPTION
+    -----------
+    convex_hull(points)
+        Computes the convex hull of a set of 2D points.
+    PARAMETERS
+    ----------
+    points: list
+        An iterable sequence of (x, y) pairs representing the points.
+    RETURNS
+    -------
+        A list of vertices of the convex hull in counter-clockwise order,
+        starting from the vertex with the lexicographically smallest
+        coordinates. Implements Andrew's monotone chain algorithm.
+        O(n log n) complexity.
+    NOTES
+    -----
+    """
+    # Sort the points lexicographically
+    # Remove duplicates to detect the case we have just one unique point.
+    points = sorted(set(point_list))
+    # Boring case: no points or a single point, possibly repeated
+    # multiple times.
+    if len(points) <= 1:
+        return points
+    # 2D cross product of OA and OB vectors, i.e. z-component of their
+    # 3D cross product. Returns a positive value, if OAB makes a
+    # counter-clockwise turn, negative for clockwise turn, and zero if the
+    # points are collinear.
+
+    def cross(o, a, b):
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+
+    # Build lower hull
+    lower = []
+    for p in points:
+        while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0:
+            lower.pop()
+        lower.append(p)
+
+    # Build upper hull
+    upper = []
+    for p in reversed(points):
+        while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0:
+            upper.pop()
+        upper.append(p)
+
+    # Concatenation of the lower and upper hulls gives the convex hull.
+    # Last point of each list is omitted because it is repeated at the
+    # beginning of the other list.
+    return lower[:-1] + upper[:-1]
+
 # ----------- #
 # END OF FILE #
 # ----------- #
