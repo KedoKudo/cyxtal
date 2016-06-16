@@ -146,6 +146,25 @@ class test2DGeo(unittest.TestCase):
 
     def setUp(self):
         self.pt1 = Point2D(0, 0)
+        self.pt2 = Point2D(5, 0)
+        self.pt3 = Point2D(7, 2)
+        self.pt4 = Point2D(4, 5)
+        self.pt5 = Point2D(7, 0)
+        self.pt6 = Point2D(-2, 2)
+        pts = [self.pt1, self.pt2, self.pt3, self.pt4, self.pt5, self.pt6]
+
+        self.polygon = Polygon2D()
+        for vertex in pts:
+            self.polygon.add_vertex(vertex)
+
+    def test_polygon_contain_point(self):
+        test_pt1 = Point2D(2, 2)  # inside
+        test_pt2 = Point2D(-10, -10)  # outside
+        np.testing.assert_almost_equal(self.polygon.contains_point(test_pt1),
+                                       True)
+        np.testing.assert_almost_equal(self.polygon.contains_point(test_pt2),
+                                       False)
+
 
 if __name__ == '__main__':
     unittest.main()
