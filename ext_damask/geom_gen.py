@@ -34,10 +34,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 DESCRIPTION
 -----------
 Provide various method to generate geom file for spectral solver@DAMASK.
+
 METHOD
 ------
 geom_fromRCB()
 geom_from...()
+
+NOTE
+----
+--> The default header for a reconstructed boundary file from TSL
+# Column 1-3:    right hand average orientation (phi1, PHI, phi2 in radians)
+# Column 4-6:    left hand average orientation (phi1, PHI, phi2 in radians)
+# Column 7:      length (in microns)
+# Column 8:      trace angle (in degrees)
+# Column 9-12:   x,y coordinates of endpoints (in microns)
+# Column 13-14:  IDs of right hand and left hand grains
 """
 
 import numpy as np
@@ -45,16 +56,36 @@ from cyxtal import Point2D
 from cyxtal import Polygon2D
 
 
-def geom_fromRCB(rcbFile, output='sample.geom',
-                 rim=0,
+def geom_fromRCB(rcbFile,
+                 output=None,
+                 viz=None,
+                 rim=1,
                  thickness=1,
                  step=1):
     """
     DESCRIPTION
     -----------
-    geom, textures = parse_rcb
+    geom, textures = parse_rcb(RCBFILE,
+                               output='GEOM_FILE_NAME',
+                               rim=RIM_SIZE,
+                               thickness=NUM_VOXEL_Z_DIRECTION,
+                               step=MESH_RESOLUTION_IN_um)
+        Generate a columnar microstructure based on given surface OIM
+    data (RCBFILE: reconstructed boundary file), optional geom file and
+    material configuration file can be auto generated during the process.
     PARAMETERS
     ----------
+    RCBFILE:   str
+        The path to reconstructed boundary file.
+    output:    str
+        File name for the geom file to be used with spectral solver.
+    rim:       int
+        Rim/Pan used to force periodic microstructure which is required by
+        the spectral solver. Default value is set to 1, i.e.
+    thickness: int
+        Thickness along the sample z direction (depth). Since no subsurface
+        information is available, the thickness of each grain is arbitrarily
+        defined through this option.
     RETURNS
     -------
     NOTES
