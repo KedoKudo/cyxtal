@@ -233,6 +233,29 @@ def geom_fromRCB(rcbFile,
         if debug:
             print "DAMASK geom file exported."
         # 2.material.config
+        tmpstr = "#Require manual update\n\n"
+        tmpstr += "<homogenization>]\n\n"
+        tmpstr += "[SX]\ntype\tNone\n\n"
+        tmpstr += "<microstructure>\n"
+        tmpstr += "[rim]\ncrystallite 1\n"
+        tmpstr += "(constituent)\tphase 2\ttexture 1\tfraction 1.0\n"
+        for gid in gids:
+            tmpstr += "[Grain{}]\ncrystallite 1\n".format(gid)
+            tmpstr += "(constituent)\tphase 1\t"
+            tmpstr += "texture {}\tfraction 1.0\n\n".format(gid)
+        tmpstr += "\n"
+        tmpstr += "<crystallite>\n\n<phase>\n\n"
+        tmpstr += "<texture>\n"
+        tmpstr += "[rim]\n\n"
+        for gid in gids:
+            phi1, PHI, phi2 = textures[gid]
+            tmpstr += "[Grain{}]\n".format(gid)
+            tmpstr += "(gauss) phi1 {}\t PHI {}\t phi2 {}\t".format(phi1,
+                                                                    PHI,
+                                                                    phi2)
+            tmpstr += "scatter 0.00000\tfraction 1.0\n\n"
+        if debug:
+            print "DAMASK material configuration file exported."
     return geom_withRim, textures
 
 
