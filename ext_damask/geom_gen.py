@@ -52,6 +52,7 @@ NOTE
 """
 
 import vtk
+import sys
 import numpy as np
 from cyxtal import Point2D
 from cyxtal import Polygon2D
@@ -198,6 +199,7 @@ def geom_fromRCB(rcbFile,
             coord = Point2D(i, j)
             if debug:
                 print "\r", coord,
+                sys.stdout.flush()
             for gid in gids:
                 if grains[gid].contains_point(coord):
                     geom[i, j, :] = gid
