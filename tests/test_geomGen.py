@@ -36,7 +36,6 @@ DESCRIPTION
 Testing geom_gen module.
 """
 
-import nump as np
 from cyxtal import geom_fromRCB
 
 # call geom_fromRCB

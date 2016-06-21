@@ -52,6 +52,8 @@ from cyxtal.geometry  import convex_hull
 import ext_vtk
 import ext_damask
 
+from ext_damask.geom_gen import geom_fromRCB
+
 # Auxiliary modules for APS, TSL, damask
 from cyxtal.ext_aps.parsers import VoxelStep
 from cyxtal.ext_aps.parsers import parse_xml

@@ -51,6 +51,7 @@ NOTE
 # Column 13-14:  IDs of right hand and left hand grains
 """
 
+import vtk
 import numpy as np
 from cyxtal import Point2D
 from cyxtal import Polygon2D
@@ -58,9 +59,8 @@ from cyxtal import Polygon2D
 
 def geom_fromRCB(rcbFile,
                  output=None,
-                 viz=None,
                  rim=1,
-                 thickness=1,
+                 thickness=None,
                  step=1,
                  debug=False):
     """
@@ -91,7 +91,8 @@ def geom_fromRCB(rcbFile,
         Spectral mesh resolution. Default value is set to 1, i.e. the smallest
         representation of the microstructure is a 1x1x1 um box.
     debug:     boolean
-        Control debugging output to terminal.
+        Control debugging output to terminal. Also provide VTP file for
+        visual inspection.
     RETURNS
     -------
     geom:      numpy.array
@@ -109,31 +110,39 @@ def geom_fromRCB(rcbFile,
     # Column 8:     trace angle (in degrees)
     # Column 9-12:  x,y coordinates of endpoints (in microns)
     # Column 13-14: IDs of right hand and left hand grains
-    --> Figuring out which grain are at the corner of the map:
-    For each corner, we can computer the distance between the corner and the
-    center of each grain. The grain with the smallest the distance to this
-    corner should be one containing the corner vertex.
+    --> Algorithm
     """
     with open(rcbFile) as f:
         rawstr = f.readlines()[8:]
         data = [[float(item) for item in line.split()] for line in rawstr]
+    data = np.array(data)
     # figure out patch size
-    xmax = max(max(data[:, 8]), max(data[:, 10]))
-    ymax = max(max(data[:, 9]), max(data[:, 11]))
+    # initialize columnar grain structure
+    xmax = int(max(max(data[:, 8]), max(data[:, 10])))
+    ymax = int(max(max(data[:, 9]), max(data[:, 11])))
     corners = [Point2D(0.0, 0.0),
                Point2D(0.0, ymax),
                Point2D(xmax, 0.0),
                Point2D(xmax, ymax)]
-    # total number of grains
-    # --> grain_1 is reserved for rim, thus offset all OIM ID by 1
-    # --> grains[0] is an empty polygon, a place holder for rim
-    ng = max(max(data[:, 12]), max(data[:, 13])) + 1
+    # if patch thickness is not defined, use largest possible
+    if thickness is None:
+        thickness = max(ymax, xmax)
+    geom = np.zeros((xmax, ymax, thickness))
+    # ng: total number of grains (include offset and rim)
+    # --> ng is type casted to be integer
+    # --> gid=1 is reserved for rim, thus offset all OIM GID by 1
+    # --> grains[0] is an empty polygon, a place holder since ID=0 is not
+    #     valid in DAMASK.
+    # --> grains[1] is rim, which is a empty polygon
+    ng = max(max(data[:, 12]), max(data[:, 13])) + 1 + 1
+    ng = int(ng)
     grains = [Polygon2D() for i in range(ng)]
     # texture book keeping
     # --> textures = {ID: orientation}
     textures = {}
     textures[1] = None
     # parsing each grain boundary
+    # OIM ID is offset by +1 as GID=1 is reserved for rim
     for row in data:
         l_O = tuple(np.rad2deg(row[0:3]))
         r_O = tuple(np.rad2deg(row[3:6]))
@@ -141,7 +150,7 @@ def geom_fromRCB(rcbFile,
         vtx2 = Point2D(row[10], row[11])
         l_gid = int(row[13]) + 1
         r_gid = int(row[12]) + 1
-        # parse left grain
+        # update texture info
         if l_gid not in textures.keys():
             textures[l_gid] = l_O
         if r_gid not in textures.keys():
@@ -151,9 +160,59 @@ def geom_fromRCB(rcbFile,
         grains[l_gid].add_vertex(vtx2)
         grains[r_gid].add_vertex(vtx1)
         grains[r_gid].add_vertex(vtx2)
+    # Grain information
+    # --> ID, (phi1, PHI, phi2), (center.x, center.y)
+    if debug:
+        print "Identified grains:"
+        for key in textures:
+            if key == 1:
+                print key, textures[key]
+            else:
+                print key, textures[key], grains[key].center
+        print
+    # Add corner to correct polygon (grain)
+    # NOTE:
+    #   Some of the Grain (Polygon2D) will be empty one due to
+    #   missing info in the RCB file. This is usually related to
+    #   the cleaning up.
+    gids = textures.keys()[1:]
+    # Figuring out which grain are at the corner of the map:
+    # For each corner, the distance between the corner and the center of each
+    # grain is computed. The grain with the smallest the distance to this
+    # corner should be one containing this corner vertex.
+    for corner in corners:
+        dist = 1e9
+        mygid = -1
+        for gid in gids:
+            tmp = corner.dist2point(grains[gid].center)
+            if tmp < dist:
+                mygid = gid
+                dist = tmp
+        grains[mygid].add_vertex(corner)
+    # Fill the geom array with corresponding grain ID
+    # NOTE:
+    #   This part uses nested loop, which will not work well for large
+    #   dataset.
+    for i in range(xmax):
+        for j in range(ymax):
+            coord = Point2D(i, j)
+            if debug:
+                print "\r", coord,
+            for gid in gids:
+                if grains[gid].contains_point(coord):
+                    geom[i, j, :] = gid
+                    break
+    # Add rim to geom
+    x, y, z = geom.shape
+    geom_withRim = np.ones((x+rim*2, y+rim*2, z+rim))
+    geom_withRim[rim:x+rim, rim:y+rim, rim:] = geom
+    # Output visualization file for debugging purpose
+    if debug:
+        print "Exporting vtp file for visualization."
+        geom_viz(geom_withRim, filename='geomviz.vtp')
+    # Output geom file and material configuration file if specified
 
-    # generate some debugging info
-
+    return geom_withRim, textures
 
 
 def geom_fromSeed():
@@ -168,3 +227,63 @@ def geom_fromSeed():
     ----
     """
     pass
+
+
+def geom_viz(geomData, filename='sample.vtp'):
+    """
+    DESCRIPTION
+    -----------
+    geom_viz(geomData, filename='geom.vtp')
+    Generate a simple point centered vtp file to visualize grain ID.
+    PARAMETERS
+    ----------
+    geomData: numpy.array
+    Grain ID populated in a numpy array representing the extruded
+    microstructure.
+    filename: str
+    Output VTP file name.
+    RETURNS
+    -------
+    NOTES
+    ----
+    """
+    polydata = vtk.vtkPolyData()
+    points = vtk.vtkPoints()
+    vertices = vtk.vtkCellArray()
+
+    gids = vtk.vtkFloatArray()
+    gids.SetNumberOfComponents(1)
+    gids.SetName("GrainID")
+
+    # iterating through CPFFT data
+    cnt = 0
+    x, y, z = geomData.shape
+    for i in range(x):
+        for j in range(y):
+            for k in range(z):
+                # set position
+                points.InsertNextPoint(i, j, k)
+                vertex = vtk.vtkVertex()
+                vertex.GetPointIds().SetId(0, cnt)
+                cnt += 1
+                vertices.InsertNextCell(vertex)
+                # set Grain ID
+                gids.InsertNextTuple1(geomData[i, j, k])
+    # finish the vtp object
+    polydata.SetPoints(points)
+    polydata.SetVerts(vertices)
+    polydata.GetPointData().SetScalars(gids)
+    polydata.Modified()
+
+    if vtk.VTK_MAJOR_VERSION <= 5:
+        polydata.Update()
+
+    writer = vtk.vtkXMLPolyDataWriter()
+    writer.SetFileName(filename)
+
+    if vtk.VTK_MAJOR_VERSION <= 5:
+        writer.SetInput(polydata)
+    else:
+        writer.SetInputData(polydata)
+
+    writer.Write()
