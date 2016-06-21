@@ -144,11 +144,14 @@ def geom_fromRCB(rcbFile,
     textures[1] = None
     # parsing each grain boundary
     # OIM ID is offset by +1 as GID=1 is reserved for rim
+    tmp_xmax = max(max(data[:, 8]), max(data[:, 10]))
     for row in data:
         l_O = tuple(np.rad2deg(row[0:3]))
         r_O = tuple(np.rad2deg(row[3:6]))
-        vtx1 = Point2D(row[8], row[9])
-        vtx2 = Point2D(row[10], row[11])
+        # Due to the coordinate setting, x coordinate has to be
+        # flipped.
+        vtx1 = Point2D(tmp_xmax - row[8], row[9])
+        vtx2 = Point2D(tmp_xmax - row[10], row[11])
         l_gid = int(row[13]) + 1
         r_gid = int(row[12]) + 1
         # update texture info
@@ -210,6 +213,7 @@ def geom_fromRCB(rcbFile,
     geom_withRim[rim:x+rim, rim:y+rim, rim:] = geom
     # Output visualization file for debugging purpose
     if debug:
+        print
         print "Exporting vtp file for visualization."
         geom_viz(geom_withRim, filename='geomviz.vtp')
     # Output geom file and material configuration file if specified
