@@ -254,6 +254,8 @@ def geom_fromRCB(rcbFile,
                                                                     PHI,
                                                                     phi2)
             tmpstr += "scatter 0.00000\tfraction 1.0\n\n"
+        with open("material.config", "w") as f:
+            f.write(tmpstr)
         if debug:
             print "DAMASK material configuration file exported."
     return geom_withRim, textures
