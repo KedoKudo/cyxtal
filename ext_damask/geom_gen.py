@@ -101,47 +101,57 @@ def geom_fromRCB(rcbFile,
         orientation in Bunge Euler angles.
     NOTES
     -----
-    Standard header of the reconstructed grain boundary file from TSL software
+    --> Standard header of the reconstructed grain boundary file from TSL
+        software
     # Column 1-3:   right hand average orientation (phi1, PHI, phi2 in radians)
     # Column 4-6:   left hand average orientation (phi1, PHI, phi2 in radians)
     # Column 7:     length (in microns)
     # Column 8:     trace angle (in degrees)
     # Column 9-12:  x,y coordinates of endpoints (in microns)
     # Column 13-14: IDs of right hand and left hand grains
-    ----
+    --> Figuring out which grain are at the corner of the map:
+    For each corner, we can computer the distance between the corner and the
+    center of each grain. The grain with the smallest the distance to this
+    corner should be one containing the corner vertex.
     """
-    # textures = {ID: orientation}
-    # grainID=1 is reserved for rim.
-    textures = {}
-    textures[1] = 'rim'
-    # grains = {ID: [vtx]}
-    grains = {}
-    grains[1] = []
     with open(rcbFile) as f:
-        # remove header
         rawstr = f.readlines()[8:]
-        for line in rawstr:
-            tmpData = [float(item) for item in line.split()]
-            l_O = tuple(np.rad2deg(tmpData[0:3]))
-            r_O = tuple(np.rad2deg(tmpData[3:6]))
-            vtx1 = Point2D(tmpData[8], tmpData[9])
-            vtx2 = Point2D(tmpData[10], tmpData[11])
-            l_gid = int(tmpData[13]) + 1
-            r_gid = int(tmpData[12]) + 1
-            # parse left grain
-            if l_gid in textures.keys():
-                grains[l_gid].append(vtx1)
-                grains[l_gid].append(vtx2)
-            else:
-                textures[l_gid] = l_O
-                grains[l_gid] = [vtx1, vtx2]
-            # parse right grain
-            if r_gid in textures.keys():
-                grains[r_gid].append(vtx1)
-                grains[r_gid].append(vtx2)
-            else:
-                textures[r_gid] = r_O
-                grains[r_gid] = [vtx1, vtx2]
+        data = [[float(item) for item in line.split()] for line in rawstr]
+    # figure out patch size
+    xmax = max(max(data[:, 8]), max(data[:, 10]))
+    ymax = max(max(data[:, 9]), max(data[:, 11]))
+    corners = [Point2D(0.0, 0.0),
+               Point2D(0.0, ymax),
+               Point2D(xmax, 0.0),
+               Point2D(xmax, ymax)]
+    # total number of grains
+    # --> grain_1 is reserved for rim, thus offset all OIM ID by 1
+    # --> grains[0] is an empty polygon, a place holder for rim
+    ng = max(max(data[:, 12]), max(data[:, 13])) + 1
+    grains = [Polygon2D() for i in range(ng)]
+    # texture book keeping
+    # --> textures = {ID: orientation}
+    textures = {}
+    textures[1] = None
+    # parsing each grain boundary
+    for row in data:
+        l_O = tuple(np.rad2deg(row[0:3]))
+        r_O = tuple(np.rad2deg(row[3:6]))
+        vtx1 = Point2D(row[8], row[9])
+        vtx2 = Point2D(row[10], row[11])
+        l_gid = int(row[13]) + 1
+        r_gid = int(row[12]) + 1
+        # parse left grain
+        if l_gid not in textures.keys():
+            textures[l_gid] = l_O
+        if r_gid not in textures.keys():
+            textures[r_gid] = r_O
+        # add vertex to polygon
+        grains[l_gid].add_vertex(vtx1)
+        grains[l_gid].add_vertex(vtx2)
+        grains[r_gid].add_vertex(vtx1)
+        grains[r_gid].add_vertex(vtx2)
+
     # generate some debugging info
 
 

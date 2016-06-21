@@ -599,6 +599,8 @@ class Polygon2D(object):
     @property
     def center(self):
         """return the gravity center"""
+        if not self.__ordered:
+            self.__update()
         center_x = 0.0
         center_y = 0.0
         for vertex in self.__vertices:
