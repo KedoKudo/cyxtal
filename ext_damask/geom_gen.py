@@ -220,9 +220,10 @@ def geom_fromRCB(rcbFile,
     # Output geom file and material configuration file
     if output is not None:
         # 1.geom file
+        tmpx, tmpy, tmpz = geom_withRim.shape
         tmpstr = "3\theader\n"
-        tmpstr += "grid\ta {}\tb {}\tc {}\n"
-        tmpstr += "size\tx {}\ty {}\tz {}\n"
+        tmpstr += "grid\ta {}\tb {}\tc {}\n".format(tmpx, tmpy, tmpz)
+        tmpstr += "size\tx {}\ty {}\tz {}\n".format(tmpx, tmpy, tmpz)
         tmpstr += "homogenization 1\n"
         for tmpz in range(geom_withRim.shape[2]):
             zslice = geom_withRim[:, :, tmpz]
