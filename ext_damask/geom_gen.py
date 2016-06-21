@@ -127,7 +127,7 @@ def geom_fromRCB(rcbFile,
                Point2D(xmax, ymax)]
     # if patch thickness is not defined, use largest possible
     if thickness is None:
-        thickness = max(ymax, xmax)
+        thickness = max(xmax, ymax)
     geom = np.zeros((xmax, ymax, thickness))
     # ng: total number of grains (include offset and rim)
     # --> ng is type casted to be integer
