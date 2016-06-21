@@ -119,8 +119,9 @@ def geom_fromRCB(rcbFile,
     data = np.array(data)
     # figure out patch size
     # initialize columnar grain structure
-    xmax = int(max(max(data[:, 8]), max(data[:, 10])))
-    ymax = int(max(max(data[:, 9]), max(data[:, 11])))
+    # now x_oim --> y_tsl, y_oim --> x_tsl
+    ymax = int(max(max(data[:, 8]), max(data[:, 10])))
+    xmax = int(max(max(data[:, 9]), max(data[:, 11])))
     corners = [Point2D(0.0, 0.0),
                Point2D(0.0, ymax),
                Point2D(xmax, 0.0),
@@ -144,14 +145,13 @@ def geom_fromRCB(rcbFile,
     textures[1] = None
     # parsing each grain boundary
     # OIM ID is offset by +1 as GID=1 is reserved for rim
-    tmp_xmax = max(max(data[:, 8]), max(data[:, 10]))
     for row in data:
         l_O = tuple(np.rad2deg(row[0:3]))
         r_O = tuple(np.rad2deg(row[3:6]))
         # Due to the coordinate setting, x coordinate has to be
         # flipped.
-        vtx1 = Point2D(tmp_xmax - row[8], row[9])
-        vtx2 = Point2D(tmp_xmax - row[10], row[11])
+        vtx1 = Point2D(row[9], row[8])
+        vtx2 = Point2D(row[11], row[10])
         l_gid = int(row[13]) + 1
         r_gid = int(row[12]) + 1
         # update texture info
@@ -168,6 +168,7 @@ def geom_fromRCB(rcbFile,
     # --> ID, (phi1, PHI, phi2), (center.x, center.y)
     if debug:
         print "Identified grains:"
+        print "ID\t(phi1,PHI,phi2)\t(center.x,center.y)"
         for key in textures:
             if key == 1:
                 print key, textures[key]
@@ -201,7 +202,7 @@ def geom_fromRCB(rcbFile,
         for j in range(ymax):
             coord = Point2D(i, j)
             if debug:
-                print "\r", coord,
+                print "\rProcessing pt: ", coord,
                 sys.stdout.flush()
             for gid in gids:
                 if grains[gid].contains_point(coord):
@@ -216,8 +217,22 @@ def geom_fromRCB(rcbFile,
         print
         print "Exporting vtp file for visualization."
         geom_viz(geom_withRim, filename='geomviz.vtp')
-    # Output geom file and material configuration file if specified
-
+    # Output geom file and material configuration file
+    if output is not None:
+        # 1.geom file
+        tmpstr = "3\theader\n"
+        tmpstr += "grid\ta {}\tb {}\tc {}\n"
+        tmpstr += "size\tx {}\ty {}\tz {}\n"
+        tmpstr += "homogenization 1\n"
+        for tmpz in range(geom_withRim.shape[2]):
+            zslice = geom_withRim[:, :, tmpz]
+            for row in zslice.T:
+                tmpstr += "\t".join(map(str, map(int, reversed(row)))) + "\n"
+        with open(output, "w") as f:
+            f.write(tmpstr)
+        if debug:
+            print "DAMASK geom file exported."
+        # 2.material.config
     return geom_withRim, textures
 
 

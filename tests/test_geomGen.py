@@ -39,4 +39,7 @@ Testing geom_gen module.
 from cyxtal import geom_fromRCB
 
 # call geom_fromRCB
-geom, textures = geom_fromRCB('sample.rcb', debug=True, rim=4)
+geom, textures = geom_fromRCB('sample.rcb',
+                              output='sample.geom',
+                              debug=True,
+                              rim=4)
