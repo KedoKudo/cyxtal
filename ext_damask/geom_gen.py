@@ -239,7 +239,7 @@ def geom_fromRCB(rcbFile,
         tmpstr += "[SX]\ntype\tNone\n\n"
         tmpstr += "<microstructure>\n"
         tmpstr += "[rim]\ncrystallite 1\n"
-        tmpstr += "(constituent)\tphase 2\ttexture 1\tfraction 1.0\n"
+        tmpstr += "(constituent)\tphase 2\ttexture 1\tfraction 1.0\n\n"
         for gid in gids:
             tmpstr += "[Grain{}]\ncrystallite 1\n".format(gid)
             tmpstr += "(constituent)\tphase 1\t"

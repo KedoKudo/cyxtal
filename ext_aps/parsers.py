@@ -641,7 +641,7 @@ def parse_xml(xmlfile,
         qx = [float(item) for item in qx.split()]
         qy = [float(item) for item in qy.split()]
         qz = [float(item) for item in qz.split()]
-        voxel.qs = np.column_stack((qx,qy,qz))
+        voxel.qs = np.column_stack((qx, qy, qz))
         # |->diffraction pattern goodness
         voxel.goodness = goodness
         # |->reciprocal lattice vectors
@@ -652,13 +652,14 @@ def parse_xml(xmlfile,
         h = [float(item) for item in h.split()]
         k = [float(item) for item in k.split()]
         l = [float(item) for item in l.split()]
-        voxel.hkls = np.column_stack((h,k,l))
+        voxel.hkls = np.column_stack((h, k, l))
         # |->lattice constants (ideal)
         voxel.lc = [float(item) for item in lc.split()]
         voxel.validate()
         # STEP 3: PUSH DATA TO CONAINER ARRAY/LIST
         voxels.append(voxel)
-    if disp: print '\n', sep_tail
+    if disp:
+        print '\n', sep_tail
     # SIMPLE STATISTICS
     if disp:
         print sep_head
@@ -669,6 +670,7 @@ def parse_xml(xmlfile,
         print sep_tail
 
     return voxels
+
 
 def get_reciprocal_base(lc, degrees=True):
     """
@@ -718,7 +720,7 @@ def get_base(lc,
         lattice constant. The base vectors are stack by column.
     """
     # unpack lattice constant
-    a,b,c,alpha,beta,gamma = lc
+    a, b, c, alpha, beta, gamma = lc
     if degrees:
         alpha, beta, gamma = np.radians([alpha, beta, gamma])
     # just trying to make syntax cleaner
