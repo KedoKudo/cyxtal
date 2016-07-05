@@ -356,7 +356,7 @@ cpdef get_vonMisesStrain(DTYPE_t[:,:] tnsr):
         calculate von Mises strain for given strain tensor
     PARAMETERS
     ----------
-    tnsr: DTYPE_t
+    tnsr: DTYPE_t[3,3]
         strain tensor
     RETURNS
     -------
