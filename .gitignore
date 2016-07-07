@@ -60,3 +60,19 @@ html/*
 documentation/doxygen.sty
 
 documentation/Makefile
+
+documentation/classcyxtal_1_1geometry_1_1_line.pdf
+
+documentation/classcyxtal_1_1geometry_1_1_line2_d.pdf
+
+documentation/classcyxtal_1_1geometry_1_1_plane.pdf
+
+documentation/classcyxtal_1_1geometry_1_1_point.pdf
+
+documentation/classcyxtal_1_1geometry_1_1_point2_d.pdf
+
+documentation/classcyxtal_1_1geometry_1_1_polygon2_d.pdf
+
+tests/geomviz.vtp
+
+tests/sample.geom
