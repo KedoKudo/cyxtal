@@ -132,10 +132,56 @@ Another point worth mentioning here is that the full strain tensor can only be `
 In other words, without the knowledge of the length of \tnsr q (diffraction vector), it is not possible to inferred the whole strain tensor.
 However, if the volume of the unit cell is assumed to remain constant through deformation, the deviatoric component of the strain tensor is not tied to $||\tnsr q||$.
 \footnote{Diffraction vector: $\tnsr q_{hkl} = \tnsr B \cdot (khl) $}
-Thus, it is necessary to add this assumption to the optimization if white beam calibration is not done, which add one more step to get the deviatoric strain component,
+Thus, it is necessary to add this assumption to the optimization if white beam calibration is not done.
+
+Originally the deviatoric strain is directly extracted using 
 \[
-	\tnsr \epsilon_{dev} = \tnsr \epsilon - \dfrac{1}{3}\text{tr}(\tnsr \epsilon)
+	\tnsr \epsilon_{dev} = \tnsr \epsilon - \dfrac{1}{3}\text{tr}(\tnsr \epsilon),
 \]
+which results in large residual strain value. 
+To avoid this problem, it is recommended to remove the deviatoric at the deformation gradient level, $\tnsr F$.
+\footnote{%
+Dr. Eisenlohr found some reference on computing the deviatoric strain directly from deformation gradient rather than the strain tensor.
+}
+The overall deformation gradient can be decomposed into volumetric change (hydrostatic, $\tnsr F_v$) and the deviatoric change (deviatoric, $\tnsr F_D$),
+\[ 
+	\tnsr F = \tnsr F_v \tnsr F_D
+\]
+
+The volumetric change, $\tnsr F_v$ is defined as 
+\[
+	\tnsr F_v = J^{\frac{1}{3}} \tnsr I
+\]
+where $J = \det (F)$.
+Thus the deviatoric portion of the deformation gradient can be expressed as 
+\[
+	\tnsr F_D = J^{-\frac{1}{3}} \tnsr F
+\]
+The deviatoric strain now can be expressed as 
+\[
+	\tnsr \epsilon_D = \tnsr \epsilon - \tnsr \epsilon_v
+\]
+in which 
+\[
+	\tnsr \epsilon = \dfrac{1}{2} (\tnsr U^T\tnsr U - \tnsr I), 
+	\tnsr \epsilon_v = \dfrac{1}{2} (J^{\frac{2}{3}} - 1)\tnsr I
+\]
+Thus,
+\[
+	\tnsr \epsilon_D = \dfrac{1}{2} ( \tnsr U_D^2- \tnsr I) J^{\frac{2}{3}}
+\]
+where $\tnsr U_D^2 = \tnsr F_D^T \tnsr F_D$.
+
+Define the correction term as $\delta$ to connect deviatoric strain with full strain tensor, we have
+\[
+	\tnsr \epsilon_D = \tnsr \epsilon - \tnsr \epsilon_v 
+	                          = \dfrac{1}{2} (\tnsr U^T\tnsr U - \tnsr I) + \delta
+\]
+where $\delta = -\epsilon_v = \dfrac{1}{2} (1 - J^{\frac{2}{3}})\tnsr I$
+\footnote{%
+$\delta$ is essentially the correction factor that correct the error from volume change during optimization procedure.
+}
+
 \end{enumerate}
 
 
