@@ -491,11 +491,12 @@ class VoxelStep(object):
         # extract refined reciprocal basis
         B_fin = np.reshape(refine.x, (3, 3), order='F')
         F_fin = np.dot(self.reciprocal_basis, np.linalg.inv(B_fin)).T
+        J = np.linalg.det(F_fin)
         epsilon = 0.5*(np.dot(F_fin.T, F_fin) - np.eye(3))
         # if no white beam energy provided, remove the hydrostatic component
         # as it has no physical meaning
         if deviatoric:
-            epsilon += 0.5 * (1 - np.det(F_fin)**(2/3.0)) * np.eye(3)
+            epsilon += 0.5 * (1 - J**(2/3.0)) * np.eye(3)
         ##
         # step 4: transform strain tensor to requested configuration
         # some preparation before hard computing
