@@ -496,7 +496,7 @@ class VoxelStep(object):
         # if no white beam energy provided, remove the hydrostatic component
         # as it has no physical meaning
         if deviatoric:
-            epsilon += 0.5 * (1 - J**(2/3.0)) * np.eye(3)
+            epsilon += 0.5 * (1 - (J**2)**(1.0/3)) * np.eye(3)
         ##
         # step 4: transform strain tensor to requested configuration
         # some preparation before hard computing
