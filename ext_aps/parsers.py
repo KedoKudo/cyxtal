@@ -430,10 +430,10 @@ class VoxelStep(object):
 
     def get_strain(self,
                    ref='TSL',
-                   xtor=1e-8,
+                   xtor=1e-10,
                    disp=False,
                    deviatoric=True,
-                   maxiter=1e4,
+                   maxiter=1e10,
                    symmetry=None,
                    opt_method='nelder-mead'):
         """
