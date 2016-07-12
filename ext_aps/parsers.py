@@ -434,6 +434,7 @@ class VoxelStep(object):
                    disp=False,
                    deviatoric=True,
                    maxiter=1e4,
+                   symmetry='hcp',
                    opt_method='nelder-mead'):
         """
         DESCRIPTION
@@ -460,6 +461,8 @@ class VoxelStep(object):
                 this particular feature has not implement yet.
         maxiter: float
             Maximum iterations/calls allowed during the optimization
+        symmetry: str
+            If symmetry is HCP|hcp, convert basis from hcp to Cartesian.
         RETURNS
         -------
         epsilon: np.array (3,3)
@@ -490,7 +493,11 @@ class VoxelStep(object):
             print refine
         # extract refined reciprocal basis
         B_fin = np.reshape(refine.x, (3, 3), order='F')
-        F_fin = np.dot(self.reciprocal_basis, np.linalg.inv(B_fin)).T
+        B_org = self.reciprocal_basis
+        if symmetry.lower() == 'hcp':
+            B_fin = base_hcp2cartesian(B_fin, reciprocal=True)
+            B_org = base_hcp2cartesian(B_org, reciprocal=True)
+        F_fin = np.dot(B_org, np.linalg.inv(B_fin)).T
         J = np.linalg.det(F_fin)
         epsilon = 0.5*(np.dot(F_fin.T, F_fin) - np.eye(3))
         # if no white beam energy provided, remove the hydrostatic component
@@ -739,7 +746,7 @@ def get_base(lc,
     v2 = [b*c_g, b*s_g, 0.0]
     v3 = [c*c_b, c*(c_a-c_b*c_g)/(s_g), vol_cell/(a*b*s_g)]
     # form the base
-    rst = np.column_stack((v1,v2,v3))
+    rst = np.column_stack((v1, v2, v3))
     # calculating reciprocal lattice based on real lattice
     # ref: https://en.wikipedia.org/wiki/Reciprocal_lattice
     if reciprocal:
@@ -747,3 +754,44 @@ def get_base(lc,
         rst = 2*np.pi*np.linalg.pinv(rst)
         rst = rst.T
     return rst
+
+
+def base_hcp2cartesian(B_hcp,
+                       reciprocal=False):
+    """
+    DESCRIPTION
+    -----------
+    B_cartesian = base_hcp2cartesian(B_hcp)
+        Convert [reciprocal] lattice basis from [a;b;c] to [x,y,z] where
+        vec_x = vec_a
+        vec_y = vec_b + 0.5*vec_a
+        vec_z = vec_c
+    PARAMETERS
+    ----------
+    B_hcp: np.array (3,3)
+        Lattice basis where each column vector represents vec_a,
+        vec_b and vec_c, i.e.
+        B_hcp = np.column_stack((vec_a, vec_b, vec_c))
+    reciprocal: boolean
+        Whether the basis is reciprocal basis or not, if so convert
+        to real space for calculation, then convert back.
+    RETURNS
+    -------
+        Lattice basis where each column vector represents vec_x,
+        vec_y and vec_z, i.e.
+        B_cartesian = np.column_stack((vec_x, vec_y, vec_z))
+    NOTE
+    ----
+    """
+    if reciprocal:
+        B_hcp = 1.0/(2*np.pi)*(np.linalg.inv(B_hcp)).T
+    vec_a = B_hcp[:, 0]
+    vec_b = B_hcp[:, 1]
+    vec_c = B_hcp[:, 2]
+    vec_x = vec_a
+    vec_y = vec_b + 0.5*vec_a
+    vec_z = vec_c
+    B_cartesian = np.column_stack(((vec_x, vec_y, vec_z)))
+    if reciprocal:
+        B_cartesian = 2*np.pi*(np.linalg.inv(B_cartesian)).T
+    return B_cartesian
