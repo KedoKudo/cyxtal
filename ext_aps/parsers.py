@@ -434,7 +434,7 @@ class VoxelStep(object):
                    disp=False,
                    deviatoric=True,
                    maxiter=1e4,
-                   symmetry='hcp',
+                   symmetry=None,
                    opt_method='nelder-mead'):
         """
         DESCRIPTION
