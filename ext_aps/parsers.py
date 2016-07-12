@@ -44,12 +44,12 @@ More information regarding the coordinate transformation can be found at:
     http://www.aps.anl.gov/Sectors/33_34/microdiff/Instrument/coordinates-PE-system.pdf
 """
 
-import h5py as h5
+# import h5py as h5
 import numpy as np
 import xml.etree.cElementTree as ET
 from scipy.optimize import minimize
 from cyxtal.cxtallite import OrientationMatrix
-from cyxtal import get_vonMisesStrain
+# from cyxtal import get_vonMisesStrain
 
 ##
 # MODULE LEVEL CONSTANTS RELATING TO COORDINATE TRANSFORMATION
@@ -494,9 +494,9 @@ class VoxelStep(object):
         # extract refined reciprocal basis
         B_fin = np.reshape(refine.x, (3, 3), order='F')
         B_org = self.reciprocal_basis
-        if symmetry.lower() == 'hcp':
-            B_fin = base_hcp2cartesian(B_fin, reciprocal=True)
-            B_org = base_hcp2cartesian(B_org, reciprocal=True)
+        # if symmetry.lower() == 'hcp':
+        #     B_fin = base_hcp2cartesian(B_fin, reciprocal=True)
+        #     B_org = base_hcp2cartesian(B_org, reciprocal=True)
         F_fin = np.dot(B_org, np.linalg.inv(B_fin)).T
         J = np.linalg.det(F_fin)
         epsilon = 0.5*(np.dot(F_fin.T, F_fin) - np.eye(3))
