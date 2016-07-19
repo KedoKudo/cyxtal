@@ -412,6 +412,9 @@ class VoxelStep(object):
         c = c/np.linalg.norm(c)
         a = np.cross(self.bstar, self.cstar)
         a = a/np.linalg.norm(a)
+        # equivalent to b*,
+        # b*/b go through atoms
+        # a go through faces
         b = np.cross(c, a)
         b = b/np.linalg.norm(b)
         # rotate real lattice into given configuration
