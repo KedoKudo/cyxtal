@@ -551,7 +551,9 @@ class VoxelStep(object):
             # calculate new Q vector based on perturbed unit cell
             q_tmp = np.dot(B_new, hkls[i])
             q_tmp = q_tmp/np.linalg.norm(q_tmp)
-            rst += 1.0 - np.dot(q_tmp, qs[i])
+            rst += np.dot(q_tmp, qs[i])
+        # get avg cos(theta)
+        rst = 1.0 - rst/qs.shape[0]
         return rst
 
 
