@@ -58,25 +58,25 @@ from cyxtal.cxtallite import OrientationMatrix
 #   more intuitive to see how each system is connected through
 #   simple rotation around x-axis (see cyxtal/documentation)
 #
-#** XHF <-> TSL
+# ** XHF <-> TSL
 theta_1 = -np.pi
 R_XHF2TSL = np.array([[1.0,              0.0,              0.0],
                       [0.0,  np.cos(theta_1), -np.sin(theta_1)],
                       [0.0,  np.sin(theta_1),  np.cos(theta_1)]])
 R_TSL2XHF = R_XHF2TSL.T
-#** XHF <-> APS
+# ** XHF <-> APS
 theta_2 = -0.25*np.pi
 R_XHF2APS = np.array([[1.0,              0.0,              0.0],
                       [0.0,  np.cos(theta_2), -np.sin(theta_2)],
                       [0.0,  np.sin(theta_2),  np.cos(theta_2)]])
 R_APS2XHF = R_XHF2APS.T
-#** APS <-> TSL
+# ** APS <-> TSL
 theta_3 = -0.75*np.pi
 R_APS2TSL = np.array([[1.0,              0.0,              0.0],
                       [0.0,  np.cos(theta_3), -np.sin(theta_3)],
                       [0.0,  np.sin(theta_3),  np.cos(theta_3)]])
 R_TSL2APS = R_APS2TSL.T
-#** self <-> self
+# ** self <-> self
 R_TSL2TSL = R_APS2APS = R_XHF2XHF = np.eye(3)
 
 
@@ -565,7 +565,8 @@ class VoxelStep(object):
 ##################################
 def parse_xml(xmlfile,
               namespace={'step':'http://sector34.xor.aps.anl.gov/34ide:indexResult'},
-              disp=True):
+              disp=True,
+              keepEmptyVoxel=False):
     """
     DESCRIPTION
     -----------
@@ -586,6 +587,8 @@ def parse_xml(xmlfile,
             extract those namespace and update them with this argument.
     disp: boolean
         Toggle output of parsing progress (terminal only)
+    keepEmptyVoxel: boolean
+        Keep non-indexed voxel in the return data set
     RETURNS
     -------
     voxels: list of VoxelStep
@@ -615,6 +618,8 @@ def parse_xml(xmlfile,
         astar = step.find('step:indexing/step:pattern/step:recip_lattice/step:astar', ns)
         if astar is None:
             skipped +=1
+            if keepEmptyVoxel:
+                voxels.append('nan')
             continue
         # progress bar for parsing
         if disp:
