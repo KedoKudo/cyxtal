@@ -617,7 +617,7 @@ def parse_xml(xmlfile,
         # determine if voxel is indexed
         astar = step.find('step:indexing/step:pattern/step:recip_lattice/step:astar', ns)
         if astar is None:
-            skipped +=1
+            skipped += 1
             if keepEmptyVoxel:
                 voxels.append('nan')
             continue
