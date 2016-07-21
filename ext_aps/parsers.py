@@ -503,7 +503,6 @@ class VoxelStep(object):
         epsilon = F2DeviatoricStrain(F_fin,
                                      method=deviatoric,
                                      debug=disp)
-        print "\n***\n", epsilon, "\n***\n"
         ##
         # step 4: transform strain tensor to requested configuration
         # some preparation before hard computing
