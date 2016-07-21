@@ -92,7 +92,7 @@ class TestStrainRefine(unittest.TestCase):
         tmp = parse_xml(xmlFile,
                         namespace={'step': apsnspace})
         self.data = tmp[0]
-        self.disp = False
+        self.disp = True
         # e is extracted from Igor
         # --> use test.pxp to see the full process
         e = np.array([-0.001113,  0.000542, 0.000571,

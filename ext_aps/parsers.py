@@ -48,6 +48,7 @@ More information regarding the coordinate transformation can be found at:
 import numpy as np
 import xml.etree.cElementTree as ET
 from scipy.optimize import minimize
+from scipy.linalg import sqrtm
 from cyxtal.cxtallite import OrientationMatrix
 # from cyxtal import get_vonMisesStrain
 
@@ -829,11 +830,11 @@ def F2DeviatoricStrain(F, method='m2', debug=False):
     J = np.linalg.det(F)  # Jacobian of F
     # Start calculation
     if method == 'tishler':
-        U = np.sqrt(np.dot(F.T, F))  # stretch tensor U^2 = F.T*F
+        U = sqrtm(np.dot(F.T, F))  # stretch tensor U^2 = F.T*F
         epsilon = U - I
         epsilon_D = epsilon - 1./3*np.trace(epsilon)*I
     elif method == 'm1':
-        U = np.sqrt(np.dot(F.T, F))
+        U = sqrtm(np.dot(F.T, F))
         epsilon_D = U - J**(1./3.)*I
     elif method == 'm2':
         epsilon_D = 0.5*(np.dot(F.T, F) - J**(2./3.)*I)
