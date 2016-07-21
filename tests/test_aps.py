@@ -88,7 +88,7 @@ class TestStrainRefine(unittest.TestCase):
 
     def setUp(self):
         apsnspace = "http://sector34.xray.aps.anl.gov/34ide:indexResult"
-        xmlFile = 'test.xml'
+        xmlFile = 'tests/test.xml'
         tmp = parse_xml(xmlFile,
                         namespace={'step': apsnspace})
         self.data = tmp[0]
