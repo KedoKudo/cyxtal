@@ -482,6 +482,10 @@ class VoxelStep(object):
         # feature vectors:
         #   [a*_1, a*_2, a*_3, b*_1, b*_2, b*_3, c*_1, c*_2, c*_3]
         v_features = np.reshape(self.reciprocal_basis, 9, order='F')
+        if disp:
+            print "*"*10
+            print v_features.reshape((3, 3))
+            print "*"*10
         # use scipy minimization module for optimization
         refine = minimize(self.strain_refine,
                           v_features,
@@ -492,14 +496,18 @@ class VoxelStep(object):
                                    'maxfev': int(maxiter)})
         # display
         if disp:
-            print "ideal: ", self.lc
-            print refine
+            Bstar = refine.x.reshape((3, 3), order='F')  # final B*
+            B = 2*np.pi*np.linalg.inv(Bstar).T  # final B from B*
+            print "reciprocal:[a*;b*;c*]\n", Bstar
+            print "real:[a;b;c]\n", B
         # extract refined reciprocal basis
         B_fin = np.reshape(refine.x, (3, 3), order='F')
         B_org = self.reciprocal_basis
         # if symmetry.lower() == 'hcp':
         #     B_fin = base_hcp2cartesian(B_fin, reciprocal=True)
         #     B_org = base_hcp2cartesian(B_org, reciprocal=True)
+        # Philip recommend using einsum, need more time to familiarize this
+        # F_fin = np.einsum('im,mj->ij', B_org, np.linalg.inv(B_fin)).T
         F_fin = np.dot(B_org, np.linalg.inv(B_fin)).T
         J = np.linalg.det(F_fin)
         epsilon = 0.5*(np.dot(F_fin.T, F_fin) - np.eye(3))

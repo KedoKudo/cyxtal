@@ -4712,7 +4712,7 @@ static PyObject *__pyx_f_6ctools_get_vonMisesStrain(__Pyx_memviewslice __pyx_v_t
 
 /* Python wrapper */
 static PyObject *__pyx_pw_6ctools_5get_vonMisesStrain(PyObject *__pyx_self, PyObject *__pyx_arg_tnsr); /*proto*/
-static char __pyx_doc_6ctools_4get_vonMisesStrain[] = "\n    DESCRIPTION\n    -----------\n    epsilon_von = get_vonMisesStrain(strain_tnsr)\n        calculate von Mises strain for given strain tensor\n    PARAMETERS\n    ----------\n    tnsr: DTYPE_t\n        strain tensor\n    RETURNS\n    -------\n    epsilon_von: DTYPE_t\n        von Mises equivalent of strain tensor\n    NOTES\n    -----\n        Following DAMASK convention.\n    ----------\n    ";
+static char __pyx_doc_6ctools_4get_vonMisesStrain[] = "\n    DESCRIPTION\n    -----------\n    epsilon_von = get_vonMisesStrain(strain_tnsr)\n        calculate von Mises strain for given strain tensor\n    PARAMETERS\n    ----------\n    tnsr: DTYPE_t[3,3]\n        strain tensor\n    RETURNS\n    -------\n    epsilon_von: DTYPE_t\n        von Mises equivalent of strain tensor\n    NOTES\n    -----\n        Following DAMASK convention.\n    ----------\n    ";
 static PyObject *__pyx_pw_6ctools_5get_vonMisesStrain(PyObject *__pyx_self, PyObject *__pyx_arg_tnsr) {
   __Pyx_memviewslice __pyx_v_tnsr = { 0, 0, { 0 }, { 0 }, { 0 } };
   int __pyx_lineno = 0;
