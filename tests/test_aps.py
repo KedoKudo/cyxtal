@@ -96,11 +96,14 @@ class TestStrainRefine(unittest.TestCase):
         # --> use test.pxp to see the full process
         e = np.array([-0.001113,  0.000542, 0.000571,
                      0.001978, -0.001261, 0.000394])
-        self.strain_igorAPS = np.array([e[0], e[5], e[4],
-                                        e[5], e[1], e[3],
-                                        e[4], e[3], e[2]])
+        idx_r0 = np.array([0, 5, 4])
+        idx_r1 = np.array([5, 1, 3])
+        idx_r2 = np.array([4, 3, 2])
+        self.strain_igorAPS = np.array([e[idx_r0],
+                                        e[idx_r1],
+                                        e[idx_r2]])
 
-    def test_strainRefine(self):
+    def test_strainRefineTishler(self):
         # epsilon = U - I
         # epsilon_D = epsilon - 1./3*tr(epsilon)*I
         strain_tishler = self.data.get_strain(ref='APS',
@@ -110,6 +113,8 @@ class TestStrainRefine(unittest.TestCase):
                                               maxiter=1e6)
         np.testing.assert_almost_equal(self.strain_igorAPS,
                                        strain_tishler)
+
+    def test_strainRefineM1(self):
         # epsilon_D = U - J^(1./3)*I
         strain_m1 = self.data.get_strain(ref='APS',
                                          disp=True,
@@ -118,6 +123,8 @@ class TestStrainRefine(unittest.TestCase):
                                          maxiter=1e6)
         np.testing.assert_almost_equal(self.strain_igorAPS,
                                        strain_m1)
+
+    def test_strainRefineM2(self):
         # epsilon_D = 0.5*(U^2 - J^(2/3)I)
         strain_m2 = self.data.get_strain(ref='APS',
                                          disp=True,

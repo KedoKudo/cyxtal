@@ -500,20 +500,10 @@ class VoxelStep(object):
         # extract refined reciprocal basis
         B_fin = np.reshape(refine.x, (3, 3), order='F')
         B_org = self.reciprocal_basis
-        # if symmetry.lower() == 'hcp':
-        #     B_fin = base_hcp2cartesian(B_fin, reciprocal=True)
-        #     B_org = base_hcp2cartesian(B_org, reciprocal=True)
-        # Philip recommend using einsum, need more time to familiarize this
-        # F_fin = np.einsum('im,mj->ij', B_org, np.linalg.inv(B_fin)).T
-        # *** switching to new deviatoric strain calculation
         F_fin = np.dot(B_org, np.linalg.inv(B_fin)).T
+        # *** switching to new deviatoric strain calculation
         epsilon = F2DeviatoricStrain(F_fin, method=deviatoric)
-        # J = np.linalg.det(F_fin)
-        # epsilon = 0.5*(np.dot(F_fin.T, F_fin) - np.eye(3))
-        # # if no white beam energy provided, remove the hydrostatic component
-        # # as it has no physical meaning
-        # if deviatoric:
-        #     epsilon += 0.5 * (1 - (J**2)**(1.0/3)) * np.eye(3)
+        print "\n***\n", epsilon, "\n***\n"
         ##
         # step 4: transform strain tensor to requested configuration
         # some preparation before hard computing
