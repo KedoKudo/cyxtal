@@ -437,7 +437,6 @@ class VoxelStep(object):
                    disp=False,
                    deviatoric='m2',
                    maxiter=1e10,
-                   symmetry=None,
                    opt_method='nelder-mead'):
         """
         DESCRIPTION
@@ -461,8 +460,6 @@ class VoxelStep(object):
             deviatoric strain.
         maxiter: float
             Maximum iterations/calls allowed during the optimization
-        symmetry: str
-            If symmetry is HCP|hcp, convert basis from hcp to Cartesian.
         RETURNS
         -------
         epsilon: np.array (3,3)
@@ -502,7 +499,9 @@ class VoxelStep(object):
         B_org = self.reciprocal_basis
         F_fin = np.dot(B_org, np.linalg.inv(B_fin)).T
         # *** switching to new deviatoric strain calculation
-        epsilon = F2DeviatoricStrain(F_fin, method=deviatoric)
+        epsilon = F2DeviatoricStrain(F_fin,
+                                     method=deviatoric,
+                                     debug=disp)
         print "\n***\n", epsilon, "\n***\n"
         ##
         # step 4: transform strain tensor to requested configuration
@@ -804,7 +803,7 @@ def base_hcp2cartesian(B_hcp,
     return B_cartesian
 
 
-def F2DeviatoricStrain(F, method='m2'):
+def F2DeviatoricStrain(F, method='m2', debug=False):
     """
     DESCRIPTION
     -----------
@@ -841,4 +840,9 @@ def F2DeviatoricStrain(F, method='m2'):
     else:
         msg = "Unknown method for deviatoric calc: {}".format(method)
         raise ValueError(msg)
+    # debug output
+    if debug:
+        print method
+        print "strain:\n", epsilon_D, "\n"
+        print "J:\n", J, "\n"
     return epsilon_D

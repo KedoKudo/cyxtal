@@ -92,6 +92,7 @@ class TestStrainRefine(unittest.TestCase):
         tmp = parse_xml(xmlFile,
                         namespace={'step': apsnspace})
         self.data = tmp[0]
+        self.disp = False
         # e is extracted from Igor
         # --> use test.pxp to see the full process
         e = np.array([-0.001113,  0.000542, 0.000571,
@@ -107,7 +108,7 @@ class TestStrainRefine(unittest.TestCase):
         # epsilon = U - I
         # epsilon_D = epsilon - 1./3*tr(epsilon)*I
         strain_tishler = self.data.get_strain(ref='APS',
-                                              disp=True,
+                                              disp=self.disp,
                                               deviatoric='tishler',
                                               xtor=1e-6,
                                               maxiter=1e6)
@@ -117,7 +118,7 @@ class TestStrainRefine(unittest.TestCase):
     def test_strainRefineM1(self):
         # epsilon_D = U - J^(1./3)*I
         strain_m1 = self.data.get_strain(ref='APS',
-                                         disp=True,
+                                         disp=self.disp,
                                          deviatoric='m1',
                                          xtor=1e-6,
                                          maxiter=1e6)
@@ -127,7 +128,7 @@ class TestStrainRefine(unittest.TestCase):
     def test_strainRefineM2(self):
         # epsilon_D = 0.5*(U^2 - J^(2/3)I)
         strain_m2 = self.data.get_strain(ref='APS',
-                                         disp=True,
+                                         disp=self.disp,
                                          deviatoric='m2',
                                          xtor=1e-6,
                                          maxiter=1e6)
