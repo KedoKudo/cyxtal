@@ -477,10 +477,6 @@ class VoxelStep(object):
         # feature vectors:
         #   [a*_1, a*_2, a*_3, b*_1, b*_2, b*_3, c*_1, c*_2, c*_3]
         v_features = np.reshape(self.reciprocal_basis, 9, order='F')
-        if disp:
-            print "*"*10
-            print v_features.reshape((3, 3))
-            print "*"*10
         # use scipy minimization module for optimization
         refine = minimize(self.strain_refine,
                           v_features,
