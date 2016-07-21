@@ -40,8 +40,8 @@ import unittest
 import numpy as np
 from cyxtal import get_base
 from cyxtal import get_reciprocal_base
-from cyxtal import VoxelStep
-from cyxtal import get_vonMisesStrain
+# from cyxtal import VoxelStep
+# from cyxtal import get_vonMisesStrain
 from cyxtal import parse_xml
 
 # void random seed for testing
@@ -70,11 +70,11 @@ class TestBase(unittest.TestCase):
         target_v = np.array([
                              [+0.2950800,  -0.1475400,  +0.0000000],
                              [+0.0000000,  +0.2555468,  +0.0000000],
-                             [+0.0000000,  +0.0000000,  +0.4685500] ])
+                             [+0.0000000,  +0.0000000,  +0.4685500]])
         target_rv = np.array([
                               [+21.293159,    +0.000000,   +0.000000],
                               [+12.293611,   +24.587222,   -0.000000],
-                              [ -0.000000,    -0.000000,  +13.409850] ])
+                              [-0.000000,    -0.000000,  +13.409850]])
         # test real lattice
         np.testing.assert_almost_equal(lvs, target_v)
         # test reciprocal lattice
@@ -90,38 +90,42 @@ class TestStrainRefine(unittest.TestCase):
         apsnspace = "http://sector34.xray.aps.anl.gov/34ide:indexResult"
         xmlFile = 'test.xml'
         tmp = parse_xml(xmlFile,
-                        namespace={'step': apsnspace},
-                        disp=True,
-                        keepEmptyVoxel=True)
+                        namespace={'step': apsnspace})
         self.data = tmp[0]
-
+        # e is extracted from Igor
+        # --> use test.pxp to see the full process
         e = np.array([-0.001113,  0.000542, 0.000571,
                      0.001978, -0.001261, 0.000394])
         self.strain_igorAPS = np.array([e[0], e[5], e[4],
                                         e[5], e[1], e[3],
                                         e[4], e[3], e[2]])
 
-    def test_strainRefine()
-    # def test_strainRefine(self):
-    #     print "The strain refinement is still in experiment stage."
-    #     # set target values
-    #     epsilonAPS100111 = np.array([
-    #            [ 0.00120322, -0.00592183, -0.0101301 ],
-    #            [-0.00592183,  0.00843847,  0.00431117],
-    #            [-0.0101301 ,  0.00431117, -0.00964169]])
-    #     epsilonAPS110111 = np.array([
-    #            [ 0.0013487 , -0.0130564 ,  -0.00731337],
-    #            [-0.0130564 ,  0.0360299 ,   0.00756606],
-    #            [-0.00731337,  0.00756606,  -0.0373786]])
-    #     # perform strain refine using Dr. Tischler method
-    #     epsilon_aps = self.data.get_strain(ref='APS')
-    #     print "von Mises Strain (Igor | Cyxtal)"
-    #     print get_vonMisesStrain(epsilonAPS110111),
-    #     print " | ",
-    #     print get_vonMisesStrain(epsilon_aps)
-    #     np.testing.assert_almost_equal(epsilonAPS110111, epsilon_aps)
-    #     np.testing.assert_almost_equal(epsilonAPS100111, epsilon_aps)
-
+    def test_strainRefine(self):
+        # epsilon = U - I
+        # epsilon_D = epsilon - 1./3*tr(epsilon)*I
+        strain_tishler = self.data.get_strain(ref='APS',
+                                              disp=True,
+                                              deviatoric='tishler',
+                                              xtor=1e-6,
+                                              maxiter=1e6)
+        np.testing.assert_almost_equal(self.strain_igorAPS,
+                                       strain_tishler)
+        # epsilon_D = U - J^(1./3)*I
+        strain_m1 = self.data.get_strain(ref='APS',
+                                         disp=True,
+                                         deviatoric='m1',
+                                         xtor=1e-6,
+                                         maxiter=1e6)
+        np.testing.assert_almost_equal(self.strain_igorAPS,
+                                       strain_m1)
+        # epsilon_D = 0.5*(U^2 - J^(2/3)I)
+        strain_m2 = self.data.get_strain(ref='APS',
+                                         disp=True,
+                                         deviatoric='m2',
+                                         xtor=1e-6,
+                                         maxiter=1e6)
+        np.testing.assert_almost_equal(self.strain_igorAPS,
+                                       strain_m2)
 
 if __name__ == '__main__':
     unittest.main()
