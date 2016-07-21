@@ -435,7 +435,7 @@ class VoxelStep(object):
                    ref='TSL',
                    xtor=1e-10,
                    disp=False,
-                   deviatoric=True,
+                   deviatoric='m2',
                    maxiter=1e10,
                    symmetry=None,
                    opt_method='nelder-mead'):
@@ -456,12 +456,9 @@ class VoxelStep(object):
             cell
         disp: boolean
             Toggle the display of optimization process results
-        deviatoric: boolean
-            Whether only returning the deviatoric strain components or
-            full strain tensor
-            !!!NOTE:
-                Full strain tensor requires energy beam scan data,
-                this particular feature has not implement yet.
+        deviatoric: str ['tishler', 'm1', 'm2']
+            Specify which method should be used for the calculation of
+            deviatoric strain.
         maxiter: float
             Maximum iterations/calls allowed during the optimization
         symmetry: str
@@ -510,12 +507,13 @@ class VoxelStep(object):
         # F_fin = np.einsum('im,mj->ij', B_org, np.linalg.inv(B_fin)).T
         # *** switching to new deviatoric strain calculation
         F_fin = np.dot(B_org, np.linalg.inv(B_fin)).T
-        J = np.linalg.det(F_fin)
-        epsilon = 0.5*(np.dot(F_fin.T, F_fin) - np.eye(3))
-        # if no white beam energy provided, remove the hydrostatic component
-        # as it has no physical meaning
-        if deviatoric:
-            epsilon += 0.5 * (1 - (J**2)**(1.0/3)) * np.eye(3)
+        epsilon = F2DeviatoricStrain(F_fin, method=deviatoric)
+        # J = np.linalg.det(F_fin)
+        # epsilon = 0.5*(np.dot(F_fin.T, F_fin) - np.eye(3))
+        # # if no white beam energy provided, remove the hydrostatic component
+        # # as it has no physical meaning
+        # if deviatoric:
+        #     epsilon += 0.5 * (1 - (J**2)**(1.0/3)) * np.eye(3)
         ##
         # step 4: transform strain tensor to requested configuration
         # some preparation before hard computing
@@ -816,7 +814,7 @@ def base_hcp2cartesian(B_hcp,
     return B_cartesian
 
 
-def F2DeviatoricStrain(F, method):
+def F2DeviatoricStrain(F, method='m2'):
     """
     DESCRIPTION
     -----------
@@ -838,14 +836,18 @@ def F2DeviatoricStrain(F, method):
     ----
     """
     method = method.lower()
-    epsilon_D = np.empty((3, 3))
+    I = np.eye(3)  # identity matrix
+    J = np.linalg.det(F)  # Jacobian of F
     # Start calculation
     if method == 'tishler':
-        print "do tishler"
+        U = np.sqrt(np.dot(F.T, F))  # stretch tensor U^2 = F.T*F
+        epsilon = U - I
+        epsilon_D = epsilon - 1./3*np.trace(epsilon)*I
     elif method == 'm1':
-        print 'do m1'
+        U = np.sqrt(np.dot(F.T, F))
+        epsilon_D = U - J**(1./3.)*I
     elif method == 'm2':
-        print 'do m2'
+        epsilon_D = 0.5*(np.dot(F.T, F) - J**(2./3.)*I)
     else:
         msg = "Unknown method for deviatoric calc: {}".format(method)
         raise ValueError(msg)
