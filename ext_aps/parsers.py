@@ -508,6 +508,7 @@ class VoxelStep(object):
         #     B_org = base_hcp2cartesian(B_org, reciprocal=True)
         # Philip recommend using einsum, need more time to familiarize this
         # F_fin = np.einsum('im,mj->ij', B_org, np.linalg.inv(B_fin)).T
+        # *** switching to new deviatoric strain calculation
         F_fin = np.dot(B_org, np.linalg.inv(B_fin)).T
         J = np.linalg.det(F_fin)
         epsilon = 0.5*(np.dot(F_fin.T, F_fin) - np.eye(3))
@@ -813,3 +814,39 @@ def base_hcp2cartesian(B_hcp,
     if reciprocal:
         B_cartesian = 2*np.pi*(np.linalg.inv(B_cartesian)).T
     return B_cartesian
+
+
+def F2DeviatoricStrain(F, method):
+    """
+    DESCRIPTION
+    -----------
+    epsilon_D = F2DeviatoricStrain(F, method)
+        Calculating deviatoric strain from full deformation gradient
+        using specified method
+    PARAMETERS
+    ----------
+    F: np.array (3,3)
+        Full deformation gradient
+    method: str ['tishler', 'm1', 'm2']
+        Specify which method should be used for the calculation of
+        deviatoric strain.
+    RETURNS
+    -------
+    epsilon_D: np.array(3,3)
+        A strain tensor without hydrostatic component.
+    NOTE
+    ----
+    """
+    method = method.lower()
+    epsilon_D = np.empty((3, 3))
+    # Start calculation
+    if method == 'tishler':
+        print "do tishler"
+    elif method == 'm1':
+        print 'do m1'
+    elif method == 'm2':
+        print 'do m2'
+    else:
+        msg = "Unknown method for deviatoric calc: {}".format(method)
+        raise ValueError(msg)
+    return epsilon_D
