@@ -838,7 +838,7 @@ def F2DeviatoricStrain(F, method='m2', debug=False):
         raise ValueError(msg)
     # debug output
     if debug:
-        print method
+        print "method--> ", method
         print "strain:\n", epsilon_D, "\n"
         print "J:\n", J, "\n"
     return epsilon_D
