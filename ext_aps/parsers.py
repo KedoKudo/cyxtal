@@ -556,7 +556,8 @@ class VoxelStep(object):
 # MODULE LEVEL FUNCTIONS/METHODS #
 ##################################
 def parse_xml(xmlfile,
-              namespace={'step':'http://sector34.xor.aps.anl.gov/34ide:indexResult'},
+              namespace={'step':
+                         'http://sector34.xor.aps.anl.gov/34ide:indexResult'},
               disp=True,
               keepEmptyVoxel=False):
     """
@@ -624,7 +625,7 @@ def parse_xml(xmlfile,
         xsample = step.find('step:Xsample', ns).text
         ysample = step.find('step:Ysample', ns).text
         zsample = step.find('step:Zsample', ns).text
-        depth = step.find('step:depth'  , ns).text
+        depth = step.find('step:depth', ns).text
         # |->diffraction vectors
         qx = step.find('step:detector/step:peaksXY/step:Qx', ns).text
         qy = step.find('step:detector/step:peaksXY/step:Qy', ns).text
@@ -741,9 +742,9 @@ def get_base(lc,
     if degrees:
         alpha, beta, gamma = np.radians([alpha, beta, gamma])
     # just trying to make syntax cleaner
-    s_a = np.sin(alpha)
+    # s_a = np.sin(alpha)
     c_a = np.cos(alpha)
-    s_b = np.sin(beta)
+    # s_b = np.sin(beta)
     c_b = np.cos(beta)
     s_g = np.sin(gamma)
     c_g = np.cos(gamma)
