@@ -593,13 +593,13 @@ def parse_xml(xmlfile,
     ----
     """
     # read in the xml file using cElementtree
-    tree    = ET.parse(xmlfile)
-    root    = tree.getroot()
-    voxels  = []                  # empty container
+    tree = ET.parse(xmlfile)
+    root = tree.getroot()
+    voxels = []                  # empty container
     skipped = 0                   # keep track of how many voxel skipped
-    ns      = namespace
-    sep_head= '\n' + '*'*60
-    sep_tail= '*'*60 + "\n"
+    ns = namespace
+    sep_head = '\n' + '*'*60
+    sep_tail = '*'*60 + "\n"
     # walk through each step
     if disp:
         print sep_head
@@ -607,7 +607,8 @@ def parse_xml(xmlfile,
     for i in range(len(root)):
         step = root[i]
         # determine if voxel is indexed
-        astar = step.find('step:indexing/step:pattern/step:recip_lattice/step:astar', ns)
+        target_str = 'step:indexing/step:pattern/step:recip_lattice/step:astar'
+        astar = step.find(target_str, ns)
         if astar is None:
             skipped += 1
             if keepEmptyVoxel:
@@ -623,30 +624,35 @@ def parse_xml(xmlfile,
         xsample = step.find('step:Xsample', ns).text
         ysample = step.find('step:Ysample', ns).text
         zsample = step.find('step:Zsample', ns).text
-        depth   = step.find('step:depth'  , ns).text
+        depth = step.find('step:depth'  , ns).text
         # |->diffraction vectors
         qx = step.find('step:detector/step:peaksXY/step:Qx', ns).text
         qy = step.find('step:detector/step:peaksXY/step:Qy', ns).text
         qz = step.find('step:detector/step:peaksXY/step:Qz', ns).text
         # |->reciprocal lattice vectors
-        astar = step.find('step:indexing/step:pattern/step:recip_lattice/step:astar', ns).text
-        bstar = step.find('step:indexing/step:pattern/step:recip_lattice/step:bstar', ns).text
-        cstar = step.find('step:indexing/step:pattern/step:recip_lattice/step:cstar', ns).text
+        astar_str = 'step:indexing/step:pattern/step:recip_lattice/step:astar'
+        bstar_str = 'step:indexing/step:pattern/step:recip_lattice/step:bstar'
+        cstar_str = 'step:indexing/step:pattern/step:recip_lattice/step:cstar'
+        astar = step.find(astar_str, ns).text
+        bstar = step.find(bstar_str, ns).text
+        cstar = step.find(cstar_str, ns).text
         # |->index results (hkl)
-        h  = step.find('step:indexing/step:pattern/step:hkl_s/step:h', ns).text
-        k  = step.find('step:indexing/step:pattern/step:hkl_s/step:k', ns).text
-        l  = step.find('step:indexing/step:pattern/step:hkl_s/step:l', ns).text
+        h = step.find('step:indexing/step:pattern/step:hkl_s/step:h', ns).text
+        k = step.find('step:indexing/step:pattern/step:hkl_s/step:k', ns).text
+        l = step.find('step:indexing/step:pattern/step:hkl_s/step:l', ns).text
         # |->indexation goodess for the first set of patterns
-        goodness = step.find('step:indexing/step:pattern', ns).attrib['goodness']
+        gd_str = 'step:indexing/step:pattern'
+        goodness = step.find(gd_str, ns).attrib['goodness']
         # |->lattice constants (ideal)
-        lc = step.find('step:indexing/step:xtl/step:latticeParameters', ns).text
+        lc_str = 'step:indexing/step:xtl/step:latticeParameters'
+        lc = step.find(lc_str, ns).text
         # STEP 2: PARSE DATA TO MEMORY
         voxel = VoxelStep()
         # |->motor/wire position
         voxel.Xsample = float(xsample)
         voxel.Ysample = float(ysample)
         voxel.Zsample = float(zsample)
-        voxel.depth   = float(depth)
+        voxel.depth = float(depth)
         # |->diffraction vectors
         qx = [float(item) for item in qx.split()]
         qy = [float(item) for item in qy.split()]
@@ -674,9 +680,10 @@ def parse_xml(xmlfile,
     if disp:
         print sep_head
         print "XML FILE: {}".format(xmlfile)
-        print "  Total number of voxels:\t\t{}".format(len(root))
-        print "  Valid voxel for DAXM analysis:\t{}".format(len(voxels))
-        print "  Dataset goodness:\t\t\t{:.2%}".format(float(len(voxels))/len(root))
+        print " Total number of voxels:\t\t{}".format(len(root))
+        print " Valid voxel for DAXM analysis:\t{}".format(len(voxels))
+        data_q = float(len(voxels))/len(root)
+        print " Dataset goodness:\t\t\t{:.2%}".format(data_q)
         print sep_tail
 
     return voxels
