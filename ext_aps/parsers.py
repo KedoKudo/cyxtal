@@ -8,25 +8,25 @@
 Copyright (c) 2016, C. Zhang.
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without modification,
-are permitted provided that the following conditions are met:
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
 1) Redistributions of source code must retain the above copyright notice, this
 list of conditions and the following disclaimer.
 2) Redistributions in binary form must reproduce the above copyright notice,
-this list of conditions and the following disclaimer in the documentation and/or
-other materials provided with the distribution.
+this list of conditions and the following disclaimer in the documentation
+and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 DESCRIPTION
 -----------
@@ -273,7 +273,7 @@ class VoxelStep(object):
             rl = self.reciprocal_basis
             n_peaks = self.hkls.shape[0]
             new_qs = np.empty(self.hkls.shape)
-            #**STAET:PRUNING_Q
+            # **STAET:PRUNING_Q
             # brutal search to locate the q vectors associated
             # with hkl indexation
             # NOTE:
@@ -289,7 +289,7 @@ class VoxelStep(object):
                         # try to located the closet match
                         threshold = tmp
                         new_qs[i, :] = self.qs[j, :]
-            #**END:PRUNING_Q
+            # **END:PRUNING_Q
             # save pruning results
             self.qs = new_qs
         # update flag to unlock access to this voxel
@@ -299,7 +299,7 @@ class VoxelStep(object):
     def __str__(self):
         if not(self._valid):
             return "Not validated"
-        msg  = 'DAXM voxel:\n'
+        msg = 'DAXM voxel:\n'
         msg += ' Motor/wire position:\n'
         msg += '  Xsample: {}\n'.format(self.Xsample)
         msg += '  Ysample: {}\n'.format(self.Ysample)
