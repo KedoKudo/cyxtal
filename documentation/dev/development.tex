@@ -71,7 +71,7 @@ Since there is no explicit method available to find a strained unit cell that ge
 The overall goal of this implicit numeric approach is to minimize the difference between the calculated diffraction peaks and the measured ones.
 To quantify the mismatch, angular difference between all diffraction peak pairs (calculated and measured),
 \[
-	err = \sum \tnsr q_\text{calculated} \cdot \tnsr q_\text{measured}
+	err = 1 - \dfrac{1}{N} \sum \tnsr q_\text{calculated} \cdot \tnsr q_\text{measured}
 \]
 where $\tnsr q_\text{calculated}$ can be calculated by
 \[
@@ -87,7 +87,7 @@ The relationship between $\tnsr B$ and $\tnsr B^*$ can be found through
 One of the problem of using numerical approach is that it might leads to a set of lattice constants that satisfy our criterion but completely unrealistic. 
 To avoid situation like this, the objective function for the optimization of strain refinement is constructed with both the mismatch of \tnsr Q as well as the change in the volume of the unit cell, 
 \[
-	F(\tnsr x) = \sum \tnsr q_\text{calculated} \cdot \tnsr q_\text{measured} + \Delta V_\text{unitcell}
+	F(\tnsr x) = 1 - \dfrac{1}{N} \sum \tnsr q_\text{calculated} \cdot \tnsr q_\text{measured}
 \]
 where \tnsr x represents the lattice constant vector, $\tnsr x = (a,b,c,\alpha,\beta,\gamma)$
 
