@@ -818,7 +818,7 @@ def F2DeviatoricStrain(F, method='m2', debug=False):
     ----------
     F: np.array (3,3)
         Full deformation gradient
-    method: str ['tishler', 'm1', 'm2']
+    method: str ['tischler', 'm1', 'm2']
         Specify which method should be used for the calculation of
         deviatoric strain.
     RETURNS
@@ -832,7 +832,7 @@ def F2DeviatoricStrain(F, method='m2', debug=False):
     I = np.eye(3)  # identity matrix
     J = np.linalg.det(F)  # Jacobian of F
     # Start calculation
-    if method == 'tishler':
+    if method == 'tischler':
         U = sqrtm(np.dot(F.T, F))  # stretch tensor U^2 = F.T*F
         epsilon = U - I
         epsilon_D = epsilon - 1./3*np.trace(epsilon)*I
