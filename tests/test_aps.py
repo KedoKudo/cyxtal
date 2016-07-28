@@ -113,7 +113,7 @@ class TestStrainRefine(unittest.TestCase):
         # epsilon_D = epsilon - 1./3*tr(epsilon)*I
         strain_tishler = self.data.get_strain(ref='APS',
                                               disp=self.disp,
-                                              deviatoric='tishler',
+                                              deviatoric='tischler',
                                               xtor=1e-6,
                                               maxiter=1e6)
         np.testing.assert_almost_equal(self.strain_igorAPS,
