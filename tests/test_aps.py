@@ -95,8 +95,12 @@ class TestStrainRefine(unittest.TestCase):
         self.disp = True
         # e is extracted from Igor
         # --> use test.pxp to see the full process
-        e = np.array([-0.001113,  0.000542, 0.000571,
-                     0.001978, -0.001261, 0.000394])
+        e = np.array([-0.001113,   # xx
+                      +0.000542,   # yy
+                      +0.000571,   # zz
+                      +0.001978,   # yz
+                      -0.001261,   # xz
+                      +0.000394])  # xy
         idx_r0 = np.array([0, 5, 4])
         idx_r1 = np.array([5, 1, 3])
         idx_r2 = np.array([4, 3, 2])
