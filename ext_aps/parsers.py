@@ -438,7 +438,8 @@ class VoxelStep(object):
                    disp=False,
                    deviatoric='m2',
                    maxiter=1e10,
-                   opt_method='nelder-mead'):
+                   opt_method='nelder-mead',
+                   min_qv=4):
         """
         DESCRIPTION
         -----------
@@ -461,6 +462,9 @@ class VoxelStep(object):
             deviatoric strain.
         maxiter: float
             Maximum iterations/calls allowed during the optimization
+        min_qv: int
+            Minimum amount of q vectors to start strain refinement. Igor
+            default setting is 4. @Dr.Tischler
         RETURNS
         -------
         epsilon: np.array (3,3)
@@ -474,6 +478,10 @@ class VoxelStep(object):
         if not(self._valid):
             print "Corrupted voxel found!"
             raise ValueError('Validate data first before strain refinement!')
+        if self.hkls.shape[0] < min_qv:
+            print "insufficient diffractions spots"
+            epsilon = np.empty((3, 3))
+            return epsilon.fill(np.nan)
         # feature vectors:
         #   [a*_1, a*_2, a*_3, b*_1, b*_2, b*_3, c*_1, c*_2, c*_3]
         v_features = np.reshape(self.reciprocal_basis, 9, order='F')
