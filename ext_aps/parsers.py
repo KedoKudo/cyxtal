@@ -356,6 +356,7 @@ class VoxelStep(object):
         # calculate voxel position based on motor position in XHF
         # // This is the quickest way to get the coordinates
         coord = [-self.Xsample, -self.Ysample, -self.Zsample+self.depth]
+        coord = np.array(coord)
         # depends on the desired configuration, change the rotation
         # matrix accordingly
         ref = ref.upper()

@@ -1239,6 +1239,47 @@ def slip_systems(str lattice):
 
     return np.copy(ss[0:slicer,:,:])
 
+
+def bravis2cartesian(m_bravis, n_bravis, covera):
+    """
+    DESCRIPTION
+    -----------
+    m_carteisna, n_cartesian = bravis2cartesian(m_bravis, n_bravis)
+        Using a 3x4 matrix that can convert both slip direction and plane normal
+    from Bravis-Miller to standard Miller indices.
+    PARAMETERS
+    ----------
+    m_bravis: numpy.ndarray, 1x4
+        Slip direction
+    n_bravis: numpy.ndarray, 1x4
+        Plane normal
+    covera: float
+        c/a ratio, for Ti it is 1.58.
+    RETURNS
+    -------
+    m_carteisna: numpy.ndarray, 1x3
+        Slip direction in Cartesian coordinate system.
+    n_cartesian: numpy.ndarray, 1x3
+        Plane normal in Cartesian coordinate system.
+    NOTE
+    ----
+    1. The returned slip direction and plane normal are normalized
+    """
+    cdef converter = np.array([[1, 0, 0, 0],
+                               [1/np.sqrt(3), 2/np.sqrt(3), 0, 0],
+                               [0, 0, 0, 1/covera]])
+    cdef m_carteisna = np.empty(3, dtype=DTYPE)
+    cdef n_cartesian = np.empty(3, dtype=DTYPE)
+
+    # converting to Cartesian
+    m_carteisna = np.dot(converter, m_bravis)
+    n_cartesian = np.dot(converter, n_bravis)
+    # normalization
+    m_carteisna = m_carteisna / np.linalg.norm(m_carteisna)
+    n_cartesian = n_cartesian / np.linalg.norm(n_cartesian)
+    return m_carteisna, n_cartesian
+
+
 #-------------#
 # END OF FILE #
 #-------------#

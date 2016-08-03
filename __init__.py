@@ -35,18 +35,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 from cyxtal.cxtallite import symmetry
 from cyxtal.cxtallite import Quaternion
 from cyxtal.cxtallite import Xtallite
+from cyxtal.cxtallite import slip_systems
+from cyxtal.cxtallite import bravis2cartesian
 
-from cyxtal.ctools    import kmeans
-from cyxtal.ctools    import get_vonMisesStress
-from cyxtal.ctools    import get_vonMisesStrain
+from cyxtal.ctools import kmeans
+from cyxtal.ctools import get_vonMisesStress
+from cyxtal.ctools import get_vonMisesStrain
 
-from cyxtal.geometry  import Point
-from cyxtal.geometry  import Line
-from cyxtal.geometry  import Plane
-from cyxtal.geometry  import Point2D
-from cyxtal.geometry  import Line2D
-from cyxtal.geometry  import Polygon2D
-from cyxtal.geometry  import convex_hull
+from cyxtal.geometry import Point
+from cyxtal.geometry import Line
+from cyxtal.geometry import Plane
+from cyxtal.geometry import Point2D
+from cyxtal.geometry import Line2D
+from cyxtal.geometry import Polygon2D
+from cyxtal.geometry import convex_hull
 
 # Interface modules for vtk,damask
 import ext_vtk
