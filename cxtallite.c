@@ -1881,8 +1881,6 @@ static char __pyx_k_unitary[] = "unitary";
 static char __pyx_k_Ellipsis[] = "Ellipsis";
 static char __pyx_k_absolute[] = "absolute";
 static char __pyx_k_itemsize[] = "itemsize";
-static char __pyx_k_m_bravis[] = "m_bravis";
-static char __pyx_k_n_bravis[] = "n_bravis";
 static char __pyx_k_rodrigue[] = "rodrigue";
 static char __pyx_k_symQuats[] = "symQuats";
 static char __pyx_k_symmetry[] = "symmetry";
@@ -1894,6 +1892,8 @@ static char __pyx_k_cxtallite[] = "cxtallite";
 static char __pyx_k_enumerate[] = "enumerate";
 static char __pyx_k_hexagonal[] = "hexagonal+";
 static char __pyx_k_inDegrees[] = "inDegrees";
+static char __pyx_k_m_bravais[] = "m_bravais";
+static char __pyx_k_n_bravais[] = "n_bravais";
 static char __pyx_k_tondarray[] = "tondarray";
 static char __pyx_k_triclinic[] = "triclinic";
 static char __pyx_k_IndexError[] = "IndexError";
@@ -1918,7 +1918,7 @@ static char __pyx_k_getOrientation[] = "getOrientation";
 static char __pyx_k_allocate_buffer[] = "allocate_buffer";
 static char __pyx_k_dtype_is_object[] = "dtype_is_object";
 static char __pyx_k_inStandardRange[] = "inStandardRange";
-static char __pyx_k_bravis2cartesian[] = "bravis2cartesian";
+static char __pyx_k_bravais2cartesian[] = "bravais2cartesian";
 static char __pyx_k_inFundamentalZone[] = "inFundamentalZone";
 static char __pyx_k_toFundamentalZone[] = "toFundamentalZone";
 static char __pyx_k_strided_and_direct[] = "<strided and direct>";
@@ -2000,7 +2000,7 @@ static PyObject *__pyx_n_s_average;
 static PyObject *__pyx_n_s_axis;
 static PyObject *__pyx_n_s_base;
 static PyObject *__pyx_n_s_bcc;
-static PyObject *__pyx_n_s_bravis2cartesian;
+static PyObject *__pyx_n_s_bravais2cartesian;
 static PyObject *__pyx_n_s_c;
 static PyObject *__pyx_n_u_c;
 static PyObject *__pyx_n_s_class;
@@ -2055,13 +2055,13 @@ static PyObject *__pyx_kp_s_itemsize_0_for_cython_array;
 static PyObject *__pyx_n_s_lattice;
 static PyObject *__pyx_n_s_linalg;
 static PyObject *__pyx_n_s_lower;
-static PyObject *__pyx_n_s_m_bravis;
+static PyObject *__pyx_n_s_m_bravais;
 static PyObject *__pyx_n_s_m_carteisna;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_math;
 static PyObject *__pyx_n_s_memview;
 static PyObject *__pyx_n_s_mode;
-static PyObject *__pyx_n_s_n_bravis;
+static PyObject *__pyx_n_s_n_bravais;
 static PyObject *__pyx_n_s_n_cartesian;
 static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_name_2;
@@ -2239,7 +2239,7 @@ static int __pyx_pf_9cxtallite_9Aggregate___init__(struct __pyx_obj_9cxtallite_A
 static PyObject *__pyx_pf_9cxtallite_9Aggregate_2getOrientation(struct __pyx_obj_9cxtallite_Aggregate *__pyx_v_self, PyObject *__pyx_v_mode); /* proto */
 static PyObject *__pyx_pf_9cxtallite_symmetry(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_lattice, PyObject *__pyx_v_mode); /* proto */
 static PyObject *__pyx_pf_9cxtallite_2slip_systems(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_lattice); /* proto */
-static PyObject *__pyx_pf_9cxtallite_4bravis2cartesian(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_m_bravis, PyObject *__pyx_v_n_bravis, PyObject *__pyx_v_covera); /* proto */
+static PyObject *__pyx_pf_9cxtallite_4bravais2cartesian(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_m_bravais, PyObject *__pyx_v_n_bravais, PyObject *__pyx_v_covera); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __pyx_array_obj *__pyx_v_self, PyObject *__pyx_v_shape, Py_ssize_t __pyx_v_itemsize, PyObject *__pyx_v_format, PyObject *__pyx_v_mode, int __pyx_v_allocate_buffer); /* proto */
@@ -26320,27 +26320,27 @@ static PyObject *__pyx_pf_9cxtallite_2slip_systems(CYTHON_UNUSED PyObject *__pyx
 /* "cxtallite.pyx":1243
  * 
  * 
- * def bravis2cartesian(m_bravis, n_bravis, covera):             # <<<<<<<<<<<<<<
+ * def bravais2cartesian(m_bravais, n_bravais, covera):             # <<<<<<<<<<<<<<
  *     """
  *     DESCRIPTION
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9cxtallite_5bravis2cartesian(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_9cxtallite_4bravis2cartesian[] = "\n    DESCRIPTION\n    -----------\n    m_carteisna, n_cartesian = bravis2cartesian(m_bravis, n_bravis)\n        Using a 3x4 matrix that can convert both slip direction and plane normal\n    from Bravis-Miller to standard Miller indices.\n    PARAMETERS\n    ----------\n    m_bravis: numpy.ndarray, 1x4\n        Slip direction\n    n_bravis: numpy.ndarray, 1x4\n        Plane normal\n    covera: float\n        c/a ratio, for Ti it is 1.58.\n    RETURNS\n    -------\n    m_carteisna: numpy.ndarray, 1x3\n        Slip direction in Cartesian coordinate system.\n    n_cartesian: numpy.ndarray, 1x3\n        Plane normal in Cartesian coordinate system.\n    NOTE\n    ----\n    1. The returned slip direction and plane normal are normalized\n    ";
-static PyMethodDef __pyx_mdef_9cxtallite_5bravis2cartesian = {"bravis2cartesian", (PyCFunction)__pyx_pw_9cxtallite_5bravis2cartesian, METH_VARARGS|METH_KEYWORDS, __pyx_doc_9cxtallite_4bravis2cartesian};
-static PyObject *__pyx_pw_9cxtallite_5bravis2cartesian(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_m_bravis = 0;
-  PyObject *__pyx_v_n_bravis = 0;
+static PyObject *__pyx_pw_9cxtallite_5bravais2cartesian(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_9cxtallite_4bravais2cartesian[] = "\n    DESCRIPTION\n    -----------\n    m_carteisna, n_cartesian = bravais2cartesian(m_bravais, n_bravais)\n        Using a 3x4 matrix that can convert both slip direction and plane normal\n    from Bravis-Miller to standard Miller indices.\n    PARAMETERS\n    ----------\n    m_bravais: numpy.ndarray, 1x4\n        Slip direction\n    n_bravais: numpy.ndarray, 1x4\n        Plane normal\n    covera: float\n        c/a ratio, for Ti it is 1.58.\n    RETURNS\n    -------\n    m_carteisna: numpy.ndarray, 1x3\n        Slip direction in Cartesian coordinate system.\n    n_cartesian: numpy.ndarray, 1x3\n        Plane normal in Cartesian coordinate system.\n    NOTE\n    ----\n    1. The returned slip direction and plane normal are normalized\n    ";
+static PyMethodDef __pyx_mdef_9cxtallite_5bravais2cartesian = {"bravais2cartesian", (PyCFunction)__pyx_pw_9cxtallite_5bravais2cartesian, METH_VARARGS|METH_KEYWORDS, __pyx_doc_9cxtallite_4bravais2cartesian};
+static PyObject *__pyx_pw_9cxtallite_5bravais2cartesian(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_m_bravais = 0;
+  PyObject *__pyx_v_n_bravais = 0;
   PyObject *__pyx_v_covera = 0;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("bravis2cartesian (wrapper)", 0);
+  __Pyx_RefNannySetupContext("bravais2cartesian (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_m_bravis,&__pyx_n_s_n_bravis,&__pyx_n_s_covera,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_m_bravais,&__pyx_n_s_n_bravais,&__pyx_n_s_covera,0};
     PyObject* values[3] = {0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
@@ -26355,21 +26355,21 @@ static PyObject *__pyx_pw_9cxtallite_5bravis2cartesian(PyObject *__pyx_self, PyO
       kw_args = PyDict_Size(__pyx_kwds);
       switch (pos_args) {
         case  0:
-        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_m_bravis)) != 0)) kw_args--;
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_m_bravais)) != 0)) kw_args--;
         else goto __pyx_L5_argtuple_error;
         case  1:
-        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_n_bravis)) != 0)) kw_args--;
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_n_bravais)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("bravis2cartesian", 1, 3, 3, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1243; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("bravais2cartesian", 1, 3, 3, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1243; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_covera)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("bravis2cartesian", 1, 3, 3, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1243; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("bravais2cartesian", 1, 3, 3, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1243; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "bravis2cartesian") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1243; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "bravais2cartesian") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1243; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -26378,26 +26378,26 @@ static PyObject *__pyx_pw_9cxtallite_5bravis2cartesian(PyObject *__pyx_self, PyO
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_m_bravis = values[0];
-    __pyx_v_n_bravis = values[1];
+    __pyx_v_m_bravais = values[0];
+    __pyx_v_n_bravais = values[1];
     __pyx_v_covera = values[2];
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("bravis2cartesian", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1243; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("bravais2cartesian", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1243; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("cxtallite.bravis2cartesian", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cxtallite.bravais2cartesian", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_9cxtallite_4bravis2cartesian(__pyx_self, __pyx_v_m_bravis, __pyx_v_n_bravis, __pyx_v_covera);
+  __pyx_r = __pyx_pf_9cxtallite_4bravais2cartesian(__pyx_self, __pyx_v_m_bravais, __pyx_v_n_bravais, __pyx_v_covera);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9cxtallite_4bravis2cartesian(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_m_bravis, PyObject *__pyx_v_n_bravis, PyObject *__pyx_v_covera) {
+static PyObject *__pyx_pf_9cxtallite_4bravais2cartesian(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_m_bravais, PyObject *__pyx_v_n_bravais, PyObject *__pyx_v_covera) {
   PyObject *__pyx_v_converter = 0;
   PyObject *__pyx_v_m_carteisna = 0;
   PyObject *__pyx_v_n_cartesian = 0;
@@ -26413,7 +26413,7 @@ static PyObject *__pyx_pf_9cxtallite_4bravis2cartesian(CYTHON_UNUSED PyObject *_
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("bravis2cartesian", 0);
+  __Pyx_RefNannySetupContext("bravais2cartesian", 0);
 
   /* "cxtallite.pyx":1268
  *     1. The returned slip direction and plane normal are normalized
@@ -26610,8 +26610,8 @@ static PyObject *__pyx_pf_9cxtallite_4bravis2cartesian(CYTHON_UNUSED PyObject *_
   /* "cxtallite.pyx":1275
  * 
  *     # converting to Cartesian
- *     m_carteisna = np.dot(converter, m_bravis)             # <<<<<<<<<<<<<<
- *     n_cartesian = np.dot(converter, n_bravis)
+ *     m_carteisna = np.dot(converter, m_bravais)             # <<<<<<<<<<<<<<
+ *     n_cartesian = np.dot(converter, n_bravais)
  *     # normalization
  */
   __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1275; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -26639,9 +26639,9 @@ static PyObject *__pyx_pf_9cxtallite_4bravis2cartesian(CYTHON_UNUSED PyObject *_
   __Pyx_INCREF(__pyx_v_converter);
   __Pyx_GIVEREF(__pyx_v_converter);
   PyTuple_SET_ITEM(__pyx_t_6, 0+__pyx_t_7, __pyx_v_converter);
-  __Pyx_INCREF(__pyx_v_m_bravis);
-  __Pyx_GIVEREF(__pyx_v_m_bravis);
-  PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_7, __pyx_v_m_bravis);
+  __Pyx_INCREF(__pyx_v_m_bravais);
+  __Pyx_GIVEREF(__pyx_v_m_bravais);
+  PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_7, __pyx_v_m_bravais);
   __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_6, NULL); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1275; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -26651,8 +26651,8 @@ static PyObject *__pyx_pf_9cxtallite_4bravis2cartesian(CYTHON_UNUSED PyObject *_
 
   /* "cxtallite.pyx":1276
  *     # converting to Cartesian
- *     m_carteisna = np.dot(converter, m_bravis)
- *     n_cartesian = np.dot(converter, n_bravis)             # <<<<<<<<<<<<<<
+ *     m_carteisna = np.dot(converter, m_bravais)
+ *     n_cartesian = np.dot(converter, n_bravais)             # <<<<<<<<<<<<<<
  *     # normalization
  *     m_carteisna = m_carteisna / np.linalg.norm(m_carteisna)
  */
@@ -26681,9 +26681,9 @@ static PyObject *__pyx_pf_9cxtallite_4bravis2cartesian(CYTHON_UNUSED PyObject *_
   __Pyx_INCREF(__pyx_v_converter);
   __Pyx_GIVEREF(__pyx_v_converter);
   PyTuple_SET_ITEM(__pyx_t_4, 0+__pyx_t_7, __pyx_v_converter);
-  __Pyx_INCREF(__pyx_v_n_bravis);
-  __Pyx_GIVEREF(__pyx_v_n_bravis);
-  PyTuple_SET_ITEM(__pyx_t_4, 1+__pyx_t_7, __pyx_v_n_bravis);
+  __Pyx_INCREF(__pyx_v_n_bravais);
+  __Pyx_GIVEREF(__pyx_v_n_bravais);
+  PyTuple_SET_ITEM(__pyx_t_4, 1+__pyx_t_7, __pyx_v_n_bravais);
   __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1276; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -26692,7 +26692,7 @@ static PyObject *__pyx_pf_9cxtallite_4bravis2cartesian(CYTHON_UNUSED PyObject *_
   __pyx_t_3 = 0;
 
   /* "cxtallite.pyx":1278
- *     n_cartesian = np.dot(converter, n_bravis)
+ *     n_cartesian = np.dot(converter, n_bravais)
  *     # normalization
  *     m_carteisna = m_carteisna / np.linalg.norm(m_carteisna)             # <<<<<<<<<<<<<<
  *     n_cartesian = n_cartesian / np.linalg.norm(n_cartesian)
@@ -26806,7 +26806,7 @@ static PyObject *__pyx_pf_9cxtallite_4bravis2cartesian(CYTHON_UNUSED PyObject *_
   /* "cxtallite.pyx":1243
  * 
  * 
- * def bravis2cartesian(m_bravis, n_bravis, covera):             # <<<<<<<<<<<<<<
+ * def bravais2cartesian(m_bravais, n_bravais, covera):             # <<<<<<<<<<<<<<
  *     """
  *     DESCRIPTION
  */
@@ -26819,7 +26819,7 @@ static PyObject *__pyx_pf_9cxtallite_4bravis2cartesian(CYTHON_UNUSED PyObject *_
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("cxtallite.bravis2cartesian", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cxtallite.bravais2cartesian", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_converter);
@@ -42306,7 +42306,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_axis, __pyx_k_axis, sizeof(__pyx_k_axis), 0, 0, 1, 1},
   {&__pyx_n_s_base, __pyx_k_base, sizeof(__pyx_k_base), 0, 0, 1, 1},
   {&__pyx_n_s_bcc, __pyx_k_bcc, sizeof(__pyx_k_bcc), 0, 0, 1, 1},
-  {&__pyx_n_s_bravis2cartesian, __pyx_k_bravis2cartesian, sizeof(__pyx_k_bravis2cartesian), 0, 0, 1, 1},
+  {&__pyx_n_s_bravais2cartesian, __pyx_k_bravais2cartesian, sizeof(__pyx_k_bravais2cartesian), 0, 0, 1, 1},
   {&__pyx_n_s_c, __pyx_k_c, sizeof(__pyx_k_c), 0, 0, 1, 1},
   {&__pyx_n_u_c, __pyx_k_c, sizeof(__pyx_k_c), 0, 1, 0, 1},
   {&__pyx_n_s_class, __pyx_k_class, sizeof(__pyx_k_class), 0, 0, 1, 1},
@@ -42361,13 +42361,13 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_lattice, __pyx_k_lattice, sizeof(__pyx_k_lattice), 0, 0, 1, 1},
   {&__pyx_n_s_linalg, __pyx_k_linalg, sizeof(__pyx_k_linalg), 0, 0, 1, 1},
   {&__pyx_n_s_lower, __pyx_k_lower, sizeof(__pyx_k_lower), 0, 0, 1, 1},
-  {&__pyx_n_s_m_bravis, __pyx_k_m_bravis, sizeof(__pyx_k_m_bravis), 0, 0, 1, 1},
+  {&__pyx_n_s_m_bravais, __pyx_k_m_bravais, sizeof(__pyx_k_m_bravais), 0, 0, 1, 1},
   {&__pyx_n_s_m_carteisna, __pyx_k_m_carteisna, sizeof(__pyx_k_m_carteisna), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_math, __pyx_k_math, sizeof(__pyx_k_math), 0, 0, 1, 1},
   {&__pyx_n_s_memview, __pyx_k_memview, sizeof(__pyx_k_memview), 0, 0, 1, 1},
   {&__pyx_n_s_mode, __pyx_k_mode, sizeof(__pyx_k_mode), 0, 0, 1, 1},
-  {&__pyx_n_s_n_bravis, __pyx_k_n_bravis, sizeof(__pyx_k_n_bravis), 0, 0, 1, 1},
+  {&__pyx_n_s_n_bravais, __pyx_k_n_bravais, sizeof(__pyx_k_n_bravais), 0, 0, 1, 1},
   {&__pyx_n_s_n_cartesian, __pyx_k_n_cartesian, sizeof(__pyx_k_n_cartesian), 0, 0, 1, 1},
   {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
   {&__pyx_n_s_name_2, __pyx_k_name_2, sizeof(__pyx_k_name_2), 0, 0, 1, 1},
@@ -44802,14 +44802,14 @@ static int __Pyx_InitCachedConstants(void) {
   /* "cxtallite.pyx":1243
  * 
  * 
- * def bravis2cartesian(m_bravis, n_bravis, covera):             # <<<<<<<<<<<<<<
+ * def bravais2cartesian(m_bravais, n_bravais, covera):             # <<<<<<<<<<<<<<
  *     """
  *     DESCRIPTION
  */
-  __pyx_tuple__371 = PyTuple_Pack(6, __pyx_n_s_m_bravis, __pyx_n_s_n_bravis, __pyx_n_s_covera, __pyx_n_s_converter, __pyx_n_s_m_carteisna, __pyx_n_s_n_cartesian); if (unlikely(!__pyx_tuple__371)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1243; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__371 = PyTuple_Pack(6, __pyx_n_s_m_bravais, __pyx_n_s_n_bravais, __pyx_n_s_covera, __pyx_n_s_converter, __pyx_n_s_m_carteisna, __pyx_n_s_n_cartesian); if (unlikely(!__pyx_tuple__371)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1243; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__371);
   __Pyx_GIVEREF(__pyx_tuple__371);
-  __pyx_codeobj__372 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__371, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_chenzhang8722_lib_site_pa, __pyx_n_s_bravis2cartesian, 1243, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__372)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1243; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__372 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__371, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_chenzhang8722_lib_site_pa, __pyx_n_s_bravais2cartesian, 1243, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__372)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1243; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
   /* "View.MemoryView":278
  *         return self.name
@@ -45589,13 +45589,13 @@ PyMODINIT_FUNC PyInit_cxtallite(void)
   /* "cxtallite.pyx":1243
  * 
  * 
- * def bravis2cartesian(m_bravis, n_bravis, covera):             # <<<<<<<<<<<<<<
+ * def bravais2cartesian(m_bravais, n_bravais, covera):             # <<<<<<<<<<<<<<
  *     """
  *     DESCRIPTION
  */
-  __pyx_t_3 = PyCFunction_NewEx(&__pyx_mdef_9cxtallite_5bravis2cartesian, NULL, __pyx_n_s_cxtallite); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1243; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyCFunction_NewEx(&__pyx_mdef_9cxtallite_5bravais2cartesian, NULL, __pyx_n_s_cxtallite); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1243; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_bravis2cartesian, __pyx_t_3) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1243; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_bravais2cartesian, __pyx_t_3) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1243; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
   /* "cxtallite.pyx":1
