@@ -36,7 +36,7 @@ from cyxtal.cxtallite import symmetry
 from cyxtal.cxtallite import Quaternion
 from cyxtal.cxtallite import Xtallite
 from cyxtal.cxtallite import slip_systems
-from cyxtal.cxtallite import bravis2cartesian
+from cyxtal.cxtallite import bravais2cartesian
 
 from cyxtal.ctools import kmeans
 from cyxtal.ctools import get_vonMisesStress
