@@ -1278,7 +1278,7 @@ def bravais2cartesian(m_bravais, n_bravais, covera):
     cdef m_carteisna = np.empty(3, dtype=DTYPE)
 
     # converting to Cartesian
-    m_carteisna = np.dot(converter, m_bravais)
+    m_carteisna = np.dot(converter_m, m_bravais)
     n_cartesian = np.dot(converter_n, n_bravais)
     # normalization
     m_carteisna = m_carteisna / np.linalg.norm(m_carteisna)
