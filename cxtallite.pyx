@@ -1268,21 +1268,31 @@ def bravais2cartesian(m_bravais, n_bravais, covera):
     2. The formula for slip normal and slip direction are different due
        to the definition of plane rely on inversion.
     """
-    cdef converter_n = np.array([[1, 0, 0, 0],
-                                 [1/np.sqrt(3), 2/np.sqrt(3), 0, 0],
-                                 [0, 0, 0, 1/covera]])
+    cdef double h, k, i, l
+    cdef double u, v, j, w
+
     cdef n_cartesian = np.empty(3, dtype=DTYPE)
-    cdef converter_m = np.array([[3.0/2.0, 0, 0, 0],
-                                 [np.sqrt(3)/2, 1.0, 0, 0],
-                                 [0, 0, 0, covera]])
     cdef m_carteisna = np.empty(3, dtype=DTYPE)
 
-    # converting to Cartesian
-    m_carteisna = np.dot(converter_m, m_bravais)
-    n_cartesian = np.dot(converter_n, n_bravais)
+    h, k, i, l = n_bravais
+    u, v, j, w = m_bravais
+
+    # converting plane normal
+    # --> (plane normal) = (h   (h+2k)/sqrt(3)    l/(c/a)  )
+    n_cartesian[0] = h
+    n_cartesian[1] = (h+2*k)/np.sqrt(3)
+    n_cartesian[2] = l / covera
+
+    # converting slip direction
+    # --> [Vector]  =   [ 3u/2   Ö3(u+2v)/2  wc/a  ]
+    m_carteisna[0] = 3.0*u/2.0
+    m_carteisna[1] = sqrt(3)/2.0*(u + 2*v)
+    m_carteisna[2] = w *covera
+
     # normalization
     m_carteisna = m_carteisna / np.linalg.norm(m_carteisna)
     n_cartesian = n_cartesian / np.linalg.norm(n_cartesian)
+
     return m_carteisna, n_cartesian
 
 
