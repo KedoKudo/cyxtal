@@ -239,7 +239,7 @@ class VoxelStep(object):
     # corrupted and discard it from the calculation.
     def validate(self,
                  skip=False,
-                 tor=1e-2):
+                 tor=1e-4):
         """
         DESCRIPTION
         -----------
@@ -271,24 +271,27 @@ class VoxelStep(object):
             assert self.depth is not None
             # prune through qs to remove non-indexed peaks
             rl = self.reciprocal_basis
-            n_peaks = self.hkls.shape[0]
             new_qs = np.empty(self.hkls.shape)
-            # **STAET:PRUNING_Q
-            # brutal search to locate the q vectors associated
-            # with hkl indexation
+            # **START:PRUNING_Q
+            # The way DAXM indexation works is like this. The peak fining
+            # program will find as many peaks as it can, and the indexation
+            # will only index a subset of the peaks found. Thus the number of
+            # peaks and qs should always greater than the number of indexations
+            # found (hkls). So the pruning essentially is to correctly pairing
+            # HKL with q vectors and peaks position.
             # NOTE:
             #   The searching here should be optimized at some point
-            for i in range(n_peaks):
-                threshold = tor
-                hkl = self.hkls[i, :]
+            for i, hkl in enumerate(self.hkls):
                 q_calc = np.dot(rl, hkl)
                 q_calc = q_calc/np.linalg.norm(q_calc)
-                for j in range(self.qs.shape[0]):
-                    tmp = 1.0 - abs(np.dot(q_calc, self.qs[j, :]))
-                    if tmp < threshold:
-                        # try to located the closet match
-                        threshold = tmp
-                        new_qs[i, :] = self.qs[j, :]
+                # use brutal force to test the difference from all qs
+                diff = [1.0-abs(np.dot(q_mea, q_calc)) for q_mea in self.qs]
+                if min(diff) > tor:
+                    msg = "threshold too tight! "
+                    msg += "Cannot find q vectors to match indexation"
+                    raise ValueError(msg)
+                else:
+                    new_qs[i, :] = self.qs[np.argmin(diff), :]
             # **END:PRUNING_Q
             # save pruning results
             self.qs = new_qs
