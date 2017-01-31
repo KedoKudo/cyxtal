@@ -110,6 +110,9 @@ class VoxelStep(object):
         # indexing (shape unknown)
         self._qs = None
         self._hkls = None
+        self._peaks = None
+        # diffraction image name
+        self._h5Img = None
         # strain free reciprocal lattice
         self._astar = None
         self._bstar = None
@@ -188,6 +191,22 @@ class VoxelStep(object):
         self._hkls = np.array(data)
 
     @property
+    def peaks(self):
+        return self._peaks
+
+    @peaks.setter
+    def peaks(self, data):
+        self._peaks = np.array(data)
+
+    @property
+    def h5Img(self):
+        return self._h5Img
+
+    @h5Img.setter
+    def h5Img(self, img):
+        self._h5Img = str(img)
+
+    @property
     def astar(self):
         return self._astar
 
@@ -246,7 +265,9 @@ class VoxelStep(object):
         self.validate()
             Validate all parameters are parsed;
             Prune q vectors, ensure correct mapping between
-            self.hkls and self.qs;
+            self.hkls and self.qs, and self.peaks;
+            // the peak position on the detector can be important for
+            // streak analysis
             Instance of VoxelStep can only be used when validated.
             If strain refinement is not required, set skip=True for
             quick data process.
@@ -272,7 +293,8 @@ class VoxelStep(object):
             # prune through qs to remove non-indexed peaks
             rl = self.reciprocal_basis
             new_qs = np.empty(self.hkls.shape)
-            # **START:PRUNING_Q
+            new_peaks = np.empty((self.hkls.shape[0], 2))
+            # ----- START:PRUNING_Q ----- #
             # The way DAXM indexation works is like this. The peak fining
             # program will find as many peaks as it can, and the indexation
             # will only index a subset of the peaks found. Thus the number of
@@ -292,9 +314,11 @@ class VoxelStep(object):
                     raise ValueError(msg)
                 else:
                     new_qs[i, :] = self.qs[np.argmin(diff), :]
-            # **END:PRUNING_Q
+                    new_peaks[i, :] = self.peaks[np.argmin(diff), :]
+            # ----- END:PRUNING_Q ----- #
             # save pruning results
             self.qs = new_qs
+            self.peaks = new_peaks
         # update flag to unlock access to this voxel
         self._valid = True
         return self._valid
@@ -308,8 +332,11 @@ class VoxelStep(object):
         msg += '  Ysample: {}\n'.format(self.Ysample)
         msg += '  Zsample: {}\n'.format(self.Zsample)
         msg += '    depth: {}\n'.format(self.depth)
+        msg += '  H5 iamge: {}\n'.format(self.h5Img)
         msg += ' Q vectors(qx,qy,qz):\n'
         msg += str(self.qs) + '\n'
+        msg += ' peaks on detector(pixelx, pixely):\n'
+        msg += str(self.peaks) + '\n'
         msg += ' HKLs (h,k,l):\n'
         msg += str(self.hkls) + '\n'
         msg += ' Reciprocal lattice vectors:\n'
@@ -638,6 +665,11 @@ def parse_xml(xmlfile,
         ysample = step.find('step:Ysample', ns).text
         zsample = step.find('step:Zsample', ns).text
         depth = step.find('step:depth', ns).text
+        # |->H5 image name
+        h5img = step.find('step:detector/step:inputImage', ns).text
+        # |->peak position on CCD
+        xpix = step.find('step:detector/step:peaksXY/step:Xpixel', ns).text
+        ypix = step.find('step:detector/step:peaksXY/step:Ypixel', ns).text
         # |->diffraction vectors
         qx = step.find('step:detector/step:peaksXY/step:Qx', ns).text
         qy = step.find('step:detector/step:peaksXY/step:Qy', ns).text
@@ -666,24 +698,31 @@ def parse_xml(xmlfile,
         voxel.Ysample = float(ysample)
         voxel.Zsample = float(zsample)
         voxel.depth = float(depth)
+        # |->record H5 image
+        voxel.h5Img = h5img
+        # |->record peak positions on CCD
+        xpix = map(float, xpix.split())
+        ypix = map(float, ypix.split())
+        voxel.peaks = np.column_stack((xpix, ypix))
         # |->diffraction vectors
-        qx = [float(item) for item in qx.split()]
-        qy = [float(item) for item in qy.split()]
-        qz = [float(item) for item in qz.split()]
+        qx = map(float, qx.split())
+        qy = map(float, qy.split())
+        qz = map(float, qz.split())
         voxel.qs = np.column_stack((qx, qy, qz))
         # |->diffraction pattern goodness
         voxel.goodness = goodness
         # |->reciprocal lattice vectors
-        voxel.astar = [float(item) for item in astar.split()]
-        voxel.bstar = [float(item) for item in bstar.split()]
-        voxel.cstar = [float(item) for item in cstar.split()]
+        voxel.astar = map(float, astar.split())
+        voxel.bstar = map(float, bstar.split())
+        voxel.cstar = map(float, cstar.split())
         # |->index results (hkl)
-        h = [float(item) for item in h.split()]
-        k = [float(item) for item in k.split()]
-        l = [float(item) for item in l.split()]
+        h = map(float, h.split())
+        k = map(float, k.split())
+        l = map(float, l.split())
         voxel.hkls = np.column_stack((h, k, l))
         # |->lattice constants (ideal)
-        voxel.lc = [float(item) for item in lc.split()]
+        voxel.lc = map(float, lc.split())
+        # validate the voxel
         voxel.validate()
         # STEP 3: PUSH DATA TO CONAINER ARRAY/LIST
         voxels.append(voxel)
