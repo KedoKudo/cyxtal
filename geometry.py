@@ -310,15 +310,20 @@ class Line(object):
         if self.contain_point(point):
             return 0.0
         else:
-            temp_line = Line(point, self.start_pt)
-            # find the normal of the plane defined by the point and line
-            plane_normal = np.cross(temp_line.direction, self.direction)
-            plane_normal = [item/np.linalg.norm(plane_normal)
-                            for item in plane_normal]
-            direction = np.cross(self.direction, plane_normal)
-            direction = [item/np.linalg.norm(direction) for item in direction]
-            result = temp_line.length * np.dot(temp_line.direction, direction)
-            return np.absolute(result)
+            # follow Philip suggestions use simple vector
+            # algebra
+            tmp_vec = np.array(point.coord() - self.start_pt.coord())
+            projection = np.dot(tmp_vec, self.direction) * self.direction
+            return np.linalg.norm(tmp_vec - projection)
+            # temp_line = Line(point, self.start_pt)
+            # # find the normal of the plane defined by the point and line
+            # plane_normal = np.cross(temp_line.direction, self.direction)
+            # plane_normal = [item/np.linalg.norm(plane_normal)
+            #                 for item in plane_normal]
+            # direction = np.cross(self.direction, plane_normal)
+            # direction = [item/np.linalg.norm(direction) for item in direction]
+            # result = temp_line.length * np.dot(temp_line.direction, direction)
+            # return np.absolute(result)
 
     def dist2line(self, other):
         """Return the distance between two skewed or parallel lines"""
