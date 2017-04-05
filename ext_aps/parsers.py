@@ -457,10 +457,7 @@ class VoxelStep(object):
         # its column stack will be the orientation matrix, which
         # is used to perform reference transformation
         g = np.column_stack((a, b, c))
-        # use cyxtal package to calculate the Euler angles
-        # equivalent method using damask (for reference):
-        # eulers = Orientation(matrix=g, symmetry='hexagonal').reduced()
-        # eulers = np.degrees(eulers.asEulers())
+
         return OrientationMatrix(g).toEulers()
 
     def get_strain(self,
@@ -596,7 +593,7 @@ class VoxelStep(object):
 ##################################
 def parse_xml(xmlfile,
               namespace={'step':
-                         'http://sector34.xor.aps.anl.gov/34ide:indexResult'},
+                         'http://sector34.xray.aps.anl.gov/34ide:indexResult'},
               disp=True,
               keepEmptyVoxel=False):
     """
