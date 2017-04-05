@@ -98,7 +98,7 @@ class VoxelStep(object):
     lc:          lattice constants used in indexation
     lattice:     lattice structure
     goodness:    the indexation goodness of first pattern (highest confidence)
-    _valid:      validation state of the voxel
+    _validonly:  validation state of the voxel
     """
 
     def __init__(self):
@@ -123,7 +123,7 @@ class VoxelStep(object):
         # pattern goodness
         self._goodness = None
         # validation
-        self._valid = False
+        self._validonly = False
 
     # Not the best way to handle data access constrain, but
     # we have to settle with this for now. No specific doc
@@ -280,7 +280,7 @@ class VoxelStep(object):
             Tolerance for q vectors pruning.
         RETURNS
         -------
-        self._valid: boolean
+        self._validonly: boolean
             Return the state of the voxel (valid/invalid)
         """
         # allow bypass security if necessary
@@ -320,11 +320,11 @@ class VoxelStep(object):
             self.qs = new_qs
             self.peaks = new_peaks
         # update flag to unlock access to this voxel
-        self._valid = True
-        return self._valid
+        self._validonly = True
+        return self._validonly
 
     def __str__(self):
-        if not(self._valid):
+        if not(self._validonly):
             return "Not validated"
         msg = 'DAXM voxel:\n'
         msg += ' Motor/wire position:\n'
@@ -380,7 +380,7 @@ class VoxelStep(object):
                 call divide_and_couqure()
             endif
         """
-        if not(self._valid):
+        if not(self._validonly):
             msg = "Self validation failed, try self.validate()?."
             raise ValueError(msg)
         # calculate voxel position based on motor position in XHF
@@ -427,7 +427,7 @@ class VoxelStep(object):
         make sure all calculation is done under the same reference
         configuration.
         """
-        if not(self._valid):
+        if not(self._validonly):
             raise ValueError("Invalid data, ABORT!")
         # get the rotation matrix first
         ref = ref.upper()
@@ -503,7 +503,7 @@ class VoxelStep(object):
             in the APS coordinate system.
         """
         # check if voxel data is valid
-        if not(self._valid):
+        if not(self._validonly):
             print "Corrupted voxel found!"
             raise ValueError('Validate data first before strain refinement!')
         if self.hkls.shape[0] < min_qv:
@@ -594,7 +594,7 @@ class VoxelStep(object):
 def parse_xml(xmlfile,
               namespace={'step':
                          'http://sector34.xray.aps.anl.gov/34ide:indexResult'},
-              disp=True,
+              verbose=True,
               keepEmptyVoxel=False):
     """
     DESCRIPTION
