@@ -463,7 +463,7 @@ class VoxelStep(object):
     def get_strain(self,
                    ref='TSL',
                    xtor=1e-10,
-                   disp=False,
+                   verbose=False,
                    deviatoric='m2',
                    maxiter=1e10,
                    opt_method='nelder-mead',
@@ -483,8 +483,8 @@ class VoxelStep(object):
         xtor: float
             Tolerance used in the optimization of finding strained unit
             cell
-        disp: boolean
-            Toggle the display of optimization process results
+        verbose: boolean
+            Toggle the reporting of optimization process results
         deviatoric: str ['tishler', 'm1', 'm2']
             Specify which method should be used for the calculation of
             deviatoric strain.
@@ -518,11 +518,11 @@ class VoxelStep(object):
                           v_features,
                           method=opt_method,
                           options={'xtol': xtor,
-                                   'disp': disp,
+                                   'disp': verbose,
                                    'maxiter': int(maxiter),
                                    'maxfev': int(maxiter)})
-        # display
-        if disp:
+        # verbose reporting
+        if verbose:
             Bstar = refine.x.reshape((3, 3), order='F')  # final B*
             B = 2*np.pi*np.linalg.inv(Bstar).T  # final B from B*
             print "reciprocal:[a*;b*;c*]\n", Bstar
@@ -534,7 +534,7 @@ class VoxelStep(object):
         # *** switching to new deviatoric strain calculation
         epsilon = F2DeviatoricStrain(F_fin,
                                      method=deviatoric,
-                                     debug=disp)
+                                     debug=verbose)
         ##
         # step 4: transform strain tensor to requested configuration
         # some preparation before hard computing
@@ -601,7 +601,7 @@ def parse_xml(xmlfile,
     -----------
     [VoxelStep(),...]= parse_xml(DAXM_DATA.xml,
                                  namespace={$XML_NAMESPACE_DICT},
-                                 disp=True)
+                                 verbose=True)
         Parse the DAXM data from Beamline 34-I-DE to memory.
     PARAMETERS
     ----------
@@ -614,7 +614,7 @@ def parse_xml(xmlfile,
         NOTE:
             If the beamline changes there namespace, it is necessary to
             extract those namespace and update them with this argument.
-    disp: boolean
+    verbose: boolean
         Toggle output of parsing progress (terminal only)
     keepEmptyVoxel: boolean
         Keep non-indexed voxel in the return data set
@@ -638,7 +638,7 @@ def parse_xml(xmlfile,
     sep_head = '\n' + '*'*60
     sep_tail = '*'*60 + "\n"
     # walk through each step
-    if disp:
+    if verbose:
         print sep_head
         print 'Extract data from XML file'
     for i in range(len(root)):
@@ -652,7 +652,7 @@ def parse_xml(xmlfile,
                 voxels.append('nan')
             continue
         # progress bar for parsing
-        if disp:
+        if verbose:
             state = float(i+1)/len(root)
             bar = '[' + '#'*int(state*10) + ' '*(10-int(state*10)) + ']'
             print '\r'+bar+'{:.2%}'.format(state),
@@ -723,10 +723,8 @@ def parse_xml(xmlfile,
         voxel.validate()
         # STEP 3: PUSH DATA TO CONAINER ARRAY/LIST
         voxels.append(voxel)
-    if disp:
+    if verbose:
         print '\n', sep_tail
-    # SIMPLE STATISTICS
-    if disp:
         print sep_head
         print "XML FILE: {}".format(xmlfile)
         print " Total number of voxels:\t\t{}".format(len(root))
