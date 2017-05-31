@@ -76,3 +76,5 @@ documentation/classcyxtal_1_1geometry_1_1_polygon2_d.pdf
 tests/geomviz.vtp
 
 tests/sample.geom
+
+*.ipynb
