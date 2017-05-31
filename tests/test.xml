@@ -1,137 +1,316 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<AllSteps>
+<root>
 
-<step xmlns="http://sector34.xray.aps.anl.gov/34ide:indexResult">
-	<title></title>
-	<sampleName></sampleName>
+<step xmlns="http://sector34.xor.aps.anl.gov/34ide:indexResult">
+	<title>alloy sample</title>
+	<sampleName>Hongmei525</sampleName>
 	<userName>Bieler</userName>
 	<beamline></beamline>
-	<scanNum>17246</scanNum>
-	<date>2015-02-19T06:26:54-06:00</date>
+	<scanNum>10071</scanNum>
+	<date>2011-11-12T02:15:58-06:00</date>
 	<beamBad>0</beamBad>
 	<CCDshutter>out</CCDshutter>
 	<lightOn>0</lightOn>
-	<monoMode>white slitted</monoMode>
-	<Xsample>-27.6</Xsample>
-	<Ysample>2625.6</Ysample>
-	<Zsample>-4235.9</Zsample>
-	<depth>81.0</depth>
-	<energy unit="keV">19.6191</energy>
-	<hutchTemperature>22.8944</hutchTemperature>
-	<sampleDistance>0.0</sampleDistance>
+	<monoMode></monoMode>
+	<Xsample>577.0</Xsample>
+	<Ysample>-3490.4</Ysample>
+	<Zsample>-131.6</Zsample>
+	<depth>-49.0</depth>
+	<energy unit="keV">15.97649</energy>
+	<hutchTemperature>25.5162</hutchTemperature>
+	<sampleDistance>-0.001</sampleDistance>
 	<detector>
-		<inputImage>/data/xmd34/BielerFeb2015/bend1/poke-recon/bend1poke_sort_337_54.h5</inputImage>
+		<inputImage>/data34a/Bieler11-3/Hongmei/ST-recon/ST_1_1.h5</inputImage>
 		<detectorID>PE1621 723-3335</detectorID>
-		<exposure unit="sec">0.25</exposure>
+		<exposure unit="sec">0.8</exposure>
 		<Nx>2048</Nx>
 		<Ny>2048</Ny>
-		<totalSum>1365390.0</totalSum>
-		<sumAboveThreshold>86670.4</sumAboveThreshold>
-		<numAboveThreshold>459.0</numAboveThreshold>
-		<geoFile>/data/xmd34/BielerFeb2015/geoN_2015-02-18-wireY_-10.xml</geoFile>
-		<ROI startx="0" endx="2047" groupx="1" starty="0" endy="2047" groupy="1"></ROI>
-		<peaksXY peakProgram="peaksearch" minwidth="0.2825" threshold="80.0" thresholdRatio="-1" maxRfactor="0.5" maxwidth="27.0" maxCentToFit="18.0" boxsize="18" max_number="70" min_separation="40" smooth="True" peakShape="Gaussian" Npeaks="18" executionTime="1.11">
-			<Xpixel>1253.101 1012.449 1264.323 448.808 732.257 1364.962 450.866 1200.583 1134.699 1095.864 1045.154 204.782 1263.603 886.933 855.015 626.492 365.964 664.089</Xpixel>
-			<Ypixel>1072.448 197.53 1731.196 1765.715 1388.041 930.05 752.109 319.246 1941.09 655.833 945.005 1939.409 634.73 388.047 1077.225 309.071 1085.235 1626.186</Ypixel>
-			<Intens>576.8204 523.1038 483.4854 456.8975 455.2366 423.5234 403.5699 326.07 276.1433 233.826 166.6119 144.4964 134.5729 123.4521 104.4474 104.1222 100.3637 99.0902</Intens>
-			<Integral>12.35742 11.87038 12.52996 12.39641 9.8329 10.89559 8.42985 7.52782 6.46954 4.81408 5.59987 2.98009 2.67346 1.91659 2.4582 3.31879 2.69561 1.83985</Integral>
-			<hwhmX unit="pixel">1.734 1.766 1.754 1.883 1.778 1.902 1.713 1.886 1.696 1.605 1.69 1.861 1.968 1.854 1.797 2.005 1.897 1.522</hwhmX>
-			<hwhmY unit="pixel">1.689 1.945 1.846 1.827 1.718 1.675 1.78 1.652 1.838 1.792 1.757 1.746 1.752 1.486 1.779 1.753 1.808 1.741</hwhmY>
-			<tilt unit="degree">23.799 121.3164 176.9524 18.5715 112.5996 0.9136 135.6431 32.2962 36.5903 146.7302 163.7408 29.5466 19.1127 43.2463 6.594 179.0051 8.7378 9.6858</tilt>
-			<chisq>0.071491 0.059357 0.060447 0.058419 0.070758 0.066115 0.07651 0.081111 0.079321 0.1029 0.11599 0.11695 0.12705 0.19844 0.16971 0.171 0.14761 0.17887</chisq>
-			<Qx>0.0098691 -0.2256034 0.1979239 0.1789482 0.0941527 -0.0331794 -0.0700712 -0.202567 0.246738 -0.1086643 -0.0262746 0.2066335 -0.118346 -0.1736093 0.0115291 -0.1828894 0.0135055 0.1530664</Qx>
-			<Qy>0.7557942 0.6864351 0.7300216 0.6230754 0.6797927 0.7687297 0.6412936 0.7188026 0.6974948 0.7266982 0.728222 0.5806438 0.7467588 0.6847956 0.702826 0.645546 0.6327413 0.6599764</Qy>
-			<Qz>-0.6547349 -0.6913103 -0.6541365 -0.7614161 -0.7273357 -0.6387126 -0.7640893 -0.6650484 -0.6727714 -0.678308 -0.6848375 -0.7874994 -0.6544811 -0.7077533 -0.7112684 -0.7414998 -0.7742455 -0.7355283</Qz>
+		<totalSum>-6123400.0</totalSum>
+		<sumAboveThreshold>28484.4</sumAboveThreshold>
+		<numAboveThreshold>369.0</numAboveThreshold>
+		<geoFile>/data34a/Bieler11-3/geoN_2011-11-07_12-55-07.txt</geoFile>
+		<ROI startx="0" endx="2047" groupx="1" starty="0" endy="2047" groupy="1"/>
+		<peaksXY peakProgram="peaksearch" minwidth="0.0125" threshold="53.011" thresholdRatio="-1" maxRfactor="0.7" maxwidth="27.0" maxCentToFit="18.0" boxsize="18" max_number="200" min_separation="20" smooth="True" peakShape="Gaussian" Npeaks="11" executionTime="4.72">
+			<Xpixel>1249.805 1886.574 1715.912 1971.905 104.898 212.942 1864.013 185.202 1981.505 640.953 1637.376</Xpixel>
+			<Ypixel>1301.069 1852.676 1989.165 37.202 255.916 592.049 879.179 271.748 678.031 1621.843 1787.855</Ypixel>
+			<Intens>341.7503 238.626 203.9233 178.9046 102.5966 97.2118 93.2879 92.3445 82.1801 78.3995 63.373</Intens>
+			<Integral>0.09395 0.82666 2.43391 -4.98229 -0.66489 -1.04028 2.95457 0.70309 0.64252 7.75273 5.23257</Integral>
+			<hwhmX unit="pixel">1.104 0.943 1.169 2.302 1.263 1.236 3.035 1.109 2.137 4.014 2.151</hwhmX>
+			<hwhmY unit="pixel">1.191 1.546 1.102 1.084 1.115 1.021 1.238 0.984 2.723 2.189 4.098</hwhmY>
+			<tilt unit="degree">34.5921 137.7242 155.1809 18.7769 150.6507 155.9656 0.4074 59.9212 33.4057 12.3307 60.0467</tilt>
+			<chisq>0.31325 0.69263 0.36447 0.63308 0.42704 0.59431 0.61263 0.49527 0.66376 0.6686 0.63104</chisq>
+			<Qx>0.0760559 0.2473737 0.2788269 -0.3050166 -0.1738246 -0.1038622 -0.0546084 -0.1738694 -0.1203048 0.1503881 0.2228478</Qx>
+			<Qy>0.7519181 0.7846404 0.7550467 0.7681304 0.5735042 0.6029533 0.8221462 0.5849078 0.8252811 0.6576038 0.7668463</Qy>
+			<Qz>-0.6548546 -0.5684591 -0.5934307 -0.5629747 -0.8005485 -0.7909867 -0.5666511 -0.7922451 -0.5517589 -0.7382009 -0.6019017</Qz>
 		</peaksXY>
 	</detector>
-	<indexing indexProgram="euler" Nindexed="6" Npeaks="18" Npatterns="1" keVmaxCalc="16.5" keVmaxTest="30.0" angleTolerance="0.1" cone="179.0" hklPrefer="1 0 0" executionTime="0.16">
+	<indexing indexProgram="euler" Nindexed="4" Npeaks="11" Npatterns="1" keVmaxCalc="18.0" keVmaxTest="32.0" angleTolerance="0.15" cone="172.0" hklPrefer="0 0 1" executionTime="0.57">
 		<!-- Result of indexing. -->
-		<pattern num="0" rms_error="0.0129" goodness="104.893" Nindexed="6">
+		<pattern num="0" rms_error="0.173" goodness="19.5253" Nindexed="4">
 			<recip_lattice unit="1/nm">
-				<astar>0.4538093 10.2720016 -22.3340888</astar>
-				<bstar>6.9637779 -13.2670441 -19.4941740</bstar>
-				<cstar>-12.7185820 -3.7571120 -1.9864196</cstar>
+				<astar>14.3620411 5.5131139 19.0287216</astar>
+				<bstar>21.3167157 11.4402666 -3.6705352</bstar>
+				<cstar>-6.0733685 11.6996963 1.1942058</cstar>
 			</recip_lattice>
 			<hkl_s>
-				<h>7 7 5 7 5 7</h>
-				<k>-2 -2 -1 -3 -2 -2</k>
-				<l>-4 -2 -2 0 0 0</l>
+				<h>-2 -4 -6 -4</h>
+				<k>3 3 7 3</k>
+				<l>3 4 6 8</l>
 			</hkl_s>
 		</pattern>
 		<xtl>
-			<structureDesc>Ti hcp (hexagonal axis)</structureDesc>
-			<xtlFile>/data/xmd34/BielerFeb2015/Ti.xml</xtlFile>
+			<structureDesc>Ti crystal (hexagonal axis),  (Bieler Ti 525)</structureDesc>
 			<SpaceGroup>194</SpaceGroup>
-			<latticeParameters unit="nm">0.29508 0.29508 0.46855 90 90 120</latticeParameters>
+			<latticeParameters unit="nm">0.2965 0.2965 0.4747 90 90 120</latticeParameters>
+		   <atom n="1" occ="1" symbol="Cu" Z="29" label="Cu001">0.33333 0.66667 0.75</atom>
+		   <atom n="2" occ="1" symbol="Cu" Z="29" label="Cu001">0.66667 0.33333 0.25</atom>
 		</xtl>
 	</indexing>
 </step>
 
-<step xmlns="http://sector34.xray.aps.anl.gov/34ide:indexResult">
-	<title></title>
-	<sampleName></sampleName>
+<step xmlns="http://sector34.xor.aps.anl.gov/34ide:indexResult">
+	<title>alloy sample</title>
+	<sampleName>Hongmei525</sampleName>
 	<userName>Bieler</userName>
 	<beamline></beamline>
-	<scanNum>17246</scanNum>
-	<date>2015-02-19T06:26:54-06:00</date>
+	<scanNum>10071</scanNum>
+	<date>2011-11-12T02:15:58-06:00</date>
 	<beamBad>0</beamBad>
 	<CCDshutter>out</CCDshutter>
 	<lightOn>0</lightOn>
-	<monoMode>white slitted</monoMode>
-	<Xsample>-27.6</Xsample>
-	<Ysample>2625.6</Ysample>
-	<Zsample>-4235.9</Zsample>
-	<depth>81.0</depth>
-	<energy unit="keV">19.6191</energy>
-	<hutchTemperature>22.8944</hutchTemperature>
-	<sampleDistance>0.0</sampleDistance>
+	<monoMode></monoMode>
+	<Xsample>577.0</Xsample>
+	<Ysample>-3490.4</Ysample>
+	<Zsample>-131.6</Zsample>
+	<depth>-48.0</depth>
+	<energy unit="keV">15.97649</energy>
+	<hutchTemperature>25.5162</hutchTemperature>
+	<sampleDistance>-0.001</sampleDistance>
 	<detector>
-		<inputImage>/data/xmd34/BielerFeb2015/bend1/poke-recon/bend1poke_sort_337_54.h5</inputImage>
+		<inputImage>/data34a/Bieler11-3/Hongmei/ST-recon/ST_1_2.h5</inputImage>
 		<detectorID>PE1621 723-3335</detectorID>
-		<exposure unit="sec">0.25</exposure>
+		<exposure unit="sec">0.8</exposure>
 		<Nx>2048</Nx>
 		<Ny>2048</Ny>
-		<totalSum>1365390.0</totalSum>
-		<sumAboveThreshold>86670.4</sumAboveThreshold>
-		<numAboveThreshold>459.0</numAboveThreshold>
-		<geoFile>/data/xmd34/BielerFeb2015/geoN_2015-02-18-wireY_-10.xml</geoFile>
-		<ROI startx="0" endx="2047" groupx="1" starty="0" endy="2047" groupy="1"></ROI>
-		<peaksXY peakProgram="peaksearch" minwidth="0.2825" threshold="80.0" thresholdRatio="-1" maxRfactor="0.5" maxwidth="27.0" maxCentToFit="18.0" boxsize="18" max_number="70" min_separation="40" smooth="True" peakShape="Gaussian" Npeaks="18" executionTime="1.11">
-			<Xpixel>1253.101 1012.449 1264.323 448.808 732.257 1364.962 450.866 1200.583 1134.699 1095.864 1045.154 204.782 1263.603 886.933 855.015 626.492 365.964 664.089</Xpixel>
-			<Ypixel>1072.448 197.53 1731.196 1765.715 1388.041 930.05 752.109 319.246 1941.09 655.833 945.005 1939.409 634.73 388.047 1077.225 309.071 1085.235 1626.186</Ypixel>
-			<Intens>576.8204 523.1038 483.4854 456.8975 455.2366 423.5234 403.5699 326.07 276.1433 233.826 166.6119 144.4964 134.5729 123.4521 104.4474 104.1222 100.3637 99.0902</Intens>
-			<Integral>12.35742 11.87038 12.52996 12.39641 9.8329 10.89559 8.42985 7.52782 6.46954 4.81408 5.59987 2.98009 2.67346 1.91659 2.4582 3.31879 2.69561 1.83985</Integral>
-			<hwhmX unit="pixel">1.734 1.766 1.754 1.883 1.778 1.902 1.713 1.886 1.696 1.605 1.69 1.861 1.968 1.854 1.797 2.005 1.897 1.522</hwhmX>
-			<hwhmY unit="pixel">1.689 1.945 1.846 1.827 1.718 1.675 1.78 1.652 1.838 1.792 1.757 1.746 1.752 1.486 1.779 1.753 1.808 1.741</hwhmY>
-			<tilt unit="degree">23.799 121.3164 176.9524 18.5715 112.5996 0.9136 135.6431 32.2962 36.5903 146.7302 163.7408 29.5466 19.1127 43.2463 6.594 179.0051 8.7378 9.6858</tilt>
-			<chisq>0.071491 0.059357 0.060447 0.058419 0.070758 0.066115 0.07651 0.081111 0.079321 0.1029 0.11599 0.11695 0.12705 0.19844 0.16971 0.171 0.14761 0.17887</chisq>
-			<Qx>0.0098691 -0.2256034 0.1979239 0.1789482 0.0941527 -0.0331794 -0.0700712 -0.202567 0.246738 -0.1086643 -0.0262746 0.2066335 -0.118346 -0.1736093 0.0115291 -0.1828894 0.0135055 0.1530664</Qx>
-			<Qy>0.7557942 0.6864351 0.7300216 0.6230754 0.6797927 0.7687297 0.6412936 0.7188026 0.6974948 0.7266982 0.728222 0.5806438 0.7467588 0.6847956 0.702826 0.645546 0.6327413 0.6599764</Qy>
-			<Qz>-0.6547349 -0.6913103 -0.6541365 -0.7614161 -0.7273357 -0.6387126 -0.7640893 -0.6650484 -0.6727714 -0.678308 -0.6848375 -0.7874994 -0.6544811 -0.7077533 -0.7112684 -0.7414998 -0.7742455 -0.7355283</Qz>
+		<totalSum>-5820110.0</totalSum>
+		<sumAboveThreshold>26907.9</sumAboveThreshold>
+		<numAboveThreshold>342.0</numAboveThreshold>
+		<geoFile>/data34a/Bieler11-3/geoN_2011-11-07_12-55-07.txt</geoFile>
+		<ROI startx="0" endx="2047" groupx="1" starty="0" endy="2047" groupy="1"/>
+		<peaksXY peakProgram="peaksearch" minwidth="0.0125" threshold="55.5249" thresholdRatio="-1" maxRfactor="0.7" maxwidth="27.0" maxCentToFit="18.0" boxsize="18" max_number="200" min_separation="20" smooth="True" peakShape="Gaussian" Npeaks="7" executionTime="3.73">
+			<Xpixel>184.985 834.781 1986.143 1972.057 1704.894 467.004 119.179</Xpixel>
+			<Ypixel>272.016 1088.966 1148.982 37.564 462.243 55.976 919.977</Ypixel>
+			<Intens>192.2076 177.8343 171.714 138.3937 113.3989 109.5976 80.4451</Intens>
+			<Integral>1.51147 4.50664 2.10203 6.26092 2.36068 -0.66723 0.24535</Integral>
+			<hwhmX unit="pixel">1.196 1.415 1.131 1.541 1.145 1.066 1.186</hwhmX>
+			<hwhmY unit="pixel">1.072 1.014 1.315 2.047 0.829 1.099 1.362</hwhmY>
+			<tilt unit="degree">120.7333 150.3837 158.9076 156.0164 152.1037 153.4522 26.7397</tilt>
+			<chisq>0.2877 0.46914 0.44423 0.68769 0.66634 0.54716 0.53936</chisq>
+			<Qx>-0.1738032 0.0137293 0.0325213 -0.3049295 -0.179994 -0.2326024 -0.0261408</Qx>
+			<Qy>0.5848928 0.7003118 0.835168 0.7681844 0.7851548 0.6075867 0.5968915</Qy>
+			<Qz>-0.7922707 -0.713705 -0.5490326 -0.5629482 -0.5925656 -0.7594304 -0.801896</Qz>
 		</peaksXY>
 	</detector>
-	<indexing indexProgram="euler" Nindexed="6" Npeaks="18" Npatterns="1" keVmaxCalc="16.5" keVmaxTest="30.0" angleTolerance="0.1" cone="179.0" hklPrefer="1 0 0" executionTime="0.16">
+	<indexing indexProgram="euler" Nindexed="4" Npeaks="7" Npatterns="1" keVmaxCalc="18.0" keVmaxTest="32.0" angleTolerance="0.15" cone="172.0" hklPrefer="0 0 1" executionTime="0.21">
 		<!-- Result of indexing. -->
-		<pattern num="0" rms_error="0.0129" goodness="104.893" Nindexed="6">
+		<pattern num="0" rms_error="0.0353" goodness="17.6236" Nindexed="4">
 			<recip_lattice unit="1/nm">
-				<astar>0.4538093 10.2720016 -22.3340888</astar>
-				<bstar>6.9637779 -13.2670441 -19.4941740</bstar>
-				<cstar>-12.7185820 -3.7571120 -1.9864196</cstar>
+				<astar>16.1078641 -11.6472027 -14.2700483</astar>
+				<bstar>16.8124391 12.7405727 -12.4005885</bstar>
+				<cstar>8.3275863 -1.0253067 10.2369369</cstar>
 			</recip_lattice>
 			<hkl_s>
-				<h>7 7 5 7 5 7</h>
-				<k>-2 -2 -1 -3 -2 -2</k>
-				<l>-4 -2 -2 0 0 0</l>
+				<h>-1 -4 -2 -2</h>
+				<k>2 5 3 5</k>
+				<l>-4 -8 -4 -6</l>
 			</hkl_s>
 		</pattern>
 		<xtl>
-			<structureDesc>Ti hcp (hexagonal axis)</structureDesc>
-			<xtlFile>/data/xmd34/BielerFeb2015/Ti.xml</xtlFile>
+			<structureDesc>Ti crystal (hexagonal axis),  (Bieler Ti 525)</structureDesc>
 			<SpaceGroup>194</SpaceGroup>
-			<latticeParameters unit="nm">0.29508 0.29508 0.46855 90 90 120</latticeParameters>
+			<latticeParameters unit="nm">0.2965 0.2965 0.4747 90 90 120</latticeParameters>
+		   <atom n="1" occ="1" symbol="Cu" Z="29" label="Cu001">0.33333 0.66667 0.75</atom>
+		   <atom n="2" occ="1" symbol="Cu" Z="29" label="Cu001">0.66667 0.33333 0.25</atom>
 		</xtl>
 	</indexing>
 </step>
 
-</AllSteps>
+<step xmlns="http://sector34.xor.aps.anl.gov/34ide:indexResult">
+	<title>alloy sample</title>
+	<sampleName>Hongmei525</sampleName>
+	<userName>Bieler</userName>
+	<beamline></beamline>
+	<scanNum>10071</scanNum>
+	<date>2011-11-12T02:15:58-06:00</date>
+	<beamBad>0</beamBad>
+	<CCDshutter>out</CCDshutter>
+	<lightOn>0</lightOn>
+	<monoMode></monoMode>
+	<Xsample>577.0</Xsample>
+	<Ysample>-3490.4</Ysample>
+	<Zsample>-131.6</Zsample>
+	<depth>-47.0</depth>
+	<energy unit="keV">15.97649</energy>
+	<hutchTemperature>25.5162</hutchTemperature>
+	<sampleDistance>-0.001</sampleDistance>
+	<detector>
+		<inputImage>/data34a/Bieler11-3/Hongmei/ST-recon/ST_1_3.h5</inputImage>
+		<detectorID>PE1621 723-3335</detectorID>
+		<exposure unit="sec">0.8</exposure>
+		<Nx>2048</Nx>
+		<Ny>2048</Ny>
+		<totalSum>-5823210.0</totalSum>
+		<sumAboveThreshold>23815.5</sumAboveThreshold>
+		<numAboveThreshold>315.0</numAboveThreshold>
+		<geoFile>/data34a/Bieler11-3/geoN_2011-11-07_12-55-07.txt</geoFile>
+		<ROI startx="0" endx="2047" groupx="1" starty="0" endy="2047" groupy="1"/>
+		<peaksXY peakProgram="peaksearch" minwidth="0.0125" threshold="55.3082" thresholdRatio="-1" maxRfactor="0.7" maxwidth="27.0" maxCentToFit="18.0" boxsize="18" max_number="200" min_separation="20" smooth="True" peakShape="Gaussian" Npeaks="8" executionTime="3.28">
+			<Xpixel>601.025 1500.613 577.831 1858.642 1073.314 545.802 655.371 1242.093</Xpixel>
+			<Ypixel>1322.927 612.63 1176.828 1854.58 366.083 1756.102 1631.559 1235.056</Ypixel>
+			<Intens>282.6491 140.9064 128.0405 111.7566 92.016 75.5134 70.0529 59.2714</Intens>
+			<Integral>-0.2142 -5.0881 2.09636 -3.55624 1.85247 2.77725 5.54319 3.88782</Integral>
+			<hwhmX unit="pixel">1.085 2.35 1.17 1.318 1.824 8.958 5.835 1.859</hwhmX>
+			<hwhmY unit="pixel">1.193 1.065 1.057 1.692 2.175 1.531 2.131 5.381</hwhmY>
+			<tilt unit="degree">53.3961 26.1974 165.472 16.5085 46.4963 13.2045 163.9213 111.9126</tilt>
+			<chisq>0.32331 0.69271 0.55985 0.62326 0.53929 0.58849 0.57237 0.68583</chisq>
+			<Qx>0.0742922 -0.1310567 0.0364011 0.2471691 -0.1867943 0.1793746 0.1531945 0.0566962</Qx>
+			<Qy>0.6636977 0.7733746 0.6631253 0.7819337 0.7069624 0.6372488 0.6590569 0.7526796</Qy>
+			<Qz>-0.7443023 -0.6202546 -0.7476228 -0.572265 -0.6821379 -0.7494923 -0.7363256 -0.6559413</Qz>
+		</peaksXY>
+	</detector>
+	<indexing indexProgram="euler" Nindexed="0" Npeaks="8" Npatterns="0" keVmaxCalc="18.0" keVmaxTest="32.0" angleTolerance="0.15" cone="172.0" hklPrefer="0 0 1" executionTime="0.27">
+		<!-- Result of indexing. -->
+		<xtl>
+			<structureDesc>Ti crystal (hexagonal axis),  (Bieler Ti 525)</structureDesc>
+			<SpaceGroup>194</SpaceGroup>
+			<latticeParameters unit="nm">0.2965 0.2965 0.4747 90 90 120</latticeParameters>
+		   <atom n="1" occ="1" symbol="Cu" Z="29" label="Cu001">0.33333 0.66667 0.75</atom>
+		   <atom n="2" occ="1" symbol="Cu" Z="29" label="Cu001">0.66667 0.33333 0.25</atom>
+		</xtl>
+	</indexing>
+</step>
+
+<step xmlns="http://sector34.xor.aps.anl.gov/34ide:indexResult">
+	<title>alloy sample</title>
+	<sampleName>Hongmei525</sampleName>
+	<userName>Bieler</userName>
+	<beamline></beamline>
+	<scanNum>10071</scanNum>
+	<date>2011-11-12T02:15:58-06:00</date>
+	<beamBad>0</beamBad>
+	<CCDshutter>out</CCDshutter>
+	<lightOn>0</lightOn>
+	<monoMode></monoMode>
+	<Xsample>577.0</Xsample>
+	<Ysample>-3490.4</Ysample>
+	<Zsample>-131.6</Zsample>
+	<depth>-46.0</depth>
+	<energy unit="keV">15.97649</energy>
+	<hutchTemperature>25.5162</hutchTemperature>
+	<sampleDistance>-0.001</sampleDistance>
+	<detector>
+		<inputImage>/data34a/Bieler11-3/Hongmei/ST-recon/ST_1_4.h5</inputImage>
+		<detectorID>PE1621 723-3335</detectorID>
+		<exposure unit="sec">0.8</exposure>
+		<Nx>2048</Nx>
+		<Ny>2048</Ny>
+		<totalSum>-5700210.0</totalSum>
+		<sumAboveThreshold>32960.2</sumAboveThreshold>
+		<numAboveThreshold>418.0</numAboveThreshold>
+		<geoFile>/data34a/Bieler11-3/geoN_2011-11-07_12-55-07.txt</geoFile>
+		<ROI startx="0" endx="2047" groupx="1" starty="0" endy="2047" groupy="1"/>
+		<peaksXY peakProgram="peaksearch" minwidth="0.0125" threshold="53.6534" thresholdRatio="-1" maxRfactor="0.7" maxwidth="27.0" maxCentToFit="18.0" boxsize="18" max_number="200" min_separation="20" smooth="True" peakShape="Gaussian" Npeaks="10" executionTime="4.11">
+			<Xpixel>1709.101 1742.43 1269.08 1216.719 1886.795 540.891 941.541 1637.53 466.855 1974.154</Xpixel>
+			<Ypixel>119.975 1686.866 1202.181 404.041 1851.113 219.024 1399.654 1785.468 55.86 1173.544</Ypixel>
+			<Intens>318.9729 168.892 125.5605 119.3079 108.7044 92.4764 91.386 88.2193 76.1353 57.6162</Intens>
+			<Integral>3.15767 -2.5193 2.39448 0.16726 5.89324 -1.44787 2.25758 0.32097 1.04446 4.94068</Integral>
+			<hwhmX unit="pixel">1.145 2.469 3.831 0.845 11.768 1.276 3.87 1.493 1.416 1.617</hwhmX>
+			<hwhmY unit="pixel">1.116 1.185 1.289 1.384 1.457 1.434 1.681 1.794 1.113 4.601</hwhmY>
+			<tilt unit="degree">171.0194 50.2373 10.4765 168.5994 166.6305 168.2975 166.7444 178.9755 28.8513 122.4948</tilt>
+			<chisq>0.28167 0.63468 0.69582 0.65161 0.68671 0.63447 0.51894 0.68893 0.57492 0.68907</chisq>
+			<Qx>-0.2741423 0.1969937 0.0471867 -0.1817604 0.2469459 -0.2007709 0.0997552 0.2221946 -0.2326186 0.0405325</Qx>
+			<Qy>0.7543169 0.7857981 0.7567225 0.7271135 0.7848111 0.6285369 0.708524 0.7670693 0.6075582 0.8337015</Qy>
+			<Qz>-0.5965333 -0.5862719 -0.652031 -0.6620189 -0.5684093 -0.7514203 -0.6986005 -0.601859 -0.7594482 -0.5507257</Qz>
+		</peaksXY>
+	</detector>
+	<indexing indexProgram="euler" Nindexed="0" Npeaks="10" Npatterns="0" keVmaxCalc="18.0" keVmaxTest="32.0" angleTolerance="0.15" cone="172.0" hklPrefer="0 0 1" executionTime="0.36">
+		<!-- Result of indexing. -->
+		<xtl>
+			<structureDesc>Ti crystal (hexagonal axis),  (Bieler Ti 525)</structureDesc>
+			<SpaceGroup>194</SpaceGroup>
+			<latticeParameters unit="nm">0.2965 0.2965 0.4747 90 90 120</latticeParameters>
+		   <atom n="1" occ="1" symbol="Cu" Z="29" label="Cu001">0.33333 0.66667 0.75</atom>
+		   <atom n="2" occ="1" symbol="Cu" Z="29" label="Cu001">0.66667 0.33333 0.25</atom>
+		</xtl>
+	</indexing>
+</step>
+
+<step xmlns="http://sector34.xor.aps.anl.gov/34ide:indexResult">
+	<title>alloy sample</title>
+	<sampleName>Hongmei525</sampleName>
+	<userName>Bieler</userName>
+	<beamline></beamline>
+	<scanNum>10071</scanNum>
+	<date>2011-11-12T02:15:58-06:00</date>
+	<beamBad>0</beamBad>
+	<CCDshutter>out</CCDshutter>
+	<lightOn>0</lightOn>
+	<monoMode></monoMode>
+	<Xsample>577.0</Xsample>
+	<Ysample>-3490.4</Ysample>
+	<Zsample>-131.6</Zsample>
+	<depth>-45.0</depth>
+	<energy unit="keV">15.97649</energy>
+	<hutchTemperature>25.5162</hutchTemperature>
+	<sampleDistance>-0.001</sampleDistance>
+	<detector>
+		<inputImage>/data34a/Bieler11-3/Hongmei/ST-recon/ST_1_5.h5</inputImage>
+		<detectorID>PE1621 723-3335</detectorID>
+		<exposure unit="sec">0.8</exposure>
+		<Nx>2048</Nx>
+		<Ny>2048</Ny>
+		<totalSum>-5494620.0</totalSum>
+		<sumAboveThreshold>34995.8</sumAboveThreshold>
+		<numAboveThreshold>411.0</numAboveThreshold>
+		<geoFile>/data34a/Bieler11-3/geoN_2011-11-07_12-55-07.txt</geoFile>
+		<ROI startx="0" endx="2047" groupx="1" starty="0" endy="2047" groupy="1"/>
+		<peaksXY peakProgram="peaksearch" minwidth="0.0125" threshold="53.2683" thresholdRatio="-1" maxRfactor="0.7" maxwidth="27.0" maxCentToFit="18.0" boxsize="18" max_number="200" min_separation="20" smooth="True" peakShape="Gaussian" Npeaks="10" executionTime="5.45">
+			<Xpixel>835.017 1260.501 860.138 1841.04 841.145 1277.036 212.992 760.976 415.929 434.52</Xpixel>
+			<Ypixel>1088.999 1198.868 440.028 2005.132 888.89 328.08 592.152 245.884 154.235 1187.16</Ypixel>
+			<Intens>388.4638 247.7346 243.9805 183.2258 176.7032 119.6418 105.5322 88.8218 70.9481 70.1443</Intens>
+			<Integral>2.22906 9.2526 -1.36052 0.38209 -1.1544 2.47153 0.9288 -1.45252 0.44716 0.55879</Integral>
+			<hwhmX unit="pixel">1.115 2.098 1.145 1.24 1.014 1.221 1.296 1.557 1.118 1.199</hwhmX>
+			<hwhmY unit="pixel">1.17 2.001 1.141 1.09 1.538 1.469 1.093 1.15 1.501 2.346</hwhmY>
+			<tilt unit="degree">49.4298 79.493 18.3721 22.262 102.5361 29.6425 141.1669 33.3994 109.4512 0.7153</tilt>
+			<chisq>0.22819 0.34201 0.36233 0.34844 0.50897 0.59307 0.41787 0.62381 0.54451 0.57171</chisq>
+			<Qx>0.0137383 0.0461662 -0.1604709 0.2869483 -0.0410775 -0.2039494 -0.1038394 -0.2041791 -0.2092667 0.0381809</Qx>
+			<Qy>0.7003425 0.7557115 0.6846745 0.7648089 0.6998735 0.7284442 0.602961 0.6588687 0.6079892 0.6423258</Qy>
+			<Qz>-0.7136747 -0.6532755 -0.7109641 -0.5768258 -0.7130846 -0.6540441 -0.7909838 -0.7240186 -0.7658698 -0.7654801</Qz>
+		</peaksXY>
+	</detector>
+	<indexing indexProgram="euler" Nindexed="4" Npeaks="10" Npatterns="1" keVmaxCalc="18.0" keVmaxTest="32.0" angleTolerance="0.15" cone="172.0" hklPrefer="0 0 1" executionTime="0.35">
+		<!-- Result of indexing. -->
+		<pattern num="0" rms_error="0.101" goodness="20.554" Nindexed="4">
+			<recip_lattice unit="1/nm">
+				<astar>-0.2427321 2.3583591 -24.3543450</astar>
+				<bstar>7.3489439 -18.5520116 -14.1623016</bstar>
+				<cstar>-12.3857214 -4.6563403 -0.3274533</cstar>
+			</recip_lattice>
+			<hkl_s>
+				<h>3 5 6 7</h>
+				<k>-2 -3 -4 -4</k>
+				<l>-3 -2 -3 0</l>
+			</hkl_s>
+		</pattern>
+		<xtl>
+			<structureDesc>Ti crystal (hexagonal axis),  (Bieler Ti 525)</structureDesc>
+			<SpaceGroup>194</SpaceGroup>
+			<latticeParameters unit="nm">0.2965 0.2965 0.4747 90 90 120</latticeParameters>
+		   <atom n="1" occ="1" symbol="Cu" Z="29" label="Cu001">0.33333 0.66667 0.75</atom>
+		   <atom n="2" occ="1" symbol="Cu" Z="29" label="Cu001">0.66667 0.33333 0.25</atom>
+		</xtl>
+	</indexing>
+</step>
+
+</root>
