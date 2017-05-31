@@ -6,7 +6,7 @@
 <\____/   /_//_/|_|/_/ /_/  |_/_____/ >
 >-------------------------------------<
 
-Copyright (c) 2016, C. Zhang.
+Copyright (c) 2015-2017, C. Zhang.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
