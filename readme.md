@@ -1,6 +1,5 @@
 CYXTAL
 =====
-=
 
 Copyright (c) 2015-2017, C. Zhang.
 All rights reserved.
@@ -26,21 +25,19 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-# PACKAGE DESCRIPTION
-This package consists of several data processing tools supplementing CPFE/CPFFT
-analysis with DAMASK in conjunction with APS-34-IDE.
+# PACKAGE DESCRIPTION.   
+This package consists of several data processing tools supplementing **CPFE**/**CP-FFT**
+analysis with **DAMASK** in conjunction with high energy x-ray date.
 
-##################
-# FILE STRUCTURE #
-##################
-cyxtal/
-    __init__.py
-    corientation.pyd
-    corientation.pyx
-    ctools.pyd
-    ctools.pyx
-    ext_aps/
-        parses.py
+
+# FILE STRUCTURE    
+> cyxtal/
+>>  corientation.pyd
+>>  corientation.pyx
+>>  ctools.pyd
+>>  ctools.pyx
+>>  ext_aps/
+>>> parses.py
     ext_damask/
         nil
     ext_vtk/
