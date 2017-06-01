@@ -565,7 +565,8 @@ class VoxelStep(object):
     # use proposed F to strain the unit cell
     F = np.reshape(F, (3,3), order='F')
     R, U = polar(F, side='right')
-    B_strained = np.dot(F, self.reciprocal_basis)
+    Fstar = np.transpose(np.linalg.inv(F))
+    Bstar_strained = np.dot(Fstar, self.reciprocal_basis)
 
     rst = 0.0
     # now add q vector differences into the control
@@ -573,7 +574,7 @@ class VoxelStep(object):
     qs = self.qs
     for i in xrange(qs.shape[0]):
       # calculate new Q vector based on perturbed unit cell
-      q_tmp = np.dot(B_strained, hkls[i])
+      q_tmp = np.dot(Bstar_strained, hkls[i])
       q_tmp = q_tmp/np.linalg.norm(q_tmp)
       rst += np.dot(q_tmp, qs[i])
     # the loss function is defined as the mismatch between qv and
