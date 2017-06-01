@@ -512,18 +512,7 @@ class VoxelStep(object):
                                'disp': verbose,
                                'maxiter': int(maxiter),
                                'maxfev': int(maxiter)})
-    # verbose reporting
-    # if verbose:
-    #   Bstar = refine.x.reshape((3, 3), order='F')  # final B*
-    #   B = 2*np.pi*np.linalg.inv(Bstar).T  # final B from B*
-    #   print "reciprocal:[a*;b*;c*]\n", Bstar
-    #   print "real:[a;b;c]\n", B
-    # extract refined reciprocal basis
-    # B_fin = np.reshape(refine.x, (3, 3), order='F')
-    # B_org = self.reciprocal_basis
-    # force rescaling
-    # B_fin = B_fin / np.linalg.det(B_fin) * np.linalg.det(B_org)
-    # calc deformation gradient
+    # get the final deformation gradient
     F_fin = refine.x.reshape((3, 3), order='F')
     # *** switching to new deviatoric strain calculation
     epsilon = F2DeviatoricStrain(F_fin, method=deviatoric, debug=verbose)
