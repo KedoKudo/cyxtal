@@ -49,6 +49,7 @@ import numpy as np
 import xml.etree.cElementTree as ET
 from scipy.optimize import minimize
 from scipy.linalg import sqrtm
+from scipy.linalg import polar
 from cyxtal.cxtallite import OrientationMatrix
 # from cyxtal import get_vonMisesStrain
 
@@ -501,30 +502,29 @@ class VoxelStep(object):
       print "insufficient diffractions spots"
       epsilon = np.empty((3, 3))
       return epsilon.fill(np.nan)
-    # feature vectors:
-    #   [a*_1, a*_2, a*_3, b*_1, b*_2, b*_3, c*_1, c*_2, c*_3]
-    v_features = np.reshape(self.reciprocal_basis, 9, order='F')
+    # feature vector is F:
+    F = np.reshape(np.eye(3), 9, order='F')
     # use scipy minimization module for optimization
     refine = minimize(self.strain_refine,
-                      v_features,
+                      F,
                       method=opt_method,
                       options={'xtol': xtor,
                                'disp': verbose,
                                'maxiter': int(maxiter),
                                'maxfev': int(maxiter)})
     # verbose reporting
-    if verbose:
-      Bstar = refine.x.reshape((3, 3), order='F')  # final B*
-      B = 2*np.pi*np.linalg.inv(Bstar).T  # final B from B*
-      print "reciprocal:[a*;b*;c*]\n", Bstar
-      print "real:[a;b;c]\n", B
+    # if verbose:
+    #   Bstar = refine.x.reshape((3, 3), order='F')  # final B*
+    #   B = 2*np.pi*np.linalg.inv(Bstar).T  # final B from B*
+    #   print "reciprocal:[a*;b*;c*]\n", Bstar
+    #   print "real:[a;b;c]\n", B
     # extract refined reciprocal basis
-    B_fin = np.reshape(refine.x, (3, 3), order='F')
-    B_org = self.reciprocal_basis
+    # B_fin = np.reshape(refine.x, (3, 3), order='F')
+    # B_org = self.reciprocal_basis
     # force rescaling
     # B_fin = B_fin / np.linalg.det(B_fin) * np.linalg.det(B_org)
     # calc deformation gradient
-    F_fin = np.dot(B_org, np.linalg.inv(B_fin)).T
+    F_fin = refine.x.reshape((3, 3), order='F')
     # *** switching to new deviatoric strain calculation
     epsilon = F2DeviatoricStrain(F_fin, method=deviatoric, debug=verbose)
 
@@ -543,7 +543,7 @@ class VoxelStep(object):
     epsilon = np.dot(g, np.dot(epsilon, g.T))
     return epsilon
 
-  def strain_refine(self, v_features):
+  def strain_refine(self, F):
     """
     DESCRIPTION
     -----------
@@ -551,9 +551,8 @@ class VoxelStep(object):
       This is the objective function for the strain refinement.
     PARAMETERS
     ----------
-    v_features: np.array
-      feature vectors
-      (a*_1, a*_2, a*_3, b*_1, b*_2, b*_3, c*_1, c*_2, c*_3)
+    F: np.array
+      proposed defomration gradient used to perturb the unit cell
     RETURNS
     -------
     rst: float
@@ -563,8 +562,10 @@ class VoxelStep(object):
       This approach is still under construction. Further change of
       the objective function is possible
     """
-    # convert to reciprocal basis
-    B_new = np.reshape(v_features, (3, 3), order='F')
+    # use proposed F to strain the unit cell
+    F = np.reshape(F, (3,3), order='F')
+    R, U = polar(F, side='right')
+    B_strained = np.dot(F, self.reciprocal_basis)
 
     rst = 0.0
     # now add q vector differences into the control
@@ -572,11 +573,12 @@ class VoxelStep(object):
     qs = self.qs
     for i in xrange(qs.shape[0]):
       # calculate new Q vector based on perturbed unit cell
-      q_tmp = np.dot(B_new, hkls[i])
+      q_tmp = np.dot(B_strained, hkls[i])
       q_tmp = q_tmp/np.linalg.norm(q_tmp)
       rst += np.dot(q_tmp, qs[i])
-    # get avg cos(theta)
-    rst = 1.0 - rst/qs.shape[0]
+    # the loss function is defined as the mismatch between qv and
+    # the rotation angle (want to minimize rotation if possible)
+    rst = 1.0 - rst/qs.shape[0] + 3 - np.trace(R)
 
     return rst
 
@@ -752,9 +754,7 @@ def get_reciprocal_base(lc, degrees=True):
   return get_base(lc, reciprocal=True, degrees=degrees)
 
 
-def get_base(lc,
-       reciprocal=False,
-       degrees=True):
+def get_base(lc, reciprocal=False, degrees=True):
   """
   DESCRIPTION
   -----------
@@ -805,8 +805,7 @@ def get_base(lc,
   return rst
 
 
-def base_hcp2cartesian(B_hcp,
-             reciprocal=False):
+def base_hcp2cartesian(B_hcp, reciprocal=False):
   """
   DESCRIPTION
   -----------
@@ -879,7 +878,7 @@ def F2DeviatoricStrain(F, method='m2', debug=False):
     U = sqrtm(np.dot(F.T, F))
     epsilon_D = U - J**(1./3.)*I
   elif method == 'm2':
-    epsilon_D = 0.5*(np.dot(F.T, F) - J**(2./3.)*I)
+    epsilon_D = 0.5*(np.dot(F.T, F) - (J**2)**(1.0/3.0)*I)
   else:
     msg = "Unknown method for deviatoric calc: {}".format(method)
     raise ValueError(msg)
