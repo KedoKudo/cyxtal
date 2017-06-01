@@ -84,13 +84,6 @@ The relationship between $\tnsr B$ and $\tnsr B^*$ can be found through
 	\tnsr B^* = 2 \pi \tnsr B^{-T}
 \]
 
-One of the problem of using numerical approach is that it might leads to a set of lattice constants that satisfy our criterion but completely unrealistic. 
-To avoid situation like this, the objective function for the optimization of strain refinement is constructed with both the mismatch of \tnsr Q as well as the change in the volume of the unit cell, 
-\[
-	F(\tnsr x) = 1 - \dfrac{1}{N} \sum \tnsr q_\text{calculated} \cdot \tnsr q_\text{measured}
-\]
-where \tnsr x represents the lattice constant vector, $\tnsr x = (a,b,c,\alpha,\beta,\gamma)$
-
 Considering most of the searching will be done in the reciprocal space, it is necessary to find the connection between $\tnsr B^*$ and \tnsr F.
 
 Let $\tnsr B_2$ be the basis for strained and rotated unit cell, $\tnsr B_0$ be the basis for ideal unit cell (zero rotation, strain free), and $\tnsr B_1$ be the basis for the unit cell only considering stretch.
@@ -105,11 +98,22 @@ Convert everything to reciprocal space except for \tnsr F,
 	\tnsr B_2 &= \tnsr F \tnsr B_0 \\
 	\tnsr B^*_2 &= \tnsr F^{-T} \tnsr B_0^*
 \end{align*}
-Now the deformation gradient can be expressed using reciprocal basis,
+
+Varying the reciprocal lattice base vectors ($\vctr a*, \vctr b*, \vctr c*$) is physically easy to understand, but difficult to control during the optimization process as the minimization subroutine could generate really large rotation just to minimize the mismatch of the diffraction vectors ($\vctr q_v$). 
+Thus, the full deformation gradient $\vctr F$ is selected as the feature vector for the optimization procedure such that the distortion with the least amount of rotation can be found using gradient descend optimization subroutine by calculating the distorted diffraction vector,
 \[
-	\tnsr F = {\tnsr B_2^*}^{-T} {\tnsr B_0^*}^T
+	 \tnsr q_\text{calculated} 
+	 = \tnsr B^*_\text{strained} \cdot \vctr v_\text{hkl}
+	 = (\tnsr F^{-T} \tnsr B^*_\text{ideal}) \cdot \vctr v_\text{hkl}.
 \]
-Thus the strain tensor can be written as
+And the corresponding fitness/loss function for the optimization can be defined as 
+\[
+	\eta = 1 - \dfrac{1}{N} \sum \tnsr q_\text{calculated} \cdot \tnsr q_\text{measured} + 3 - \text{tr}(\tnsr R)
+\]
+where $\tnsr F = \tnsr R \tnsr U$.
+Notice that the term $3 - \text{tr}(\tnsr R)$ is used to prevent large rotation occurs during the search of \tnsr F.
+
+With the deformation gradient from the optimization subroutine, the strain tensor can be written as
 \begin{align*}
 	\epsilon &= \dfrac{1}{2} (\tnsr F^T\tnsr F - \tnsr I) \\
 	              &= \dfrac{1}{2} ( ({\tnsr B_2^*}^{-T} {\tnsr B_0^*}^T)^T{\tnsr B_2^*}^{-T} {\tnsr B_0^*}^T - \tnsr I) \\
