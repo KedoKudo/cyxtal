@@ -521,6 +521,9 @@ class VoxelStep(object):
     # extract refined reciprocal basis
     B_fin = np.reshape(refine.x, (3, 3), order='F')
     B_org = self.reciprocal_basis
+    # force rescaling
+    # B_fin = B_fin / np.linalg.det(B_fin) * np.linalg.det(B_org)
+    # calc deformation gradient
     F_fin = np.dot(B_org, np.linalg.inv(B_fin)).T
     # *** switching to new deviatoric strain calculation
     epsilon = F2DeviatoricStrain(F_fin, method=deviatoric, debug=verbose)
@@ -562,6 +565,7 @@ class VoxelStep(object):
     """
     # convert to reciprocal basis
     B_new = np.reshape(v_features, (3, 3), order='F')
+
     rst = 0.0
     # now add q vector differences into the control
     hkls = self.hkls
@@ -573,10 +577,6 @@ class VoxelStep(object):
       rst += np.dot(q_tmp, qs[i])
     # get avg cos(theta)
     rst = 1.0 - rst/qs.shape[0]
-
-    # calcualte unit cell volume change (should be really small)
-    B = 2*np.pi*np.linalg.inv(B_new).T  # final B from B*
-    rst = rst + 1.0 - np.linalg.det(B)
 
     return rst
 
