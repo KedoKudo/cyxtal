@@ -568,7 +568,7 @@ class VoxelStep(object):
       rst += np.dot(q_tmp, qs[i])
     # the loss function is defined as the mismatch between qv and
     # the rotation angle (want to minimize rotation if possible)
-    rst = 1.0 - rst/qs.shape[0] + 3 - np.trace(R)
+    rst = 1.0 - rst/qs.shape[0] + (3.0 - np.trace(R))
 
     return rst
 
