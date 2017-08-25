@@ -459,7 +459,8 @@ class VoxelStep(object):
 
   def get_strain(self,
                  ref='TSL', xtor=1e-10, verbose=False, deviatoric='m2',
-                 maxiter=1e10, opt_method='nelder-mead', min_qv=4):
+                 maxiter=1e10, opt_method='nelder-mead', min_qv=4,
+                 lagmul=1.0):
     """
     DESCRIPTION
     -----------
@@ -507,8 +508,10 @@ class VoxelStep(object):
     # use scipy minimization module for optimization
     refine = minimize(self.strain_refine,
                       F,
+                      args=(lagmul),
                       method=opt_method,
                       options={'xtol': xtor,
+                               'gtol': xtor,
                                'disp': verbose,
                                'maxiter': int(maxiter),
                                'maxfev': int(maxiter)})
@@ -532,7 +535,7 @@ class VoxelStep(object):
     epsilon = np.dot(g, np.dot(epsilon, g.T))
     return epsilon
 
-  def strain_refine(self, F):
+  def strain_refine(self, F, lagmul):
     """
     DESCRIPTION
     -----------
@@ -568,7 +571,7 @@ class VoxelStep(object):
       rst += np.dot(q_tmp, qs[i])
     # the loss function is defined as the mismatch between qv and
     # the rotation angle (want to minimize rotation if possible)
-    rst = 1.0 - rst/qs.shape[0] + (3.0 - np.trace(R))
+    rst = 1.0 - rst/qs.shape[0] + lagmul*(3.0 - np.trace(R))
 
     return rst
 
