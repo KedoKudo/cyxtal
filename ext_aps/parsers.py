@@ -567,13 +567,18 @@ class VoxelStep(object):
     for i in xrange(qs.shape[0]):
       # calculate new Q vector based on perturbed unit cell
       q_tmp = np.dot(Bstar_strained, hkls[i])
-      q_tmp = q_tmp/np.linalg.norm(q_tmp)
-      rst += np.dot(q_tmp, qs[i])
+      q_tmp /= np.linalg.norm(q_tmp)
+      ang = np.arccos(min(1.,max(-1.,np.dot(q_tmp, qs[i]))))
+      # print np.degrees(ang),
+      rst += 1.0 - abs(2*ang/np.pi - 1.0)
+    # print
     # the loss function is defined as the mismatch between qv and
     # the rotation angle (want to minimize rotation if possible)
-    rst = 1.0 - rst/qs.shape[0] + lagmul*(3.0 - np.trace(R))
+    rotation_penalty = np.arccos(min(1., max(-1., 0.5*(np.trace(R)-1))))/np.pi
+    residual = rst/qs.shape[0] + lagmul*rotation_penalty
+    # print residual,lagmul*rotation_penalty,rst/qs.shape[0]
 
-    return rst
+    return residual
 
 
 ##################################
