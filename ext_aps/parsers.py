@@ -303,10 +303,9 @@ class VoxelStep(object):
       # NOTE:
       #   The searching here should be optimized at some point
       for i, hkl in enumerate(self.hkls):
-        q_calc = np.dot(rl, hkl)
-        q_calc = q_calc/np.linalg.norm(q_calc)
-        # use brutal force to test the difference from all qs
-        diff = [1.0-abs(np.dot(q_mea, q_calc)) for q_mea in self.qs]
+        q_calc = normalize(np.dot(rl, hkl))
+        # use brute force to test the difference from all qs
+        diff = [1.0-abs(np.dot(normalize(q_mea), q_calc)) for q_mea in self.qs]
         if min(diff) > tor:
           msg = "threshold too tight! "
           msg += "Cannot find q vectors to match indexation"
@@ -532,7 +531,7 @@ class VoxelStep(object):
                  opt_method='nelder-mead',
                  min_qv=3,
                  lagmul_rot=1e-2,
-                 lagmul_len=1e-10,
+                 lagmul_len=1e-2,
                  fullstrain=False):
     """
     DESCRIPTION
@@ -625,24 +624,21 @@ class VoxelStep(object):
 
     rst = 0.0
     # now add q vector differences into the control
-    hkls = self.hkls
-    qs = self.qs
-    for i in xrange(qs.shape[0]):
+    for i,hkl in enumerate(self.hkls):
       # calculate new Q vector based on perturbed unit cell
-      q_tmp = np.dot(Bstar_strained, hkls[i])
-      q_norm = q_tmp / np.linalg.norm(q_tmp)
+      q_tmp = np.dot(Bstar_strained, hkl)
       # angular difference
-      ang = np.arccos(min(1.,max(-1.,np.dot(q_norm,
-                                            qs[i]/np.linalg.norm(qs[i])))))
+      ang = np.arccos(min(1.,max(-1.,np.dot(normalize(q_tmp),
+                                            normalize(self.qs[i])))))
       # length difference
-      lgn = abs(np.linalg.norm(q_tmp) - np.linalg.norm(qs[i])) if fullstrain else 0.0
+      lgn = abs(norm(q_tmp) - norm(self.qs[i]))/norm(self.qs[i]) if fullstrain else 0.0
       # combine both
       rst += (1.0 - abs(2*ang/np.pi - 1.0)) + lgn*lagmul_len
       # rst += np.dot(q_tmp, qs[i])
     # the loss function is defined as the mismatch between qv and
     # the rotation angle (want to minimize rotation if possible)
     rotation_penalty = np.arccos(min(1., max(-1., 0.5*(np.trace(R)-1))))/np.pi
-    residual = rst/qs.shape[0] + lagmul_rot*rotation_penalty
+    residual = rst/self.qs.shape[0] + lagmul_rot*rotation_penalty
     # residual = 1.0 - rst/qs.shape[0] + lagmul*(3 - np.trace(R))
 
     return residual
@@ -953,3 +949,17 @@ def F2DeviatoricStrain(F, method='m2', debug=False):
     print "strain:\n", epsilon_D, "\n"
     print "J:\n", J, "\n"
   return epsilon_D
+
+
+def normalize(vector):
+  try:
+    return vector/np.linalg.norm(vector,axis=1)
+  except:
+    return vector/np.linalg.norm(vector)
+
+
+def norm(vector):
+  try:
+    return np.linalg.norm(vector,axis=1)
+  except:
+    return np.linalg.norm(vector)
