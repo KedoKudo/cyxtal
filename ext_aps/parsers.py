@@ -457,10 +457,83 @@ class VoxelStep(object):
 
     return OrientationMatrix(g).toEulers()
 
+
+  def get_defgrad(self,
+                  ref='TSL',
+                  xtor=1e-10,
+                  verbose=False,
+                  maxiter=1e10,
+                  opt_method='nelder-mead',
+                  min_qv=3,
+                  lagmul_rot=1e-2,
+                  lagmul_len=1e-10,
+                  fullstrain=False):
+    """
+    DESCRIPTION
+    -----------
+    F = self.get_defgrad(ref='TSL')
+      Return full deformation gradient from the strain refinement.
+    PARAMETERS
+    ----------
+    ref:  str ['APS', 'TSL', XHF]
+      The coordinate system in which the refined strain tensor
+      will be returned.
+    xtor: float
+      Tolerance used in the optimization of finding strained unit
+      cell
+    verbose: boolean
+      Toggle the reporting of optimization process results
+    deviatoric: str ['tishler', 'm1', 'm2']
+      Specify which method should be used for the calculation of
+      deviatoric strain.
+    maxiter: float
+      Maximum iterations/calls allowed during the optimization
+    min_qv: int
+      Minimum amount of q vectors to start strain refinement. Igor
+      default setting is 4. @Dr.Tischler
+    RETURNS
+    -------
+    epsilon: np.array (3,3)
+      Green--Lagrange strain tensor in given reference configuration
+    NOTE
+    ----
+      The strain is approximated using the (a*,b*,c*), which are
+      in the APS coordinate system.
+    """
+    # check if voxel data is valid
+    if not(self._validonly):
+      print "Corrupted voxel found!"
+      raise ValueError('Validate data first before strain refinement!')
+    if self.hkls.shape[0] < min_qv:
+      print "insufficient diffractions spots"
+      return np.ones((3,3))*np.nan
+    # feature vector is F:
+    F = np.reshape(np.eye(3), 9, order='F')
+    # populate initial simplex ourselves
+    # use scipy minimization module for optimization
+    return  minimize(self.strain_refine,
+                     F,
+                     args=(lagmul_rot, lagmul_len, fullstrain),
+                     method=opt_method,
+                     options={'xtol': xtor,
+                              'gtol': xtor,
+                              'disp': verbose,
+                              'maxiter': int(maxiter),
+                              'maxfev': int(maxiter),
+                              }
+                      ).x.reshape((3, 3), order='F')  # result of minimization (x) reshaped into 2nd rank tensor
+
   def get_strain(self,
-                 ref='TSL', xtor=1e-10, verbose=False, deviatoric='m2',
-                 maxiter=1e10, opt_method='nelder-mead', min_qv=4,
-                 lagmul=1.0):
+                 ref='TSL',
+                 xtor=1e-10,
+                 verbose=False,
+                 deviatoric='m2',
+                 maxiter=1e10,
+                 opt_method='nelder-mead',
+                 min_qv=3,
+                 lagmul_rot=1e-2,
+                 lagmul_len=1e-10,
+                 fullstrain=False):
     """
     DESCRIPTION
     -----------
@@ -495,30 +568,20 @@ class VoxelStep(object):
       The strain is approximated using the (a*,b*,c*), which are
       in the APS coordinate system.
     """
-    # check if voxel data is valid
-    if not(self._validonly):
-      print "Corrupted voxel found!"
-      raise ValueError('Validate data first before strain refinement!')
-    if self.hkls.shape[0] < min_qv:
-      print "insufficient diffractions spots"
-      epsilon = np.empty((3, 3))
-      return epsilon.fill(np.nan)
-    # feature vector is F:
-    F = np.reshape(np.eye(3), 9, order='F')
-    # use scipy minimization module for optimization
-    refine = minimize(self.strain_refine,
-                      F,
-                      args=(lagmul),
-                      method=opt_method,
-                      options={'xtol': xtor,
-                               'gtol': xtor,
-                               'disp': verbose,
-                               'maxiter': int(maxiter),
-                               'maxfev': int(maxiter)})
-    # get the final deformation gradient
-    F_fin = refine.x.reshape((3, 3), order='F')
+    F_fin = self.get_defgrad(ref=ref,
+                             xtor=xtor,
+                             verbose=verbose,
+                             maxiter=maxiter,
+                             opt_method=opt_method,
+                             min_qv=min_qv,
+                             lagmul_rot=lagmul_rot,
+                             lagmul_len=lagmul_len,
+                             fullstrain=fullstrain)
     # *** switching to new deviatoric strain calculation
-    epsilon = F2DeviatoricStrain(F_fin, method=deviatoric, debug=verbose)
+    if fullstrain:
+      epsilon = 0.5*(np.dot(F_fin.T, F_fin) - np.eye(3))
+    else:
+      epsilon = F2DeviatoricStrain(F_fin, method=deviatoric, debug=verbose)
 
     # transform strain tensor to requested configuration
     ref = ref.upper()
@@ -535,7 +598,7 @@ class VoxelStep(object):
     epsilon = np.dot(g, np.dot(epsilon, g.T))
     return epsilon
 
-  def strain_refine(self, F, lagmul):
+  def strain_refine(self, F, lagmul_rot, lagmul_len, fullstrain):
     """
     DESCRIPTION
     -----------
@@ -567,16 +630,20 @@ class VoxelStep(object):
     for i in xrange(qs.shape[0]):
       # calculate new Q vector based on perturbed unit cell
       q_tmp = np.dot(Bstar_strained, hkls[i])
-      q_tmp /= np.linalg.norm(q_tmp)
-      ang = np.arccos(min(1.,max(-1.,np.dot(q_tmp, qs[i]))))
-      # print np.degrees(ang),
-      rst += 1.0 - abs(2*ang/np.pi - 1.0)
-    # print
+      q_norm = q_tmp / np.linalg.norm(q_tmp)
+      # angular difference
+      ang = np.arccos(min(1.,max(-1.,np.dot(q_norm,
+                                            qs[i]/np.linalg.norm(qs[i])))))
+      # length difference
+      lgn = abs(np.linalg.norm(q_tmp) - np.linalg.norm(qs[i])) if fullstrain else 0.0
+      # combine both
+      rst += (1.0 - abs(2*ang/np.pi - 1.0)) + lgn*lagmul_len
+      # rst += np.dot(q_tmp, qs[i])
     # the loss function is defined as the mismatch between qv and
     # the rotation angle (want to minimize rotation if possible)
     rotation_penalty = np.arccos(min(1., max(-1., 0.5*(np.trace(R)-1))))/np.pi
-    residual = rst/qs.shape[0] + lagmul*rotation_penalty
-    # print residual,lagmul*rotation_penalty,rst/qs.shape[0]
+    residual = rst/qs.shape[0] + lagmul_rot*rotation_penalty
+    # residual = 1.0 - rst/qs.shape[0] + lagmul*(3 - np.trace(R))
 
     return residual
 
