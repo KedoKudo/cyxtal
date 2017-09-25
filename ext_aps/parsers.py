@@ -754,8 +754,8 @@ def parse_xml(xmlfile,
     # |->record H5 image
     voxel.h5Img = h5img
     # |->record peak positions on CCD
-    xpix = map(float, xpix.split())
-    ypix = map(float, ypix.split())
+    xpix = np.nan if xpix is None else map(float, xpix.split())
+    ypix = np.nan if ypix is None else map(float, ypix.split())
     voxel.peaks = np.column_stack((xpix, ypix))
     # |->diffraction vectors
     qx = map(float, qx.split())
