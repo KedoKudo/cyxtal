@@ -461,8 +461,8 @@ class VoxelStep(object):
   def guess_defgrad(self,
                     fullstrain=False):
     """
-    return the deformation gradient caclulated with least squre assuming no
-    random noise present in the recoreded q vectors
+    return the deformation gradient in APS frame caclulated with least squre
+    assuming no random noise present in the recoreded q vectors
     """
     _hkls = self.hkls
     # q0s are the strain free q vectors computed from HKL index
@@ -493,7 +493,6 @@ class VoxelStep(object):
     return np.linalg.inv(Fstar).T
 
   def get_defgrad(self,
-                  ref='TSL',
                   xtor=1e-10,
                   verbose=False,
                   maxiter=1e10,
@@ -506,12 +505,9 @@ class VoxelStep(object):
     DESCRIPTION
     -----------
     F = self.get_defgrad(ref='TSL')
-      Return full deformation gradient from the strain refinement.
+      Return full deformation gradient from the strain refinement in APS frame.
     PARAMETERS
     ----------
-    ref:  str ['APS', 'TSL', XHF]
-      The coordinate system in which the refined strain tensor
-      will be returned.
     xtor: float
       Tolerance used in the optimization of finding strained unit
       cell
