@@ -568,12 +568,7 @@ class VoxelStep(object):
                      F,
                      args=(lagmul_rot, lagmul_len, fullstrain),
                      method=opt_method,
-                     options={'xtol': xtor,
-                              'gtol': xtor,
-                              'disp': verbose,
-                              'maxiter': int(maxiter),
-                              'maxfev': int(maxiter),
-                              }
+                     options=options,
                       ).x.reshape((3, 3), order='F')  # result of minimization (x) reshaped into 2nd rank tensor
 
   def get_strain(self,
