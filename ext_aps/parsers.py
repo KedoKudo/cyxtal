@@ -51,6 +51,8 @@ from scipy.optimize import minimize
 from scipy.linalg import sqrtm
 from scipy.linalg import polar
 from cyxtal.cxtallite import OrientationMatrix
+from cyxtal.npmath import normalize
+from cyxtal.npmath import norm
 # from cyxtal import get_vonMisesStrain
 
 ##
@@ -456,6 +458,39 @@ class VoxelStep(object):
 
     return OrientationMatrix(g).toEulers()
 
+  def guess_defgrad(self,
+                    fullstrain=False):
+    """
+    return the deformation gradient caclulated with least squre assuming no
+    random noise present in the recoreded q vectors
+    """
+    _hkls = self.hkls
+    # q0s are the strain free q vectors computed from HKL index
+    # it is eaiser to setup the linear system by making each q0 as a column
+    # vector.
+    _q0s = np.array([np.dot(self.reciprocal_basis, me) for me in _hkls]).T
+    # qs are the diffraction vectors recored in the DAXM indexation results.
+    # By default, these should be unit vectors, but with monochromatic beam,
+    # it is possible to get the full diffraction vector (with lenght), which
+    # can be used to calculate the full deformation gradient.
+    _qs = np.array(self.qs).T
+
+    # force normalize all diffraction vectors for deviatoric computing
+    if not fullstrain:
+      _q0s = normalize(_q0s, axis=0)
+      _qs = normalize(_qs, axis=0)
+
+    # quick summary of the least square solution
+    # F* q0 = q
+    # ==> F* q0 q0^T = q q0^T
+    # ==> F* = (q q0^T)(q0 q0^T)^-1
+    #              A       B
+    A = np.dot(_qs, _q0s.T)
+    B = np.dot(_q0s, _q0s.T)
+    Fstar = np.dot(A, np.linalg.inv(B))
+
+    # F = F*^(-T)
+    return np.linalg.inv(Fstar).T
 
   def get_defgrad(self,
                   ref='TSL',
@@ -506,8 +541,11 @@ class VoxelStep(object):
     if self.hkls.shape[0] < min_qv:
       print "insufficient diffractions spots"
       return np.ones((3,3))*np.nan
-    # feature vector is F:
-    F = np.reshape(np.eye(3), 9, order='F')
+
+    # use the deformation gradient computed with least square as initial
+    # guess
+    F = self.guess_defgrad(fullstrain=fullstrain).reshape(9, order='F')
+
     # populate initial simplex ourselves
     # use scipy minimization module for optimization
     return  minimize(self.strain_refine,
@@ -949,17 +987,3 @@ def F2DeviatoricStrain(F, method='m2', debug=False):
     print "strain:\n", epsilon_D, "\n"
     print "J:\n", J, "\n"
   return epsilon_D
-
-
-def normalize(vector):
-  try:
-    return vector/np.linalg.norm(vector,axis=1)
-  except:
-    return vector/np.linalg.norm(vector)
-
-
-def norm(vector):
-  try:
-    return np.linalg.norm(vector,axis=1)
-  except:
-    return np.linalg.norm(vector)
