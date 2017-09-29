@@ -487,10 +487,11 @@ class VoxelStep(object):
     #              A       B
     A = np.dot(_qs, _q0s.T)
     B = np.dot(_q0s, _q0s.T)
-    Fstar = np.dot(A, np.linalg.inv(B))
+    # Fstar = np.dot(A, np.linalg.pinv(B))
 
-    # F = F*^(-T)
-    return np.linalg.inv(Fstar).T
+    # F = F*^(-T) = A^-T B^T
+    # inverting B can be dangerous
+    return np.dot(np.linalg.inv(A).T, B.T)
 
   def get_defgrad(self,
                   xtor=1e-10,
