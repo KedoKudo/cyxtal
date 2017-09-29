@@ -546,6 +546,22 @@ class VoxelStep(object):
     # guess
     F = self.guess_defgrad(fullstrain=fullstrain).reshape(9, order='F')
 
+    # set options based on given method
+    # NOTE: avoid anoying warning prints from scipy
+    if opt_method.lower == 'nelder-mead':
+      options = {'xtol': xtor,
+                 'disp': verbose,
+                 'maxiter': int(maxiter),
+                 'maxfev': int(maxiter),
+                 }
+    elif opt_method.lower == 'bfgs':
+      options = {'gtol': xtor,
+                 'disp': verbose,
+                 'maxiter': int(maxiter),
+                }
+    else:
+      options = {}
+
     # populate initial simplex ourselves
     # use scipy minimization module for optimization
     return  minimize(self.strain_refine,
