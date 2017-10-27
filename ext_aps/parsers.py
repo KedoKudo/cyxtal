@@ -191,7 +191,7 @@ class VoxelStep(object):
     def q0s(self):
         return self._qs
 
-    @qs.setter
+    @q0s.setter
     def q0s(self, data):
         """
         DESCRIPTION
@@ -491,7 +491,6 @@ class VoxelStep(object):
         return the deformation gradient in APS frame caclulated with least squre
         assuming no random noise present in the recoreded q vectors
         """
-        _hkls = self.hkls
         # q0s are the strain free q vectors computed from HKL index
         # it is eaiser to setup the linear system by making each q0 as a column
         # vector.
