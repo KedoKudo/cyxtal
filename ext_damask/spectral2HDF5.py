@@ -69,9 +69,9 @@ parser.add_argument('-s', '--silent',
                     default=False)
 args = parser.parse_args()
 if not args.silent:
-    print "*"*20
+    print("*"*20)
     parser.parse_args()
-    print "*"
+    print("*")
 
 
 ##
@@ -100,4 +100,4 @@ converter.convert(outFileName)
 
 # Finishing up
 if not args.silent:
-    print "All done, output HDF5 file is: {}".format(outFileName)
+    print("All done, output HDF5 file is: {}".format(outFileName))

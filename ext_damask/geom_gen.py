@@ -167,14 +167,14 @@ def geom_fromRCB(rcbFile,
     # Grain information
     # --> ID, (phi1, PHI, phi2), (center.x, center.y)
     if debug:
-        print "Identified grains:"
-        print "ID\t(phi1,PHI,phi2)\t(center.x,center.y)"
+        print("Identified grains:")
+        print("ID\t(phi1,PHI,phi2)\t(center.x,center.y)")
         for key in textures:
             if key == 1:
-                print key, textures[key]
+                print(key, textures[key])
             else:
-                print key, textures[key], grains[key].center
-        print
+                print(key, textures[key], grains[key].center)
+        print()
     # Add corner to correct polygon (grain)
     # NOTE:
     #   Some of the Grain (Polygon2D) will be empty one due to
@@ -202,7 +202,7 @@ def geom_fromRCB(rcbFile,
         for j in range(ymax):
             coord = Point2D(i, j)
             if debug:
-                print "\rProcessing pt: ", coord,
+                print("\rProcessing pt: ", coord,)
                 sys.stdout.flush()
             for gid in gids:
                 if grains[gid].contains_point(coord):
@@ -214,8 +214,8 @@ def geom_fromRCB(rcbFile,
     geom_withRim[rim:x+rim, rim:y+rim, rim:] = geom
     # Output visualization file for debugging purpose
     if debug:
-        print
-        print "Exporting vtp file for visualization."
+        print()
+        print("Exporting vtp file for visualization.")
         geom_viz(geom_withRim, filename='geomviz.vtp')
     # Output geom file and material configuration file
     if output is not None:
@@ -232,7 +232,7 @@ def geom_fromRCB(rcbFile,
         with open(output, "w") as f:
             f.write(tmpstr)
         if debug:
-            print "DAMASK geom file exported."
+            print("DAMASK geom file exported.")
         # 2.material.config
         tmpstr = "#Require manual update\n\n"
         tmpstr += "<homogenization>]\n\n"
@@ -258,7 +258,7 @@ def geom_fromRCB(rcbFile,
         with open("material.config", "w") as f:
             f.write(tmpstr)
         if debug:
-            print "DAMASK material configuration file exported."
+            print("DAMASK material configuration file exported.")
     return geom_withRim, textures
 
 

@@ -51,10 +51,7 @@ from cyxtal.geometry import Polygon2D
 from cyxtal.geometry import convex_hull
 
 # Interface modules for vtk,damask
-import ext_vtk
-import ext_damask
-
-from ext_damask.geom_gen import geom_fromRCB
+# from cyxtal.ext_damask.geom_gen import geom_fromRCB
 
 # Auxiliary modules for APS, TSL, damask
 from cyxtal.ext_aps.parsers import VoxelStep

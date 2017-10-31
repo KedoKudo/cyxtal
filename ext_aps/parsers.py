@@ -555,10 +555,10 @@ class VoxelStep(object):
         """
         # check if voxel data is valid
         if not(self._validonly):
-            print "Corrupted voxel found!"
+            print("Corrupted voxel found!")
             raise ValueError('Validate data first before strain refinement!')
         if self.hkls.shape[0] < min_qv:
-            print "insufficient diffractions spots"
+            print("insufficient diffractions spots")
             return np.ones((3, 3))*np.nan
 
         # use the deformation gradient computed with least square as initial
@@ -766,8 +766,8 @@ def parse_xml(xmlfile,
     sep_tail = '*'*60 + "\n"
     # walk through each step
     if verbose:
-        print sep_head
-        print 'Extract data from XML file'
+        print(sep_head)
+        print('Extract data from XML file')
     for i in range(len(root)):
         step = root[i]
         # determine if voxel is indexed
@@ -782,7 +782,7 @@ def parse_xml(xmlfile,
         if verbose:
             state = float(i+1)/len(root)
             bar = '[' + '#'*int(state*10) + ' '*(10-int(state*10)) + ']'
-            print '\r'+bar+'{:.2%}'.format(state),
+            print('\r'+bar+'{:.2%}'.format(state),)
         # STEP 1: EXTRACT TEXT STRING
         # |->motor/wire position
         xsample = step.find('step:Xsample', ns).text
@@ -851,14 +851,14 @@ def parse_xml(xmlfile,
         # STEP 3: PUSH DATA TO CONAINER ARRAY/LIST
         voxels.append(voxel)
     if verbose:
-        print '\n', sep_tail
-        print sep_head
-        print "XML FILE: {}".format(xmlfile)
-        print " Total number of voxels:\t\t{}".format(len(root))
-        print " Valid voxel for DAXM analysis:\t{}".format(len(voxels))
+        print('\n', sep_tail)
+        print(sep_head)
+        print("XML FILE: {}".format(xmlfile))
+        print(" Total number of voxels:\t\t{}".format(len(root)))
+        print(" Valid voxel for DAXM analysis:\t{}".format(len(voxels)))
         data_q = float(len(voxels))/len(root)
-        print " Dataset goodness:\t\t\t{:.2%}".format(data_q)
-        print sep_tail
+        print(" Dataset goodness:\t\t\t{:.2%}".format(data_q))
+        print(sep_tail)
 
     return voxels
 
@@ -1016,7 +1016,7 @@ def F2DeviatoricStrain(F, method='m2', debug=False):
         raise ValueError(msg)
     # debug output
     if debug:
-        print "method--> ", method
-        print "strain:\n", epsilon_D, "\n"
-        print "J:\n", J, "\n"
+        print("method--> ", method)
+        print("strain:\n", epsilon_D, "\n")
+        print("J:\n", J, "\n")
     return epsilon_D
