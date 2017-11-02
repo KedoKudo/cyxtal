@@ -52,7 +52,9 @@ def safe_dotprod(vec1, vec2):
     """
     vec1 = normalize(vec1)
     vec2 = normalize(vec2)
-    return min(1.0, max(-1.0, np.dot(vec1, vec2)))
+    return min(1.0, max(-1.0, np.dot(vec1, vec2)
+                        )
+               )
 
 
 def rotation2ang(R, degree=False):
