@@ -522,6 +522,7 @@ class VoxelStep(object):
                     min_qv=3,
                     lagmul_rot=1e-1,
                     lagmul_len=1e-1,
+                    defgrad_guess=None,
                     ):
         """
         DESCRIPTION
@@ -562,8 +563,8 @@ class VoxelStep(object):
             return np.ones((3, 3))*np.nan
 
         # use the deformation gradient computed with least square as initial
-        # guess
-        F = self.guess_defgrad().reshape(9, order='F')
+        # guess if no initial guess is provided.
+        F = self.guess_defgrad().reshape(9, order='F') if defgrad_guess is None else defgrad_guess
 
         # set options based on given method
         # NOTE: avoid anoying warning prints from scipy
