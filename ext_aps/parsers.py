@@ -698,13 +698,14 @@ class VoxelStep(object):
         for i, hkl in enumerate(self.hkls):
             # calculate new Q vector based on perturbed unit cell
             q_tmp = np.dot(Bstar_strained, hkl)
+
             # angular difference
             ang = np.arccos(safe_dotprod(q_tmp, self.qs[i]))
+
             # length difference
             # NOTE:
             # the comparison of length is done for all, but only the one with
             # length information in q0 and q are useful.
-            lgn = abs(norm(q_tmp) - norm(self.qs[i]))/norm(self.qs[i])
             if abs(norm(self.qs[i]) - 1.0) > 1e-6:
                 lgn = abs(norm(q_tmp) - norm(self.qs[i]))/norm(self.qs[i])
             else:
