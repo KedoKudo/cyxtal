@@ -347,6 +347,15 @@ class VoxelStep(object):
             self.q0s = new_q0s
             self.qs = new_qs
             self.peaks = new_peaks
+        else:
+            rl = self.reciprocal_basis
+            new_q0s = np.empty(self.hkls.shape)
+            for i, hkl in enumerate(self.hkls):
+                if abs(norm(self.qs[i, :]) - 1.0) > 1e-10:
+                    new_q0s[i, :] = np.dot(rl, hkl)
+                else:
+                    new_q0s[i, :] = normalize(np.dot(rl, hkl))
+            self.q0s = new_q0s
         # update flag to unlock access to this voxel
         self._validonly = True
         return self._validonly
