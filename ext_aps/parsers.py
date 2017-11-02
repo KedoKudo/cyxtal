@@ -336,7 +336,7 @@ class VoxelStep(object):
                     new_qs[i, :] = self.qs[np.argmin(diff), :]
                     # record the strain free q0, retain length if measure q
                     # is not a unit vector (gone through monochromatic scan)
-                    if norm(new_qs[i, :]) > 1.0:
+                    if abs(norm(new_qs[i, :]) - 1.0) > 1e-4:
                         new_q0s[i, :] = np.dot(rl, hkl)
                     else:
                         new_q0s[i, :] = q_calc
@@ -704,6 +704,11 @@ class VoxelStep(object):
             # the comparison of length is done for all, but only the one with
             # length information in q0 and q are useful.
             lgn = abs(norm(q_tmp) - norm(self.qs[i]))/norm(self.qs[i])
+            if abs(norm(self.qs[i]) - 1.0) > 1e-6:
+                lgn = abs(norm(q_tmp) - norm(self.qs[i]))/norm(self.qs[i])
+            else:
+                lgn = 0.0
+
             # combine both
             rst += (1.0 - abs(2*ang/np.pi - 1.0)) + lgn*lagmul_len
             # rst += np.dot(q_tmp, qs[i])
