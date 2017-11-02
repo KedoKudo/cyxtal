@@ -50,9 +50,7 @@ def safe_dotprod(vec1, vec2):
     Return the dot product that is forced to be between -1.0 and 1.0.  Both
     vectors are normalized to prevent error.
     """
-    vec1 = normalize(vec1)
-    vec2 = normalize(vec2)
-    return min(1.0, max(-1.0, np.dot(vec1, vec2)
+    return min(1.0, max(-1.0, np.dot(normalize(vec1), normalize(vec2))
                         )
                )
 
