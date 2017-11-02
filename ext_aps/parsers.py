@@ -189,7 +189,7 @@ class VoxelStep(object):
 
     @property
     def q0s(self):
-        return self._qs
+        return self._q0s
 
     @q0s.setter
     def q0s(self, data):
@@ -200,7 +200,7 @@ class VoxelStep(object):
         For q with lenght information, we retain the lenght of q0 as well.
         This is because the way strain quantification is setup.
         """
-        self._qs = np.array(data)
+        self._q0s = np.array(data)
 
     @property
     def hkls(self):
