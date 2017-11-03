@@ -702,7 +702,9 @@ class VoxelStep(object):
         Fstar = np.transpose(np.linalg.inv(F))
         Bstar_strained = np.dot(Fstar, self.reciprocal_basis)
 
-        rst = 0.0
+        rstang = []
+        rstlgn = []
+        # rst = 0.0
         # now add q vector differences into the control
         for i, hkl in enumerate(self.hkls):
             # calculate new Q vector based on perturbed unit cell
@@ -717,16 +719,22 @@ class VoxelStep(object):
             # length information in q0 and q are useful.
             if abs(norm(self.qs[i]) - 1.0) > 1.e-6:
                 lgn = abs(norm(q_tmp) - norm(self.qs[i]))/norm(self.qs[i])
-            else:
-                lgn = 0.0
+                rstlgn.append(lgn)
 
             # combine both
-            rst += (1.0 - abs(2*ang/np.pi - 1.0)) + lgn*lagmul_len
+            rstang.append((1.0 - abs(2*ang/np.pi - 1.0)))
+
+            # rstang += (1.0 - abs(2*ang/np.pi - 1.0))
+            # rst += (1.0 - abs(2*ang/np.pi - 1.0)) + lgn*lagmul_len
             # rst += np.dot(q_tmp, qs[i])
         # the loss function is defined as the mismatch between qv and
         # the rotation angle (want to minimize rotation if possible)
         rotation_penalty = rotation2ang(R)/np.pi
-        residual = rst/self.qs.shape[0] + lagmul_rot*rotation_penalty
+        residual = np.average(rstang) + rotation_penalty
+
+        if len(rstlgn) > 0:
+            residual += np.average(rstlgn)
+
         return residual
 
 
