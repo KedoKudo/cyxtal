@@ -730,7 +730,7 @@ class VoxelStep(object):
         # the loss function is defined as the mismatch between qv and
         # the rotation angle (want to minimize rotation if possible)
         rotation_penalty = rotation2ang(R)/np.pi
-        residual = np.average(rstang) + rotation_penalty
+        residual = np.average(rstang) #+ rotation_penalty
 
         if len(rstlgn) > 0:
             residual += np.average(rstlgn)
