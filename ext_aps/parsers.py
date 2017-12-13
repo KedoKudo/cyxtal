@@ -532,6 +532,7 @@ class VoxelStep(object):
                     lagmul_rot=1e-1,
                     lagmul_len=1e-1,
                     defgrad_guess=None,
+                    fastmode=False,
                     ):
         """
         DESCRIPTION
@@ -595,7 +596,7 @@ class VoxelStep(object):
         # use scipy minimization module for optimization
         return minimize(self.strain_refine,
                         F,
-                        args=(lagmul_rot, lagmul_len),
+                        args=(lagmul_rot, lagmul_len, fastmode),
                         method=opt_method,
                         options=options,
                         ).x.reshape((3, 3), order='F')
@@ -612,6 +613,7 @@ class VoxelStep(object):
                    lagmul_rot=1e-1,
                    lagmul_len=1e-1,
                    fullstrain=False,
+                   fastmode=False,
                    ):
         """
         DESCRIPTION
@@ -655,6 +657,7 @@ class VoxelStep(object):
                                  min_qv=min_qv,
                                  lagmul_rot=lagmul_rot,
                                  lagmul_len=lagmul_len,
+                                 fastmode=False,
                                  )
         # *** switching to new deviatoric strain calculation
         if fullstrain:
@@ -677,7 +680,7 @@ class VoxelStep(object):
         epsilon = np.dot(g, np.dot(epsilon, g.T))
         return epsilon
 
-    def strain_refine(self, F, lagmul_rot, lagmul_len):
+    def strain_refine(self, F, lagmul_rot, lagmul_len, fastmode):
         """
         DESCRIPTION
         -----------
@@ -710,9 +713,6 @@ class VoxelStep(object):
             # calculate new Q vector based on perturbed unit cell
             q_tmp = np.dot(Bstar_strained, hkl)
 
-            # angular difference
-            ang = np.arccos(safe_dotprod(q_tmp, self.qs[i]))
-
             # length difference
             # NOTE:
             # the comparison of length is done for all, but only the one with
@@ -722,8 +722,12 @@ class VoxelStep(object):
                 lgn = np.log( norm(q_tmp)/norm(self.qs[i]) ) 
                 rstlgn.append(abs(lgn))
 
-            # combine both
-            rstang.append((1.0 - abs(2*ang/np.pi - 1.0)))
+            # angular difference
+            if fastmode:
+                rstang.append(1.0 - safe_dotprod(q_tmp, self.qs[i]))
+            else:
+                ang = np.arccos(safe_dotprod(q_tmp, self.qs[i]))
+                rstang.append((1.0 - abs(2*ang/np.pi - 1.0)))
 
             # rstang += (1.0 - abs(2*ang/np.pi - 1.0))
             # rst += (1.0 - abs(2*ang/np.pi - 1.0)) + lgn*lagmul_len
