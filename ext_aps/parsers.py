@@ -718,8 +718,9 @@ class VoxelStep(object):
             # the comparison of length is done for all, but only the one with
             # length information in q0 and q are useful.
             if abs(norm(self.qs[i]) - 1.0) > 1.e-6:
-                lgn = abs(norm(q_tmp) - norm(self.qs[i]))/norm(self.qs[i])
-                rstlgn.append(lgn)
+                # lgn = abs(norm(q_tmp) - norm(self.qs[i]))/norm(self.qs[i])
+                lgn = np.log( norm(q_tmp)/norm(self.qs[i]) ) 
+                rstlgn.append(abs(lgn))
 
             # combine both
             rstang.append((1.0 - abs(2*ang/np.pi - 1.0)))
