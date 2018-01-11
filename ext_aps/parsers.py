@@ -524,6 +524,7 @@ class VoxelStep(object):
         return np.dot(np.linalg.inv(A).T, B.T)
 
     def get_defgrad(self,
+                    ref="APS",
                     xtor=1e-10,
                     verbose=False,
                     maxiter=1e10,
@@ -594,13 +595,30 @@ class VoxelStep(object):
 
         # populate initial simplex ourselves
         # use scipy minimization module for optimization
-        return minimize(self.strain_refine,
+        # result of minimization (x) reshaped into 2nd rank tensor
+        defgrad_final = minimize(self.strain_refine,
                         F,
                         args=(lagmul_rot, lagmul_len, fastmode),
                         method=opt_method,
                         options=options,
                         ).x.reshape((3, 3), order='F')
-        # result of minimization (x) reshaped into 2nd rank tensor
+
+
+        # transform strain tensor to requested configuration
+        ref = ref.upper()
+        if ref == "TSL":
+            r = R_APS2TSL
+        elif ref == "APS":
+            r = R_APS2APS
+        elif ref == "XHF":
+            r = R_APS2XHF
+        else:
+            raise ValueError("Unknown reference configuration")
+        g = r.T
+
+        # convert it to the proper reference frame
+        return np.dot(g, np.dot(defgrad_final, g.T))
+        
 
     def get_strain(self,
                    ref='APS',
