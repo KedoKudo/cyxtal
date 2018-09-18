@@ -489,11 +489,11 @@ class VoxelStep(object):
         b = np.dot(r.T, b)
         c = np.dot(r.T, c)
         # use the three basis vectors to form a base,
-        # its column stack will be the orientation matrix, which
+        # its column stack will be the rotation matrix, which
         # is used to perform reference transformation
-        g = np.column_stack((a, b, c))
+        g = np.column_stack((a, b, c)).T
 
-        return OrientationMatrix(g).toEulers()
+        return OrientationMatrix(g).toEulers()  
 
     def guess_defgrad(self):
         """
