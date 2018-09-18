@@ -1,6 +1,5 @@
 # Cython derivables
 *.o
-*.bk
 *.pyc
 *.so
 
