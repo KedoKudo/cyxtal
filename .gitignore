@@ -16,3 +16,8 @@
 
 # MAC OS
 *.DS_Store
+*.plist
+
+# local develop files
+*.out
+*.out.DSYM
