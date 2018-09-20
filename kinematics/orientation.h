@@ -15,9 +15,14 @@ class Orientation{
 
     public:
     Orientation(double quaternionVec[4],      string crystalLattice);
-    Orientation(double eulers[3],             string crystalLattice, bool inDegree);
-    Orientation(double angle, double axis[3], string crystalLattice);
+
+    Orientation(double eulers[3],             string crystalLattice, 
+                bool isBunge, bool inDegree);
+
+    Orientation(double angle, double axis[3], string crystalLattice, bool inDegree);
+
     Orientation(double rotationMatrix[3][3],  string crystalLattice);
+
     ~Orientation(){};
 
     //output to terminal 
