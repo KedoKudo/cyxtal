@@ -1,6 +1,5 @@
 # Cython derivables
 *.o
-*.pyc
 *.so
 
 # Tex related
@@ -21,3 +20,7 @@
 # local develop files
 *.out
 *.out.DSYM
+
+# python
+__pycache__
+*.pyc
