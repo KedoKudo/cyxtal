@@ -24,3 +24,6 @@
 # python
 __pycache__
 *.pyc
+
+# local private files
+private
