@@ -8,26 +8,28 @@
 using namespace std;
 using namespace Eigen;
 
-class Orientation{
-    protected:
-    Quaterniond quaternion;  // use quaternion to represent orientation
-    string      lattice;     // given lattice structure
+namespace cyxtal {
+    class Orientation{
+        protected:
+        Quaterniond quaternion;  // use quaternion to represent orientation
+        string      lattice;     // given lattice structure
 
-    public:
-    Orientation(double quaternionVec[4],      string crystalLattice);
+        public:
+        Orientation(double quaternionVec[4],      string crystalLattice);
 
-    Orientation(double eulers[3],             string crystalLattice, 
-                bool isBunge, bool inDegree);
+        Orientation(double eulers[3],             string crystalLattice, 
+                    bool isBunge, bool inDegree);
 
-    Orientation(double angle, double axis[3], string crystalLattice, bool inDegree);
+        Orientation(double angle, double axis[3], string crystalLattice, bool inDegree);
 
-    Orientation(double rotationMatrix[3][3],  string crystalLattice);
+        Orientation(double rotationMatrix[3][3],  string crystalLattice);
 
-    ~Orientation(){};
+        ~Orientation(){};
 
-    //output to terminal 
-    void Print();
+        //output to terminal 
+        void Print();
 
-};
+    };
+}
 
 #endif

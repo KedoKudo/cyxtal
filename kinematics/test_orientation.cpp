@@ -1,10 +1,12 @@
 #include <iostream>
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <stdio.h>
 #include <string>
 #include "orientation.h"
 
 using namespace std;
+using namespace cyxtal;
 
 int main(){
 
@@ -28,6 +30,8 @@ int main(){
     oed.Print();
     Orientation oer = Orientation(eulersr, lattice, true, false);
     oer.Print();
+
+    printf ("copysign (-10.0, -0.0) = %f\n", copysign(-10.0, 0.0));
 
     return 0;
 }
